@@ -1,0 +1,27 @@
+/* ============================================================
+ * Semantic Status & Feedback Color - starter design tokens (CSS custom properties)
+ * Skill id: semantic-color-system (#06 of 12)
+ *
+ * Success, warning, danger, info - the conventional status hues, their ramps, multi-signal delivery, and protection from brand drift.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-success-text: clr-success-700; /* Success text on light bg */
+  --clr-success-bg: clr-success-50; /* Success banner/tint background */
+  --clr-success-border: clr-success-300; /* Banner border tier */
+  --clr-warning-text: clr-warning-800; /* Warning text; darker than others for hue clarity */
+  --clr-warning-bg: clr-warning-50; /* Warning tint bg */
+  --clr-danger-text: clr-danger-700; /* Danger text on light bg */
+  --clr-danger-bg: clr-danger-50; /* Error tint bg */
+  --clr-danger-filled: clr-danger-600 + white; /* Destructive button contract (computed text) */
+  --clr-info-text: clr-info-700; /* Info text on light bg */
+  --clr-status-signal-pairing: icon+text+color; /* Never color alone (a11y 1.4.1); documented triple */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide implements WCAG 1.4.1 (use of color) at the palette level: every status signal ships as color+icon+text, and all status text/bg pairs pass 4.5:1 - CVD users (guide 11) must decode status without the hue. */
+/* Fallback: Where a status hue cannot meet contrast at a layer, shift that layer's L (darker text, lighter bg) within the status ramp - the hue convention holds, the values flex. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Toasts & Notifications - starter design tokens (CSS custom properties)
+ * Skill id: toasts-notifications (#05 of 12)
+ *
+ * Transient feedback done politely: aria-live narration, timing that respects reading speed, stacking, and the undo pattern.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-toast-announcing: aria-live-polite; /* Never assertive for success; focus never stolen */
+  --comp-toast-duration-min: 4s; /* Minimum read time */
+  --comp-toast-duration-cap: 8s; /* Long toasts cap; errors persist */
+  --comp-toast-dismissibility: close+hover-pause; /* Timer pauses on hover/focus */
+  --comp-toast-stack-max: 3; /* Overflow → digest/notification center */
+  --comp-toast-placement: bottom-right-desktop-top-mobile; /* Consistent; non-blocking */
+  --comp-toast-undo-window: 5-8s; /* Undo action window for reversible actions */
+  --comp-toast-error-persist: until-dismissed; /* Errors never auto-dismiss */
+  --comp-toast-success-quiet: subtle-single-line; /* Success stays understated */
+  --comp-toast-center-overflow: notification-center; /* History lives in a dedicated surface */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Toasts implement WCAG 4.1.3 (status messages): polite narration without focus theft, durations a screen reader user can meet (hover-pause), and dismissal controls - the toast service is a11y infrastructure, not decoration. */
+/* Fallback: If a toast cannot be announced (legacy stack), pair critical feedback with an inline status region on the page - narration must exist somewhere, even if not transient. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Visual Hierarchy Audit - starter design tokens (CSS custom properties)
+ * Skill id: visual-hierarchy-audit (#02 of 12)
+ *
+ * Does the page guide the eye: primary action dominance, scanning patterns, and the squint test.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-squint-test: 2-3-dominant-elements; /* First check; blurred view */
+  --rev-primary-finding: under-5-seconds; /* Primary action findability budget */
+  --rev-one-primary-rule: per-view; /* Competing primaries = finding */
+  --rev-scan-path-check: f/z-pattern-traced; /* Eye path serves the task */
+  --rev-emphasis-tools: size,weight,color,position; /* Consistent, not random */
+  --rev-whitespace-hierarchy: space-over-boxes; /* Box-everything = finding */
+  --rev-position-emphasis: task-relevant; /* Important ≠ buried */
+  --rev-density-layering: summary-over-detail; /* Dense views layer information */
+  --rev-real-content-rule: lorem-invalid; /* Audits run on real copy */
+  --rev-hierarchy-score: per-surface; /* Scored in the report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Hierarchy must not rely on color alone (WCAG 1.4.1) and must survive zoom/reflow (1.4.4/1.4.10) - the audit checks hierarchy with color removed and at 400% zoom; heading structure (2.4.6) is the AT parallel of visual hierarchy. */
+/* Fallback: If the visual audit is inconclusive, check the heading outline + primary-action aria - semantic hierarchy that works for AT usually reveals the visual fix. */

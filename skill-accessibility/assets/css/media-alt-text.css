@@ -1,0 +1,27 @@
+/* ============================================================
+ * Images, Media & Alt Text - starter design tokens (CSS custom properties)
+ * Skill id: media-alt-text (#09 of 12)
+ *
+ * Alt text that carries meaning, audio descriptions, captions, and transcripts - WCAG 1.1.1, 1.2.1-1.2.6 as a content workflow.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-alt-policy: purpose-driven; /* Alt answers 'why is this image here' in its context */
+  --a11y-alt-length-guide: under-150-chars; /* Concise; complex images get longdesc/adjacent text instead */
+  --a11y-decorative-handling: alt-empty; /* alt='' + never omitted attribute */
+  --a11y-functional-alt: describe-action; /* Icon buttons name the action, not the glyph */
+  --a11y-complex-image-policy: alt-plus-data-table; /* Charts: short alt + accessible data table nearby */
+  --a11y-images-of-text: avoid; /* WCAG 1.4.5 unless logotype/essential */
+  --a11y-captions-policy: closed+speaker-ids; /* WCAG 1.2.2/1.2.4: speaker identification + sound cues */
+  --a11y-audio-description: prerecorded-required; /* WCAG 1.2.3/1.2.5 for video */
+  --a11y-transcript-policy: audio-required; /* Podcasts/audio get full transcripts (1.2.1) */
+  --a11y-icon-with-label: alt-empty; /* Visible text label carries the name; icon is decorative */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide owns WCAG 1.1.1 and the 1.2.x media criteria - Level A essentials that block conformance entirely when missing. */
+/* Fallback: If quality alt cannot be produced in time, ship a descriptive caption below the image rather than an empty guess - a plain-text description is always better than silence. */

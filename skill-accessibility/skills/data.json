@@ -1,0 +1,649 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": ["skill-ui-ux", "skill-animation", "skill-design-tokens"]
+  },
+  "skills": [
+    {
+      "id": "wcag-fundamentals",
+      "name": "WCAG Fundamentals",
+      "summary": "The POUR principles, conformance levels, and the WCAG 2.2 success-criteria map that anchors every other accessibility decision.",
+      "sections": {
+        "definition": "WCAG (Web Content Accessibility Guidelines) is the shared legal and technical contract for accessibility: four POUR principles (Perceivable, Operable, Understandable, Robust), three conformance levels (A, AA, AAA), and versioned success criteria. This skill is the map layer - it does not replace the specialized skills (contrast, keyboard, ARIA) but tells you which criteria apply to which UI situation and which level your product must claim. Most laws (EN 301 549, Section 508, ADA case law) reference WCAG 2.1/2.2 AA as the practical bar.",
+        "principles": [
+          "Target AA, treat AAA as selective upgrades: AA is the legal and contractual norm; AAA criteria (7:1 contrast, no timing) apply per-criterion where feasible.",
+          "POUR is a checklist of questions, not poetry: can users perceive it, operate it, understand it - and does assistive tech parse it robustly?",
+          "WCAG 2.2 is the current bar: new criteria - target size (2.5.8), focus appearance (2.4.13), dragging movements (2.5.7), accessible authentication (3.3.8) - are now in scope.",
+          "Conformance is per-page and honest: one failing component fails the page; partial-conformance claims must say exactly what fails.",
+          "Level A failures are blockers: missing alt, no keyboard path, or unlabeled inputs fail nearly everyone - ship nothing that fails A.",
+          "Accessibility is a release criterion, not a cleanup phase: criteria are checked at design review, code review, and CI.",
+          "An accessibility statement documents the position: conformance claim, known limitations, and a feedback channel - not a badge."
+        ],
+        "tokens": [
+          { "role": "conformance-target", "value": "WCAG 2.2 AA", "notes": "The product-wide claim; AAA is per-criterion upgrades" },
+          { "role": "level-a-policy", "value": "blocker", "notes": "Level A failures block release without exception" },
+          { "role": "level-aa-policy", "value": "blocker", "notes": "AA failures block release or ship with documented exceptions" },
+          { "role": "level-aaa-policy", "value": "selective", "notes": "Applied where cheap: contrast 7:1 on reading surfaces" },
+          { "role": "review-gate-design", "value": "a11y-design-review", "notes": "Designs pass an a11y checklist before build" },
+          { "role": "review-gate-code", "value": "a11y-code-review", "notes": "PRs touch aria/semantics - a11y reviewer required" },
+          { "role": "review-gate-ci", "value": "axe-ci", "notes": "Automated axe-core run on every PR; zero critical violations" },
+          { "role": "statement-required", "value": "published", "notes": "Public accessibility statement with feedback channel" },
+          { "role": "criteria-version-pin", "value": "2.2", "notes": "Pinned WCAG version; re-map criteria on major updates" },
+          { "role": "legal-baselines", "value": "EN 301 549, Section 508, ADA", "notes": "All reference WCAG AA - one target covers the law" }
+        ],
+        "composition": [
+          "This skill composes with every sibling: contrast-validation, keyboard-navigation, and aria-patterns each own the criteria this map points to.",
+          "It composes with design-tokens: contrast thresholds and focus tokens are enforced as token properties (skill-design-tokens guide 08).",
+          "It composes with reduced-motion (skill-animation guide 12): motion accessibility is the animation-side twin of this repo's map."
+        ],
+        "patterns": [
+          "Criteria-to-feature matrix: for each feature, list applicable WCAG criteria and their test method (automated, manual, screen reader) before build.",
+          "Three-gate enforcement: design review checklist + PR review labels + CI axe run - one gate alone always leaks."
+        ],
+        "useCases": [
+          "Products establishing their first formal accessibility conformance target.",
+          "Legal/procurement review: EN 301 549, Section 508, or enterprise VPAT documentation.",
+          "Auditing an existing product: mapping features to criteria to find untested surfaces."
+        ],
+        "combinations": { "good": ["color-contrast", "keyboard-navigation", "focus-management", "aria-fundamentals", "aria-patterns-widgets", "forms-errors", "screen-readers", "media-alt-text", "cognitive-content", "zoom-reflow", "testing-audit"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["neumorphism", "brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion", "easing-timing"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Badge accessibility: an audit passed once and a badge displayed forever while the product regresses",
+          "AAA theater: chasing AAA headlines while Level A basics like alt text and labels fail",
+          "Retro-fit phase: deferring accessibility to a pre-launch sprint where it becomes a rewrite",
+          "Statement as shield: publishing a conformance claim that CI results would immediately falsify"
+        ],
+        "accessibility": { "required": true, "notes": "The meta-skill: everything here exists to serve disabled users - screen reader, keyboard-only, low-vision, motor, and cognitive-needs users are the primary personas for every sibling guide.", "fallback": "When a criterion cannot be met, ship the documented exception with an alternative access path and a public known-issue - never silently." }
+      }
+    },
+    {
+      "id": "color-contrast",
+      "name": "Color & Contrast",
+      "summary": "WCAG 1.4.3/1.4.11 as designed-in properties: ratio thresholds, safe pairings, and contrast that survives dark mode and brands.",
+      "sections": {
+        "definition": "Color contrast is the most-measured accessibility property: text must reach 4.5:1 against its background (3:1 for large text), and non-text UI (icons, input borders, control boundaries, focus rings) must reach 3:1 against adjacent colors. This skill covers how to design palettes that pass by construction - validated alias pairings from skill-design-tokens - rather than fixing contrast after build with darker-and-darker text.",
+        "principles": [
+          "Know the numbers: 4.5:1 body text, 3:1 large text (24px/19px bold), 3:1 UI components and graphical objects (WCAG 1.4.3, 1.4.11).",
+          "Contrast belongs to pairings, not colors: only text-on-background has a ratio - design pairs, then lock them as alias contracts.",
+          "Focus indicators are first-class: the ring must reach 3:1 against both sides of the boundary it crosses (WCAG 2.4.13).",
+          "Hover/pressed deltas must be visible: a state change nobody can perceive (or that only color-blind users cannot) is a failure.",
+          "Never signal with color alone: pair color with text, icons, or position (WCAG 1.4.1 Use of Color).",
+          "Disabled states are exempt but documented: record their ratios so nobody 'fixes' them into confusion later.",
+          "Validated in both themes and every brand: a pairing without dark-mode and per-brand ratios is unfinished."
+        ],
+        "tokens": [
+          { "role": "contrast-body-min", "value": "4.5:1", "notes": "WCAG 1.4.3 AA body text" },
+          { "role": "contrast-large-min", "value": "3:1", "notes": "24px regular / 18.66px bold text" },
+          { "role": "contrast-ui-min", "value": "3:1", "notes": "WCAG 1.4.11 icons, borders, control boundaries" },
+          { "role": "contrast-aaa-body", "value": "7:1", "notes": "AAA for long-form reading surfaces" },
+          { "role": "contrast-focus-min", "value": "3:1", "notes": "WCAG 2.4.13 focus ring vs adjacent colors" },
+          { "role": "focus-ring-color", "value": "#1D4ED8", "notes": "6.3:1 on white, 4.6:1 on neutral-100 - safe default" },
+          { "role": "focus-ring-width", "value": "2px", "notes": "WCAG 2.4.13 wants visible thickness; 2px minimum" },
+          { "role": "focus-ring-offset", "value": "2px", "notes": "Separation from the component edge; visible against both surfaces" },
+          { "role": "state-delta-min", "value": "1.5:1", "notes": "Hover/pressed shift perceivable to low vision" },
+          { "role": "non-color-signal", "value": "icon-or-text-paired", "notes": "WCAG 1.4.1: never color alone for errors/required/status" }
+        ],
+        "composition": [
+          "Composes with skill-design-tokens: thresholds live as token properties (contrast-validation guide); this skill covers the design practice around them.",
+          "Composes with dark-mode theming: every pairing re-validates per theme cell; the manifest makes N x M validation automatic.",
+          "Composes with data-viz work (skill-color-theory guide 10): chart series need 3:1 against adjacent surfaces plus non-color differentiation."
+        ],
+        "patterns": [
+          "Pairing manifest first: write text/bg, icon/surface, and focus/surface pairs with computed ratios before styling anything.",
+          "Contrast-first palette build: pick alias pairs that pass, let the palette be whatever values satisfy the manifest."
+        ],
+        "useCases": [
+          "Designing new palettes or themes that pass WCAG AA by construction.",
+          "Remediating audit findings at the token level so fixes propagate everywhere.",
+          "Reviewing charts, dashboards, and data-dense UI where non-text contrast is routinely ignored."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "keyboard-navigation", "focus-management", "aria-fundamentals", "forms-errors", "screen-readers", "zoom-reflow", "testing-audit", "cognitive-content", "media-alt-text", "aria-patterns-widgets"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": ["brutalism-ui", "collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Eyeball contrast: judging ratios by looking at the screen - human vision adapts and lies; compute the number",
+          "Darker-and-darker text: fixing every failure by forcing text to black until hierarchy disappears",
+          "Light-theme-only audits: shipping dark themes and brand cells whose pairings were never computed",
+          "Color-only signaling: red error borders without text or icons - invisible to color-blind users"
+        ],
+        "accessibility": { "required": true, "notes": "This guide IS a WCAG enforcement skill: 1.4.3, 1.4.11, 1.4.1, and 2.4.13 are its daily subject matter; ratios use the WCAG relative-luminance formula.", "fallback": "A failing pairing is fixed by changing the background alias, the text alias, or (last resort) adding a validated primitive step - never by shipping below threshold." }
+      }
+    },
+    {
+      "id": "keyboard-navigation",
+      "name": "Keyboard Navigation",
+      "summary": "Everything operable by mouse works by keyboard: tab order, skip links, roving tabindex, and shortcut discipline (WCAG 2.1.1/2.4.3).",
+      "sections": {
+        "definition": "Keyboard navigation is the operability backbone: every interactive element reachable and usable without a mouse (WCAG 2.1.1), in a meaningful order (2.4.3), with no traps the user cannot escape (2.1.2). It serves motor-impaired users, screen reader users, and power users alike - and it is the fastest accessibility audit there is: unplug the mouse and try to use the product.",
+        "principles": [
+          "Everything interactive is tabbable or contains a documented path: if it has a click handler, it needs a keyboard story (button, link, or roving tabindex).",
+          "DOM order IS tab order: visually reordered layouts (CSS order, grid re-placement) silently break logical navigation - keep source order semantic.",
+          "Skip links are mandatory on repeated navigation: first Tab reaches 'skip to main content' and it must actually appear on focus.",
+          "No keyboard traps without escape: focus traps are legal only inside modals, and Escape releases them (WCAG 2.1.2).",
+          "Custom widgets follow ARIA patterns exactly: tabs, menus, and comboboxes have documented keymaps - inventing keymaps is an anti-pattern.",
+          "Shortcuts are enhancements, never the only path: single-key shortcuts must be remappable or active only on focus (WCAG 2.1.4).",
+          "Visible focus is keyboard's companion: every stop shows where you are - a tabbable-but-invisible focus is a focus-management bug."
+        ],
+        "tokens": [
+          { "role": "nav-model", "value": "dom-order", "notes": "Tab order follows DOM; visual reordering must preserve semantics" },
+          { "role": "skip-link-required", "value": "true", "notes": "First tabbable element on pages with repeated nav blocks" },
+          { "role": "escape-releases-trap", "value": "true", "notes": "WCAG 2.1.2: modal focus traps always exit via Escape" },
+          { "role": "roving-tabindex", "value": "pattern-owned", "notes": "Composite widgets (tabs/listbox/grid) own arrow-key roving" },
+          { "role": "arrow-key-semantics", "value": "in-group-only", "notes": "Arrows move inside a widget; Tab moves between widgets" },
+          { "role": "shortcut-policy", "value": "remappable-or-focus-only", "notes": "WCAG 2.1.4 character key shortcuts" },
+          { "role": "interactive-min-target", "value": "44px", "notes": "Keyboard focus + touch share the target-size floor (2.5.8)" },
+          { "role": "modal-focus-policy", "value": "trap-and-return", "notes": "Trap inside modal; return to trigger on close" },
+          { "role": "tabindex-policy", "value": "0-or-negative-only", "notes": "tabindex=1+ is a build failure in review" },
+          { "role": "keyboard-test", "value": "mouse-unplugged", "notes": "The 5-minute audit: complete a core task keyboard-only" }
+        ],
+        "composition": [
+          "Composes with focus-management: keyboard defines the stops; focus management defines where focus lands when surfaces change.",
+          "Composes with aria-patterns-widgets: composite widgets inherit their keymaps from ARIA patterns - this skill enforces them.",
+          "Composes with modals/dialogs recipes (skill-component-recipes guide 04): the trap-and-return policy is a shared contract."
+        ],
+        "patterns": [
+          "Mouse-unplugged walkthrough: complete one core task (signup, checkout, search) keyboard-only before release; record every stop that fails.",
+          "Skip-link + landmark skeleton: header/nav/main/footer landmarks with a working skip link ship as a page template, not per-page work."
+        ],
+        "useCases": [
+          "Any product with forms, tables, or custom widgets - the surfaces where keyboard breaks first.",
+          "Enterprise apps used all day by keyboard-first power users.",
+          "Quick audits: the mouse-unplugged test finds the worst violations in minutes."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "focus-management", "aria-fundamentals", "aria-patterns-widgets", "forms-errors", "screen-readers", "zoom-reflow", "testing-audit", "cognitive-content", "media-alt-text"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["micro-interactions", "easing-timing"], "caution": ["gesture-drag"], "avoid": [] },
+        "antiPatterns": [
+          "Div-with-onClick: clickable non-focusable elements - the single most common WCAG 2.1.1 failure",
+          "tabindex Positive: 1, 2, 3 overrides that break the moment the DOM shifts",
+          "Invisible focus: outline: none without a replacement - keyboard users navigate blind",
+          "Visual order lies: CSS-reordered layouts whose tab order no longer matches what eyes see"
+        ],
+        "accessibility": { "required": true, "notes": "This skill exists for WCAG 2.1.1/2.4.3/2.1.2/2.1.4: keyboard operability is non-negotiable and cannot have an 'alternative path' short-cut - the keyboard path IS the alternative path for mouse-inaccessible UI.", "fallback": "If a control cannot be made keyboard-operable, replace it with a native control; a broken custom widget is never shipped alongside a documented apology." }
+      }
+    },
+    {
+      "id": "focus-management",
+      "name": "Focus Management",
+      "summary": "Where focus goes when UI changes: visible focus styling, modal traps, focus return, and announcements that keep orientation.",
+      "sections": {
+        "definition": "Focus management answers the question keyboard navigation assumes: when the UI changes - a modal opens, a route changes, a dialog closes - where does focus go, where does it return, and can users always see where they are. Bad focus management is the difference between an accessible component and an accessible-looking one: focus that vanishes, lands somewhere random, or gets trapped is disorienting at best and blocking at worst.",
+        "principles": [
+          "Focus is never allowed to be lost: after any UI change, focus lands on something meaningful - the new content, its heading, or its first control.",
+          "Moving focus = announcing context: programmatic focus moves should carry a label (dialog title, 'results updated') so screen readers narrate the landing.",
+          "Modals trap and return: focus enters the dialog on open, cycles inside, and returns to the exact trigger element on close.",
+          "Route changes move focus to the new page's heading: SPA navigation must emulate what a full page load does for screen readers.",
+          "Focus visible always: :focus-visible styling reaches 3:1 (WCAG 2.4.13); removing outlines without replacement is a build failure.",
+          "Never reset scroll without consent: programmatic focus that jumps the viewport mid-read is hostile; scroll into view only on deliberate moves.",
+          "One thing at a time: autofocus fights users - only autofocus inside deliberately-focused surfaces (modals, search overlays)."
+        ],
+        "tokens": [
+          { "role": "focus-visible-style", "value": "outline 2px + offset 2px", "notes": "Default visible focus treatment; token-driven color" },
+          { "role": "focus-contrast-min", "value": "3:1", "notes": "WCAG 2.4.13 against adjacent colors" },
+          { "role": "modal-open-target", "value": "first-control-or-title", "notes": "Dialog focus lands on panel or first interactive" },
+          { "role": "modal-close-target", "value": "trigger-element", "notes": "Return to the exact button that opened it" },
+          { "role": "route-change-target", "value": "h1-or-main", "notes": "SPA routes move focus to page heading (tabindex=-1)" },
+          { "role": "in-place-update-target", "value": "live-region", "notes": "Background updates announce; focus does not move" },
+          { "role": "autofocus-policy", "value": "modals-only", "notes": "Never autofocus page loads; always inside dialogs/overlays" },
+          { "role": "scroll-on-focus", "value": "deliberate-only", "notes": "scrollIntoView only for intentional focus moves" },
+          { "role": "focus-order-review", "value": "per-component", "notes": "Open/close/submit flows tested for landing + return" },
+          { "role": "hidden-focus-policy", "value": "inert-offscreen", "notes": "Offscreen content uses inert, not just visibility, so focus cannot land there" }
+        ],
+        "composition": [
+          "Composes with keyboard-navigation: tab order defines the circuit; focus management handles the state changes that reroute it.",
+          "Composes with aria-patterns-widgets and dialog recipes: trap-and-return is the shared contract across modals, drawers, and sheets.",
+          "Composes with skill-animation: focus transitions animate with motion tokens; reduced-motion collapses them but never removes the focus move."
+        ],
+        "patterns": [
+          "Focus router per surface: each overlay/route declares open-target, close-target, and announcement; the component library implements it once.",
+          "Landing announcement: focus moves are paired with aria-live or labelled targets so screen readers narrate context, not silence."
+        ],
+        "useCases": [
+          "SPAs where route changes otherwise strand focus at the document top.",
+          "Modal/drawer/sheet components: the trap-and-return contract.",
+          "Search overlays, command palettes, and wizards with multi-step focus choreography."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "keyboard-navigation", "aria-fundamentals", "aria-patterns-widgets", "forms-errors", "screen-readers", "zoom-reflow", "testing-audit", "cognitive-content", "media-alt-text"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "page-transitions"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Vanishing focus: closing a dialog drops focus to body - keyboard users restart the page",
+          "Outline: none with nothing: removing visible focus without any replacement treatment",
+          "Autofocus everywhere: page-load autofocus that steals typing and scrolls mid-read",
+          "Silent focus jumps: moving focus programmatically with no announcement or visible change"
+        ],
+        "accessibility": { "required": true, "notes": "Focus management serves WCAG 2.4.3, 2.4.7, 2.4.13, and 3.2.1: it is the difference between reachable and usable, and screen reader orientation depends on announced landing points.", "fallback": "If a landing point cannot be meaningful (transient UI), announce via aria-live instead of moving focus - never move focus to nothing." }
+      }
+    },
+    {
+      "id": "aria-fundamentals",
+      "name": "ARIA Fundamentals",
+      "summary": "The first rule of ARIA and the core vocabulary: roles, states, properties, live regions, and when native HTML wins.",
+      "sections": {
+        "definition": "ARIA (Accessible Rich Internet Applications) is the contract between custom UI and assistive technology: roles say what a thing IS, states say how it currently is, and live regions narrate change. Its first rule governs everything - do not use ARIA if native HTML can do the job, because a native button carries focus, keyboard, and semantics for free while an ARIA-imitated div must reimplement all of them, usually wrongly.",
+        "principles": [
+          "First rule of ARIA: prefer native HTML - button, link, input, select, and table carry semantics, keyboard, and mobile behaviors automatically.",
+          "Roles do not add behavior: role='button' on a div gives narration but no keyboard - you must implement Tab/Enter/Space yourself (or use a real button).",
+          "Every interactive control has an accessible name: aria-label, aria-labelledby, or visible text - unnamed buttons read as 'button' in screen readers.",
+          "States are live data, not decoration: aria-expanded, aria-pressed, aria-checked, aria-disabled must actually track component state.",
+          "Ids referenced must exist: aria-labelledby/aria-describedby pointing at missing ids produce silence - CI-lint the references.",
+          "aria-hidden hides from AT only: it does not remove focus - hidden-but-focusable is a trap; pair with inert or removal from tab order.",
+          "Live regions are registered before they announce: an aria-live region must exist in the DOM before content changes for narration to fire."
+        ],
+        "tokens": [
+          { "role": "native-first-policy", "value": "html-before-aria", "notes": "First rule of ARIA; custom roles need justification in review" },
+          { "role": "accessible-name-policy", "value": "required", "notes": "Every interactive element; lint-blocks unnamed controls" },
+          { "role": "name-source-order", "value": "labelledby > label > aria-label > content", "notes": "Prefer visible text as the name source" },
+          { "role": "state-tracking", "value": "must-match-dom", "notes": "aria-expanded/checked/pressed mirror real state" },
+          { "role": "live-region-verbosity", "value": "polite-default", "notes": "aria-live=polite; assertive only for errors/timeouts" },
+          { "role": "decorative-policy", "value": "aria-hidden-true", "notes": "Decorative icons/images excluded from the AT tree" },
+          { "role": "idref-validation", "value": "ci-lint", "notes": "aria-labelledby/describedby targets must exist" },
+          { "role": "hidden-focus-rule", "value": "aria-hidden-plus-inert", "notes": "Hidden content must also be unfocusable" },
+          { "role": "role-validation", "value": "axe-ci", "notes": "Required parent/child role structure checked in CI" },
+          { "role": "landmark-set", "value": "header-nav-main-aside-footer", "notes": "Page skeleton roles; one main per page" }
+        ],
+        "composition": [
+          "Composes with aria-patterns-widgets: fundamentals are the vocabulary; patterns are the validated combinations (tabs, menus, comboboxes).",
+          "Composes with screen-readers: ARIA is only half the contract - testing with actual screen readers validates what markup alone cannot.",
+          "Composes with forms-errors: label/description/error wiring (aria-describedby) is the highest-traffic ARIA usage in most products."
+        ],
+        "patterns": [
+          "Name-it-once labeling: visible visible-label + aria-labelledby wiring as the default; aria-label reserved for icon-only controls.",
+          "Live-region service: a single polite live region utility announces toasts, filter results, and async status app-wide - no per-component live regions."
+        ],
+        "useCases": [
+          "Custom components: giving divs real semantics when native elements genuinely do not fit.",
+          "Icon-only buttons, toggles, and dynamic state UI that native HTML cannot express.",
+          "Auditing for the classic failures: unnamed controls, stale states, dangling idrefs."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "keyboard-navigation", "focus-management", "aria-patterns-widgets", "forms-errors", "screen-readers", "media-alt-text", "cognitive-content", "zoom-reflow", "testing-audit"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "ARIA soup: role='button' + tabindex + keydown on a div when a <button> did it all for free",
+          "Aria-label on everything: slapping labels over visible text, producing names that differ from what users see",
+          "Stale states: aria-expanded that never changes because the JS forgot the attribute exists",
+          "Dead references: aria-describedby pointing at removed ids - silent in code review, silent in screen readers"
+        ],
+        "accessibility": { "required": true, "notes": "ARIA misused is worse than ARIA absent: wrong roles misorient screen reader users more than no roles at all - that is why the native-first policy is a lint gate, not a suggestion.", "fallback": "When unsure which ARIA fits, downgrade to native HTML; an unstyled native control is accessible, an over-ARIA'd div usually is not." }
+      }
+    },
+    {
+      "id": "aria-patterns-widgets",
+      "name": "ARIA Widget Patterns",
+      "summary": "The APG patterns - tabs, menus, combobox, dialog, listbox, grid - implemented exactly as specified: roles, keymaps, and state wiring.",
+      "sections": {
+        "definition": "Composite widgets (tabs, menus, comboboxes, dialogs, listboxes, grids) have validated recipes in the W3C ARIA Authoring Practices Guide (APG): exact roles, required attributes, and canonical keymaps. This skill covers implementing those patterns faithfully - because users of assistive tech have learned these keymaps from every other product, a widget that invents its own keys is a widget they cannot use.",
+        "principles": [
+          "Follow the APG exactly: the role structure, required attributes, and keymap come from the pattern - creativity belongs in styling, not keymaps.",
+          "Arrow keys move within, Tab moves between: composite widgets use roving tabindex inside; Tab exits after the widget's last stop.",
+          "Every state change updates ARIA state: tab selection updates aria-selected, combobox updates aria-expanded + aria-activedescendant.",
+          "Dialogs follow the dialog pattern: role=dialog, aria-modal=true, labelled by title, focus trap, Escape closes, focus returns.",
+          "Menus are for actions, selects are for values: menu/listbox confusion is the most common pattern misuse.",
+          "Grid is not a table: grid owns arrow-key cell navigation and interactive cells; a read-only data table stays native <table>.",
+          "Announce async results: combobox results, filter counts, and loading states narrate via live regions or aria-activedescendant changes."
+        ],
+        "tokens": [
+          { "role": "pattern-source", "value": "w3c-apg", "notes": "ARIA Authoring Practices Guide is the canonical reference" },
+          { "role": "tabs-keymap", "value": "arrows+home+end", "notes": "Roving tabindex; optional delete key per APG" },
+          { "role": "menu-keymap", "value": "arrows+escape+enter", "notes": "Open/read/close contract; typeahead optional" },
+          { "role": "combobox-keymap", "value": "arrows+enter+escape", "notes": "aria-expanded + listbox popup + activedescendant" },
+          { "role": "dialog-keymap", "value": "escape-close", "notes": "Focus trap + labelled title + focus return" },
+          { "role": "listbox-vs-menu", "value": "value-vs-action", "notes": "Listbox selects values; menu triggers actions" },
+          { "role": "grid-policy", "value": "interactive-cells-only", "notes": "Static data stays native table" },
+          { "role": "accordion-keymap", "value": "enter+space", "notes": "aria-expanded on the trigger button" },
+          { "role": "tree-keymap", "value": "arrows+left-collapse", "notes": "Hierarchical nav per APG tree pattern" },
+          { "role": "pattern-tests-required", "value": "keyboard+sr", "notes": "Each widget ships with keymap + screen reader tests" }
+        ],
+        "composition": [
+          "Composes with keyboard-navigation and focus-management: patterns define the keymap; those skills define the page-level circuit around the widget.",
+          "Composes with component-recipes (skill-component-recipes): recipes give visual/UX specs (tabs guide 09, dropdowns guide 10); this skill gives the AT contract.",
+          "Composes with screen-readers: every pattern ships with an NVDA/VoiceOver test script, not just automated checks."
+        ],
+        "patterns": [
+          "Pattern library centralization: tabs/menu/combobox/dialog implemented once, tested once, consumed everywhere - pattern drift across teams is how keymaps fork.",
+          "APG + recipes pairing: for each widget, the APG pattern (AT contract) and the component recipe (visual spec) are linked documents."
+        ],
+        "useCases": [
+          "Building the widget layer of a design system: tabs, menus, comboboxes, dialogs, grids.",
+          "Fixing custom widgets that 'look accessible' but break in NVDA/VoiceOver.",
+          "Reviewing third-party component libraries before adoption."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "keyboard-navigation", "focus-management", "aria-fundamentals", "forms-errors", "screen-readers", "testing-audit", "zoom-reflow", "cognitive-content", "color-contrast", "media-alt-text"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["micro-interactions", "feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Invented keymaps: a tab widget where Escape or J moves - users' muscle memory from every other product breaks",
+          "Menu/select confusion: role=menu for a value picker breaks form narration and mobile behavior",
+          "Stale pattern state: aria-selected frozen on the first tab because selection logic never touched attributes",
+          "Grid abuse: arrow-key grids wrapping static tables nobody needs to navigate cell-by-cell"
+        ],
+        "accessibility": { "required": true, "notes": "This skill exists to make AT users first-class widget consumers: the APG keymaps are the interface contract they have learned product-wide.", "fallback": "If a widget cannot implement its APG pattern fully, ship the native HTML equivalent (select, details, dialog) instead of a partial pattern." }
+      }
+    },
+    {
+      "id": "forms-errors",
+      "name": "Forms & Error Handling",
+      "summary": "Labels, descriptions, and error wiring that make forms operable and recoverable: 3.3.1, 3.3.2, 3.3.3, 4.1.3 done as wiring, not styling.",
+      "sections": {
+        "definition": "Forms are where accessibility failures cost users the most - a mislabeled field or a lost error can block a purchase, a signup, or a benefits application. This skill covers the full wiring: programmatic label association (1.3.1, 4.1.2), required and format hints (3.3.2), error identification in text (3.3.1), suggested corrections (3.3.3), and status announcements (4.1.3) - the mechanics that make forms work for screen readers, not just look clean.",
+        "principles": [
+          "Every input has a programmatic label: <label for> or aria-labelledby - placeholder text is not a label (it vanishes on type).",
+          "Instructions before the field, errors after it: hints and errors wire via aria-describedby so screen readers read them in context.",
+          "Errors identify the field in text: 'Email is invalid' - never color or icon alone (WCAG 3.3.1).",
+          "Announce form status politely: error summaries and 'saved' confirmations via aria-live=polite (4.1.3); focus moves to the summary on failed submit.",
+          "Suggest the fix: 'Enter a valid email like name@domain.com' beats 'Invalid input' (WCAG 3.3.3).",
+          "Preserve user input on errors: a failed submit never wipes the form - the cruelest failure mode.",
+          "Do not rely on autocomplete alone, but do support it: proper name/email/tel autocomplete attributes help everyone (1.3.5).",
+          "Validation timing is forgiving: validate on blur or submit, never on every keystroke - mid-typing errors are noise."
+        ],
+        "tokens": [
+          { "role": "label-policy", "value": "programmatic-required", "notes": "<label for> or aria-labelledby; lint-blocks orphans" },
+          { "role": "hint-wiring", "value": "aria-describedby", "notes": "Format hints read after the label, before input" },
+          { "role": "error-wiring", "value": "aria-describedby+aria-invalid", "notes": "Error text linked per field; flag on the input" },
+          { "role": "error-summary", "value": "focus-on-submit-fail", "notes": "Summary list receives focus; each item links to its field" },
+          { "role": "status-announce", "value": "aria-live-polite", "notes": "Saved/sent confirmations; never assertive for success" },
+          { "role": "required-signal", "value": "text-plus-aria-required", "notes": "Asterisk alone is not enough; say 'required'" },
+          { "role": "error-message-style", "value": "cause-plus-fix", "notes": "3.3.3: state what is wrong and how to fix it" },
+          { "role": "input-preservation", "value": "never-wipe", "notes": "Failed submits keep all user input" },
+          { "role": "validation-timing", "value": "blur-or-submit", "notes": "No per-keystroke validation noise" },
+          { "role": "autocomplete-attrs", "value": "name,email,tel...", "notes": "WCAG 1.3.5: standard autocomplete attributes" }
+        ],
+        "composition": [
+          "Composes with aria-fundamentals: label/description/error wiring is aria-describedby traffic - the fundamentals govern the mechanics.",
+          "Composes with focus-management: failed submit moves focus to the error summary; success announcements never steal focus.",
+          "Composes with ux-writing (skill-ux-writing guides 03/08): error cause-and-fix phrasing is a shared craft."
+        ],
+        "patterns": [
+          "Error summary pattern: on failed submit, focus a list of linked errors at the top; each item jumps to its field with describedby wiring.",
+          "Inline-plus-summary: field-level messages for immediate correction, summary for orientation - both, not either."
+        ],
+        "useCases": [
+          "Checkout, signup, and application forms - the highest-stakes surfaces.",
+          "Multi-step wizards where errors must not strand users mid-flow.",
+          "Auditing forms: unlabeled fields, color-only errors, wiped inputs."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "keyboard-navigation", "focus-management", "aria-fundamentals", "aria-patterns-widgets", "screen-readers", "cognitive-content", "zoom-reflow", "testing-audit", "media-alt-text"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Placeholder-as-label: hints that disappear on first keystroke and fail contrast at 4.5:1",
+          "Red-only errors: color-coded failures with no text association - unreadable by AT and color-blind users",
+          "Error wipe: failed submit resetting the form, destroying twenty minutes of user input",
+          "Keystroke scolding: inline 'invalid' warnings firing mid-typing before the user finishes"
+        ],
+        "accessibility": { "required": true, "notes": "This guide owns WCAG 3.3.1-3.3.8 and 4.1.2/4.1.3: forms are where legal risk concentrates because they are the path to every service.", "fallback": "If field-level wiring fails, the error summary pattern alone (focus + linked list + text) keeps the form accessible even with imperfect inline wiring." }
+      }
+    },
+    {
+      "id": "screen-readers",
+      "name": "Screen Reader Testing",
+      "summary": "Testing with NVDA, JAWS, and VoiceOver: the pairing matrix, listening scripts, and what automated checks can never catch.",
+      "sections": {
+        "definition": "Automated accessibility testing catches roughly 30-40% of issues; the rest only surface when a human listens. Screen reader testing validates the actual experience: does the page make sense in reading order, do widgets narrate correctly, can a user complete the task by ear. This skill covers the platform/reader pairing matrix, core keystrokes, and repeatable listening scripts that turn 'it feels fine' into evidence.",
+        "principles": [
+          "Test the supported matrix: NVDA+Firefox/Chrome (Windows), JAWS+Chrome (enterprise), VoiceOver+Safari (macOS/iOS), TalkBack+Chrome (Android).",
+          "Automated checks are the floor, not the verdict: axe finds missing alt; only listening finds nonsense reading order and unnamed controls in context.",
+          "Navigate as users do: by headings (H), landmarks (D), forms (F), and links (K) - linear Tab-walking is not how screen reader users browse.",
+          "Reading order is semantic order: visual layout must not diverge from DOM order or narration becomes nonsense.",
+          "Widgets get full-flow scripts: open, navigate, select, close - every APG pattern has a listening script (aria-patterns-widgets).",
+          "Test both browse and focus modes: NVDA browse vs focus mode behaves differently - virtual cursor confusion is a real finding.",
+          "Record findings as tasks: quote the narration, name the reader, note the keystroke - 'NVDA reads button twice on focus' is an actionable bug."
+        ],
+        "tokens": [
+          { "role": "reader-matrix", "value": "nvda,jaws,voiceover,talkback", "notes": "Supported pairing matrix; each release tests core flows" },
+          { "role": "nvda-pairing", "value": "firefox-chrome", "notes": "Primary Windows open-source pairing" },
+          { "role": "voiceover-pairing", "value": "safari-macos-ios", "notes": "Apple platforms; rotor navigation" },
+          { "role": "jaws-pairing", "value": "chrome", "notes": "Enterprise Windows; strictest HTML expectations" },
+          { "role": "talkback-pairing", "value": "chrome-android", "notes": "Android touch exploration" },
+          { "role": "nav-by-headings", "value": "h-key", "notes": "Heading structure is the primary page map" },
+          { "role": "nav-by-landmarks", "value": "d-key", "notes": "Landmarks skeleton must be complete" },
+          { "role": "core-flow-script", "value": "per-feature", "notes": "Signup/checkout/search listening scripts in the test plan" },
+          { "role": "auto-coverage-ceiling", "value": "40%", "notes": "What axe-class tools can catch; listening covers the rest" },
+          { "role": "finding-format", "value": "reader+keystroke+quote", "notes": "Bugs cite narration verbatim for reproducibility" }
+        ],
+        "composition": [
+          "Composes with aria-fundamentals and aria-patterns-widgets: those skills write the markup; this one listens to it and files what breaks.",
+          "Composes with testing-audit: screen reader passes are a required lane in the audit framework, with scripts stored in the test plan.",
+          "Composes with forms-errors and focus-management: listening verifies error announcements and focus landings that automation cannot judge."
+        ],
+        "patterns": [
+          "Listening scripts per core flow: each critical user journey has a numbered script (open page, heading nav, complete task) run per reader before release.",
+          "Narration quotes as acceptance criteria: bugs and fixes cite the exact spoken output, so regressions are measurable."
+        ],
+        "useCases": [
+          "Pre-release validation of core flows on the supported reader matrix.",
+          "Verifying custom widgets (tabs, combobox, dialog) narrate per the APG.",
+          "Triage: converting vague 'a11y feels broken' reports into quoted narration bugs."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "keyboard-navigation", "focus-management", "aria-fundamentals", "aria-patterns-widgets", "forms-errors", "media-alt-text", "cognitive-content", "zoom-reflow", "testing-audit"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Axe-and-done: zero automated violations claimed as 'accessible' while flows fail by ear",
+          "Tab-only testing: walking links linearly and calling it screen reader testing",
+          "One-reader release gates: NVDA passing on Windows tells nothing about iOS VoiceOver",
+          "Vague bug reports: 'screen reader is confusing' findings nobody can reproduce or fix"
+        ],
+        "accessibility": { "required": true, "notes": "Screen reader testing is the reality check for WCAG 4.1.2/4.1.3 and the whole robustness principle: if it does not work by ear, it does not work.", "fallback": "If a flow fails by ear and the fix needs time, ship the documented workaround (native control, simplified view) in the interim - never block the whole flow." }
+      }
+    },
+    {
+      "id": "media-alt-text",
+      "name": "Images, Media & Alt Text",
+      "summary": "Alt text that carries meaning, audio descriptions, captions, and transcripts - WCAG 1.1.1, 1.2.1-1.2.6 as a content workflow.",
+      "sections": {
+        "definition": "Non-text content must have a text alternative (WCAG 1.1.1), and prerecorded media needs captions and audio description (1.2.x). Alt text is a writing discipline, not a formality: good alt conveys the image's purpose in context, bad alt ('image', 'photo123.jpg') or missing alt excludes screen reader users from the content's meaning. This skill covers alt writing rules, decorative handling, complex images, and the media timeline (captions, transcripts, descriptions).",
+        "principles": [
+          "Alt describes purpose, not appearance: 'CEO shaking hands with the minister at the signing' - not 'two people in suits'.",
+          "Decorative images get empty alt: alt='' removes them from narration; omitting the attribute makes readers announce the filename.",
+          "Functional images describe the action: a magnifier icon button is 'Search', not 'magnifying glass'.",
+          "Complex images need long descriptions: charts and diagrams pair short alt with adjacent text or a data table.",
+          "Text in images is a smell: real text scales, translates, and translates contrast; images-of-text fail 1.4.5 unless essential.",
+          "Captions are not subtitles: captions include speaker IDs and relevant sound cues (WCAG 1.2.2-1.2.4).",
+          "Audio description for prerecorded video: 1.2.3/1.2.5 - narration of visual information between dialogue.",
+          "Icons adjacent to visible text are decorative: the label already says it; alt='' prevents double narration."
+        ],
+        "tokens": [
+          { "role": "alt-policy", "value": "purpose-driven", "notes": "Alt answers 'why is this image here' in its context" },
+          { "role": "alt-length-guide", "value": "under-150-chars", "notes": "Concise; complex images get longdesc/adjacent text instead" },
+          { "role": "decorative-handling", "value": "alt-empty", "notes": "alt='' + never omitted attribute" },
+          { "role": "functional-alt", "value": "describe-action", "notes": "Icon buttons name the action, not the glyph" },
+          { "role": "complex-image-policy", "value": "alt-plus-data-table", "notes": "Charts: short alt + accessible data table nearby" },
+          { "role": "images-of-text", "value": "avoid", "notes": "WCAG 1.4.5 unless logotype/essential" },
+          { "role": "captions-policy", "value": "closed+speaker-ids", "notes": "WCAG 1.2.2/1.2.4: speaker identification + sound cues" },
+          { "role": "audio-description", "value": "prerecorded-required", "notes": "WCAG 1.2.3/1.2.5 for video" },
+          { "role": "transcript-policy", "value": "audio-required", "notes": "Podcasts/audio get full transcripts (1.2.1)" },
+          { "role": "icon-with-label", "value": "alt-empty", "notes": "Visible text label carries the name; icon is decorative" }
+        ],
+        "composition": [
+          "Composes with aria-fundamentals: empty alt is aria-hidden's sibling - both remove decoration from the AT tree.",
+          "Composes with icons-illustration (skill-icons-illustration): icon systems and illustration sets ship with alt/label conventions baked in.",
+          "Composes with cognitive-content: transcripts and captions serve deaf, blind, and cognitive-needs users simultaneously."
+        ],
+        "patterns": [
+          "Alt review in CMS workflow: content templates enforce alt presence (empty allowed, missing not), with an editor prompt asking the image's purpose.",
+          "Chart alt pattern: short alt states the takeaway ('Sales up 20% Q3'), followed by the full data table for users who want the numbers."
+        ],
+        "useCases": [
+          "Content-heavy sites: editorial images, charts, infographics.",
+          "Video/audio products: captions, transcripts, and description pipelines.",
+          "Icon buttons and image links: functional naming across the UI."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "aria-fundamentals", "screen-readers", "cognitive-content", "testing-audit", "keyboard-navigation", "focus-management", "color-contrast", "forms-errors", "aria-patterns-widgets", "zoom-reflow"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["illustration-lottie"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Filename alt: IMG_2384.jpg narrated as content",
+          "Alt on everything: 'logo: logo' decoration read aloud twice on every page",
+          "Alt that starts 'image of': screen readers already announce it as an image",
+          "Auto-captions only: raw ASX captions with no speaker IDs, punctuation, or review"
+        ],
+        "accessibility": { "required": true, "notes": "This guide owns WCAG 1.1.1 and the 1.2.x media criteria - Level A essentials that block conformance entirely when missing.", "fallback": "If quality alt cannot be produced in time, ship a descriptive caption below the image rather than an empty guess - a plain-text description is always better than silence." }
+      }
+    },
+    {
+      "id": "cognitive-content",
+      "name": "Cognitive & Content Accessibility",
+      "summary": "Plain language, predictable behavior, helpful errors, and memory-friendly flows - WCAG 3.x for users with cognitive and learning disabilities.",
+      "sections": {
+        "definition": "Cognitive accessibility is the least-automated and most-human layer: plain language, consistent navigation, predictable interactions, generous timing, and error recovery that does not punish. It serves users with learning disabilities, ADHD, memory limitations, and situational stress (rushing, multitasking) - which is to say, effectively everyone. Most of it maps to WCAG 3.x Understandable criteria plus emerging guidance (COGA).",
+        "principles": [
+          "Plain language is the default: short sentences, common words, one idea per paragraph; define terms on first use.",
+          "Reading level matters: aim for lower-secondary reading level on task-critical content (WCAG 3.1.5 AAA where feasible).",
+          "Consistency is navigation: same actions, same order, same location across screens (WCAG 3.2.3) - surprises cost cognition.",
+          "No context change on focus or input: focus does not trigger navigation; inputs do not auto-submit (WCAG 3.2.1/3.2.2).",
+          "Help before error, recovery after: input assistance (3.3.x), undo for irreversible actions, and no session timeouts without warning and extension (2.2.1).",
+          "Instructions survive memory limits: steps visible while needed, progress saved, no reliance on remembering across pages.",
+          "Chunk and structure: headings, lists, and progress indicators break complex tasks into oriented steps."
+        ],
+        "tokens": [
+          { "role": "plain-language-target", "value": "grade-8", "notes": "Lower-secondary reading level for task content" },
+          { "role": "sentence-length-guide", "value": "under-25-words", "notes": "One idea per sentence; paragraphs 2-4 sentences" },
+          { "role": "consistency-policy", "value": "same-place-same-action", "notes": "WCAG 3.2.3 consistent navigation/help placement" },
+          { "role": "focus-change-policy", "value": "no-navigation", "notes": "WCAG 3.2.1: focus never triggers context change" },
+          { "role": "input-change-policy", "value": "confirm-or-undo", "notes": "WCAG 3.2.2: no auto-submit surprises" },
+          { "role": "timeout-policy", "value": "warn-and-extend", "notes": "WCAG 2.2.1: 20s+ warning, extension, no data loss" },
+          { "role": "undo-policy", "value": "irreversible-only", "notes": "Destructive actions get undo or explicit confirm" },
+          { "role": "error-recovery", "value": "suggest-fix", "notes": "3.3.3-3.3.6: suggestions, review-before-submit, no re-entry" },
+          { "role": "chunking-pattern", "value": "steps-with-progress", "notes": "Multi-step flows show position + completion" },
+          { "role": "help-availability", "value": "persistent-location", "notes": "WCAG 3.2.6 (2.2): help entry point in a consistent place" }
+        ],
+        "composition": [
+          "Composes with forms-errors: forgiving validation timing and suggested fixes are cognitive accessibility applied to forms.",
+          "Composes with ux-writing (skill-ux-writing): plain language, button labels, and error phrasing are the writing-side execution of this skill.",
+          "Composes with skill-animation: reduced-motion and pauseable ambient motion serve cognitive load as much as vestibular safety."
+        ],
+        "patterns": [
+          "Stepwise flows with save-and-resume: wizards persist progress and show position - memory-friendly by architecture.",
+          "Undo-first destructiveness: 'Archive' with undo replaces confirm dialogs for low-stakes deletions; explicit confirm only for the irreversible."
+        ],
+        "useCases": [
+          "Government, health, and financial products where comprehension failures have real consequences.",
+          "Onboarding and multi-step wizards for any audience under stress or time pressure.",
+          "Audit: reading-level scan, consistency review, timeout and error-recovery walkthrough."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "forms-errors", "screen-readers", "media-alt-text", "keyboard-navigation", "focus-management", "aria-fundamentals", "aria-patterns-widgets", "color-contrast", "zoom-reflow", "testing-audit"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Legalese defaults: dense jargon on task-critical content because 'the lawyers wrote it'",
+          "Surprise auto-submit: select changes that fire navigation without confirmation",
+          "Punishing timeouts: session expiry wiping forms with no warning or extension",
+          "Confirm-dialog everything: modal fatigue that trains users to click through the one dialog that mattered"
+        ],
+        "accessibility": { "required": true, "notes": "Cognitive accessibility is the largest underserved group and the hardest to automate: every criterion here needs human review, which is why it lives in the design-review checklists of sibling repos.", "fallback": "When formal criteria conflict with content constraints, ship the plain-language summary alongside - layered content serves both audiences." }
+      }
+    },
+    {
+      "id": "zoom-reflow",
+      "name": "Zoom, Reflow & Responsive A11y",
+      "summary": "200% zoom, 320px reflow, orientation lock, and pointer alternatives - the responsive side of WCAG (1.4.4, 1.4.10, 1.3.4, 2.5.x).",
+      "sections": {
+        "definition": "Users zoom: to 200% text (1.4.4), to 400% with single-column reflow at 320 CSS px (1.4.10), and they rotate devices (1.3.4) and use pointers of every kind (2.5.x). This skill covers the WCAG criteria that live at the intersection of responsive design and accessibility - where a layout that 'works' at 1440px quietly fails at 400% zoom on a laptop, which is where many low-vision users actually browse.",
+        "principles": [
+          "200% text zoom must keep function: text scales via rem/vw tokens; no clipped controls, no overlaps (WCAG 1.4.4).",
+          "400% zoom reflows to one column at 320px: no two-dimensional scrolling for reading (WCAG 1.4.10).",
+          "Orientation is never locked: support both portrait and landscape unless essential (WCAG 1.3.4).",
+          "Pointer gestures have single-pointer alternatives: multipoint/path-based gestures get simple taps (WCAG 2.5.1).",
+          "Dragging has a non-drag path: reorder-by-drag offers up/down buttons or a list mode (WCAG 2.5.7, new in 2.2).",
+          "Pointer targets meet the 24px floor: 24x24 CSS px minimum, 44px preferred (WCAG 2.5.8).",
+          "Hover content is dismissible, hoverable, persistent: tooltips that trap the cursor fail 1.4.13.",
+          "Character key shortcuts are remappable: or active only on focus (WCAG 2.1.4)."
+        ],
+        "tokens": [
+          { "role": "text-zoom-tested", "value": "200%", "notes": "WCAG 1.4.4: all flows pass at 200% text-only zoom" },
+          { "role": "reflow-width", "value": "320px", "notes": "WCAG 1.4.10: single column, no 2D scroll at 400%" },
+          { "role": "zoom-strategy", "value": "rem-vw-tokens", "notes": "Type tokens in rem; spacing may stay px-fixed" },
+          { "role": "orientation-policy", "value": "both-supported", "notes": "WCAG 1.3.4 unless orientation is essential" },
+          { "role": "gesture-alternative", "value": "single-tap", "notes": "WCAG 2.5.1: simple pointer alternative for gestures" },
+          { "role": "drag-alternative", "value": "buttons-or-list", "notes": "WCAG 2.5.7: non-drag reorder path" },
+          { "role": "target-size-min", "value": "24px", "notes": "WCAG 2.5.8 floor; 44px per design-tokens spacing guide" },
+          { "role": "hover-content", "value": "dismissible-hoverable-persistent", "notes": "WCAG 1.4.13 content-on-hover contract" },
+          { "role": "motion-trigger-policy", "value": "user-initiated-only", "notes": "WCAG 2.3.1: no parallax/shake without opt-in" },
+          { "role": "shortcut-policy", "value": "remap-or-focus-only", "notes": "WCAG 2.1.4 character shortcuts" }
+        ],
+        "composition": [
+          "Composes with skill-responsive-layout: that repo builds the responsive mechanics; this skill states the WCAG constraints they must satisfy.",
+          "Composes with design-tokens: rem-based type tokens and 44px touch targets are token-level guarantees for 1.4.4/2.5.8.",
+          "Composes with skill-animation: motion-trigger and reduced-motion policies are the animation-side twins of 2.3.1."
+        ],
+        "patterns": [
+          "Zoom-first QA: run core flows at 200% text zoom and 400% page zoom before release; screenshot the failures as tickets.",
+          "Reflow smoke test: 320px viewport walkthrough - every reading surface single-column, every control reachable."
+        ],
+        "useCases": [
+          "Low-vision users (the majority of accessibility needs) who browse at high zoom.",
+          "Responsive redesigns claiming WCAG conformance.",
+          "Drag-and-drop interfaces needing 2.5.7 alternatives."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "keyboard-navigation", "focus-management", "aria-fundamentals", "forms-errors", "screen-readers", "cognitive-content", "testing-audit", "media-alt-text", "aria-patterns-widgets"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion", "easing-timing"], "caution": ["scroll-animation", "ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Px-locked text: font sizes that ignore 200% zoom until controls clip and overlap",
+          "Hover traps: tooltips following the cursor with no Escape, spreading over content",
+          "Drag-only reorder: lists sortable by drag with no button alternative (2.5.7)",
+          "Desktop-only testing: layouts signed off at 1440px and broken at 320px/400% where low-vision users live"
+        ],
+        "accessibility": { "required": true, "notes": "This guide owns WCAG 1.4.4, 1.4.10, 1.4.13, 1.3.4, 2.1.4, 2.3.1, and the 2.5.x pointer criteria - the responsive half of conformance.", "fallback": "Where 2D scroll is unavoidable (data grids), provide the data in an alternative single-column view (WCAG 1.4.10 exception requires it)." }
+      }
+    },
+    {
+      "id": "testing-audit",
+      "name": "Testing & Audit Framework",
+      "summary": "The three-layer a11y test strategy: automated CI, manual keyboard/zoom passes, and screen reader listening scripts - plus the audit report format.",
+      "sections": {
+        "definition": "Accessibility testing is a layered strategy because each layer catches what the others cannot: automated tools (axe-core, Lighthouse) catch ~30-40% mechanically; manual keyboard and zoom passes catch operability issues; screen reader listening scripts validate the lived experience. This skill assembles the layers into a CI pipeline and audit framework - with severity ratings, a report format, and regression gates so accessibility stays fixed.",
+        "principles": [
+          "Three layers, always: automated in CI, manual keyboard/zoom per release, screen reader scripts per core flow.",
+          "Automated checks run on every PR: axe-core on component tests plus page-level scans; critical violations block merge.",
+          "Manual passes are scripted, not vibes: keyboard-only task completion, 200%/400% zoom, and reflow checks with recorded outcomes.",
+          "Severity follows impact: blocker (task impossible), critical (major friction), major (workaround exists), minor (polish) - blockers gate release.",
+          "Audit findings are tickets with evidence: WCAG criterion, repro steps, screenshot or narration quote, suggested fix.",
+          "Track trend, not snapshot: violation counts per release and open-blocker age tell whether the system is improving.",
+          "Test with assistive tech in the loop: paid user testing with disabled users finds what simulations never will."
+        ],
+        "tokens": [
+          { "role": "ci-tool", "value": "axe-core", "notes": "Component + page scans on every PR" },
+          { "role": "ci-policy", "value": "critical-blocks-merge", "notes": "Zero new critical violations per PR" },
+          { "role": "lighthouse-threshold", "value": "a11y-score-95+", "notes": "Release gate; trend-tracked" },
+          { "role": "manual-pass-keyboard", "value": "per-release", "notes": "Mouse-unplugged core flows, recorded" },
+          { "role": "manual-pass-zoom", "value": "per-release", "notes": "200% text / 400% reflow walkthroughs" },
+          { "role": "listening-scripts", "value": "core-flows", "notes": "NVDA/VoiceOver scripts per critical journey" },
+          { "role": "severity-scale", "value": "blocker-critical-major-minor", "notes": "Blockers gate release" },
+          { "role": "audit-report-format", "value": "criterion-evidence-fix", "notes": "Every finding cites WCAG + evidence + suggested fix" },
+          { "role": "regression-watch", "value": "fixed-stays-fixed", "notes": "Fixed violations become automated tests" },
+          { "role": "user-testing-cadence", "value": "quarterly", "notes": "Sessions with disabled users; findings feed roadmap" }
+        ],
+        "composition": [
+          "Composes with every sibling: each provides its checklist section to the audit; this skill sequences them into a process.",
+          "Composes with skill-design-review: the design-side audit (guide 12 there) runs before build; this framework runs during and after.",
+          "Composes with governance (skill-design-tokens guide 12): a11y gates are enforced by the same CI machinery as token rules."
+        ],
+        "patterns": [
+          "Fixed-stays-fixed regression tests: every fixed violation becomes an automated assertion, so the backlog can only shrink.",
+          "Severity-weighted audit report: executive summary + criterion-indexed findings + prioritized fix roadmap, refreshed per release."
+        ],
+        "useCases": [
+          "Standing up an a11y practice: CI tooling, manual scripts, and report format from zero.",
+          "Pre-launch and periodic conformance audits with evidence.",
+          "Continuous monitoring: trend dashboards and regression gates."
+        ],
+        "combinations": { "good": ["wcag-fundamentals", "color-contrast", "keyboard-navigation", "focus-management", "aria-fundamentals", "aria-patterns-widgets", "forms-errors", "screen-readers", "media-alt-text", "cognitive-content", "zoom-reflow"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Score-chasing: optimizing a Lighthouse number while keyboard flows stay broken",
+          "Audit-and-shelve: a 90-page report nobody turns into tickets",
+          "One-time testing: conformance declared at launch, regressions shipping freely after",
+          "Simulation-only validation: no disabled users ever consulted, only tools and checklists"
+        ],
+        "accessibility": { "required": true, "notes": "The meta-skill of verification: without a testing framework, every other guide's contract is aspirational - this is how conformance is proven, maintained, and improved.", "fallback": "When full coverage is impossible, test in this order: blockers on core flows first, then automation on everything, then listening scripts on the highest-traffic journeys." }
+      }
+    }
+  ]
+}

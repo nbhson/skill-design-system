@@ -1,0 +1,27 @@
+/* ============================================================
+ * Tables & Data Grids - starter design tokens (CSS custom properties)
+ * Skill id: tables-data-grid (#03 of 12)
+ *
+ * Sortable, filterable, paginated tables: column semantics, sticky headers, selection models, and the grid-vs-table decision.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-table-semantics: native-table-or-aria-grid; /* The documented decision rule */
+  --comp-table-row-height: 48px; /* Default; 40px compact tier */
+  --comp-table-header-sticky: position-sticky; /* Column headers persist on vertical scroll */
+  --comp-table-numeric-align: right+tabular-nums; /* Numeric columns contract */
+  --comp-table-actions: kebab-menu-44px; /* Row actions; touch floor met */
+  --comp-table-sort-announce: aria-sort-on-headers; /* Sorting narrated */
+  --comp-table-selection-model: none|single|multi; /* Explicit per table; count announced */
+  --comp-table-empty-state: message+suggestion; /* Zero-results is designed, not blank */
+  --comp-table-loading-state: skeleton-rows; /* Column-aligned skeletons */
+  --comp-table-pagination: counts+url-state; /* 1-25 of N; state in URL */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Tables implement WCAG 1.3.1 (structure), 2.1.1 (keyboard-sort/actions), and the ARIA grid pattern when interactive: scope/caption semantics, aria-sort, and keyboard-reachable row actions are the recipe's non-negotiables. */
+/* Fallback: If the full grid pattern is too heavy for a surface, ship the native table with keyboard-reachable actions (menus open via keyboard) - a semantic table with menus beats a partial grid. */

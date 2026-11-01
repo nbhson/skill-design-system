@@ -1,0 +1,27 @@
+/* ============================================================
+ * Intrinsic Layout - starter design tokens (CSS custom properties)
+ * Skill id: intrinsic-design (#10 of 12)
+ *
+ * Layouts from content, not viewport: min/max/clamp sizing, aspect-ratio, and the Every-Layout approach that needs fewer breakpoints.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-intrinsic-strategy: content-first-fewer-queries; /* Sizing math before media queries */
+  --layout-intrinsic-sidebar: fit-content(280px) 1fr; /* Breakpoint-free sidebar pattern */
+  --layout-intrinsic-clamp-space: clamp(1rem, 50vw - 10rem, 2rem); /* Fluid spacing without queries */
+  --layout-intrinsic-min-width: min-content; /* The floor a flex item may shrink to */
+  --layout-intrinsic-max-width: max-content; /* The ceiling content occupies naturally */
+  --layout-intrinsic-fit: fit-content(66ch); /* Reading measure as an intrinsic bound */
+  --layout-intrinsic-aspect: aspect-ratio 16/9; /* Media boxes reserve shape declaratively */
+  --layout-intrinsic-minmax-absorb: minmax(min-content, 1fr); /* Columns that absorb space, never overflow */
+  --layout-intrinsic-query-budget: only-when-content-breaks; /* Media queries added when content, not viewport, demands */
+  --layout-intrinsic-test-range: 240px-2560px; /* Continuous resize test, no fixed tier set */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Intrinsic sizing is a zoom/accessibility ally: content-driven layouts survive 200%-400% zoom and text-spacing overrides better than fixed-width ones (WCAG 1.4.4/1.4.10) - flexing content IS the reflow strategy. */
+/* Fallback: Where intrinsic patterns cannot express a required design, add the minimal named breakpoint and document it - pragmatism over dogma. */

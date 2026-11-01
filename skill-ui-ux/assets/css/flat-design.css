@@ -1,0 +1,26 @@
+/* ============================================================
+ * Flat Design — starter design tokens (CSS custom properties)
+ * Style id: flat-design
+ *
+ * Purely two-dimensional UI with solid colors, simple shapes, and clear boundaries - no 3D effects, born as a reaction to skeuomorphism.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-primary-background: #f8fafc; /* Cool light gray */
+  --color-block-background: #3b82f6; /* Blue - most common in flat design */
+  --color-accent-1: #10b981; /* Green - success, secondary CTA */
+  --color-accent-2: #f59e0b; /* Amber - warning */
+  --color-danger: #ef4444; /* Red - error */
+  --color-primary-text: #1e293b; /* Dark gray, avoid absolute black */
+  --color-secondary-text: #64748b; /* Medium gray */
+  --font-heading: "Nunito Sans", sans-serif; /* Nunito Sans (or Open Sans, Source Sans Pro) */
+  --font-body: "Open Sans", sans-serif; /* Open Sans (or Roboto); UI Label: Open Sans / Nunito Sans 13-14px / 600, uppercase for status labels */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on primary background: #1E293B on #F8FAFC = 13.98:1 — PASS */
+/* secondary text on primary background: #64748B on #F8FAFC = 4.55:1 — PASS */

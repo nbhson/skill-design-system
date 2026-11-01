@@ -1,0 +1,27 @@
+/* ============================================================
+ * Icon & Illustration Animation - starter design tokens (CSS custom properties)
+ * Skill id: animation-integration (#10 of 12)
+ *
+ * Motion on vector assets: when icons animate, Lottie vs SMIL vs CSS, weight costs, and reduced-motion fallbacks.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-animation-justification: feedback,loading,celebration; /* The three earning moments */
+  --icon-technique-choice: css-simple,lottie-scene; /* SMIL avoided; choice documented */
+  --icon-animated-icon-budget: <15kb; /* Per animated icon */
+  --icon-lottie-budget: <100kb; /* Per scene; lazy-loaded */
+  --icon-reduced-motion: static-fallback-required; /* No exceptions */
+  --icon-loop-policy: one-per-viewport-max; /* Ambient rationed */
+  --icon-default-pattern: draw-in+fade-scale; /* The tasteful defaults */
+  --icon-state-announce: motion-never-only-signal; /* Text/live-region paired */
+  --icon-long-scene-pause: >5s-offers-pause; /* 2.2.2 pause control */
+  --icon-trigger-timing: on-state-change; /* Motion tracks real events */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide implements WCAG 2.2.2 (pause, stop, hide) and 2.3.3 (animation from interactions) plus reduced-motion: static fallbacks are mandatory, long scenes offer pause, and motion never carries the only meaning - animation state must be text-announced. */
+/* Fallback: If a static fallback cannot be produced per asset, disable the animation entirely - motion is enhancement, never the baseline. */

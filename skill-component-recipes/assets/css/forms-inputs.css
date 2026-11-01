@@ -1,0 +1,27 @@
+/* ============================================================
+ * Forms & Input Recipes - starter design tokens (CSS custom properties)
+ * Skill id: forms-inputs (#02 of 12)
+ *
+ * Text fields, selects, checkboxes, and validation layouts: the label-hint-error wiring recipe and forgiving-validation timing.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-input-height-md: 40px; /* Matches btn-height-md; one rhythm */
+  --comp-input-height-lg: 48px; /* Mobile/primary forms */
+  --comp-input-label-policy: visible-always; /* Placeholder-only banned (3.3.2) */
+  --comp-input-wiring: label+hint+error-wired; /* The field component implements once */
+  --comp-input-error-flag: aria-invalid+describedby; /* Programmatic error association */
+  --comp-input-validation-timing: blur-or-submit; /* No per-keystroke validation */
+  --comp-input-error-style: cause-plus-fix; /* Message format shared with ux-writing */
+  --comp-input-choice-semantics: checkbox-radio-switch-distinct; /* Control semantics match behavior */
+  --comp-input-readonly-vs-disabled: readonly-focusable; /* Readonly keeps focus/copy */
+  --comp-input-autocomplete: standard-attrs; /* WCAG 1.3.5 autofill support */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The recipe implements WCAG 3.3.1-3.3.5, 1.3.5, and 4.1.2 at the component level: programmatic labels, described-by wiring, forgiving timing, and autofill - a11y repo guide 07 owns the criteria, this recipe ships the mechanics. */
+/* Fallback: If the field wrapper cannot be adopted repo-wide, ship the wiring checklist per form (label-for, describedby, invalid, summary) - the wiring is the deliverable, the wrapper is the convenience. */

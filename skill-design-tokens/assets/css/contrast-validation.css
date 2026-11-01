@@ -1,0 +1,25 @@
+/* ============================================================
+ * Contrast Validation - starter design tokens (CSS custom properties)
+ * Skill id: contrast-validation (#08 of 12)
+ *
+ * WCAG contrast as a token property: annotated scales, validated alias pairings, and automated checks that fail the build on regressions.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-contrast-body-min: 4.5:1; /* WCAG 1.4.3 AA for body text */
+  --dt-contrast-large-text-min: 3:1; /* 24px regular / 18.66px bold text */
+  --dt-contrast-ui-component-min: 3:1; /* WCAG 1.4.11: input borders, icons, control boundaries */
+  --dt-contrast-body-aaa: 7:1; /* AAA target for long-form reading surfaces */
+  --dt-contrast-focus-ring-min: 3:1; /* WCAG 2.4.13 focus appearance; ring vs both sides of the boundary */
+  --dt-contrast-focus-ring-color: #1D4ED8; /* 6.3:1 on white, 4.6:1 on neutral-100 - safe nearly everywhere */
+  --dt-contrast-state-delta-min: 1.5:1; /* Hover/pressed color shift users can actually perceive */
+  --dt-contrast-disabled-note: exempt-documented; /* WCAG exempts disabled controls; record ratios anyway */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This skill IS the accessibility layer of the token system: WCAG 1.4.3 (text), 1.4.11 (non-text), 2.4.13 (focus) enforced as data. Ratios are computed with the WCAG relative-luminance formula against sRGB values. */
+/* Fallback: A failing pairing has three legal fixes in order: change the paired background alias, change the text alias to a darker/lighter sibling step, or (last) add a validated primitive step via governance - never ship below threshold. */

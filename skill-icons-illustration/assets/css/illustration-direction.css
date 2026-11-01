@@ -1,0 +1,27 @@
+/* ============================================================
+ * Illustration Direction - starter design tokens (CSS custom properties)
+ * Skill id: illustration-direction (#06 of 12)
+ *
+ * Defining the illustration language: purpose matrix, style lock-up with brand, color discipline, and consistency across artists.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-purpose-matrix: orient,explain,reward,humanize; /* Illustration must serve one */
+  --icon-illustration-spec: line+palette+character+lod; /* The documented style contract */
+  --icon-style-brand-lock: matches-design-style; /* Illustration mirrors product personality */
+  --icon-color-discipline: brand-ramp+palette-limits; /* No free hex in artwork */
+  --icon-character-proportions: documented-rules; /* One character system */
+  --icon-scene-templates: reusable-components; /* Framing/shadows not redrawn */
+  --icon-detail-budget: scales-with-size; /* Spots simple; heroes detailed */
+  --icon-illustration-library: versioned+curated; /* Approved art only */
+  --icon-usage-notes: per-illustration; /* Where/how each asset is used */
+  --icon-export-format: svg+lottie-as-needed; /* Vector first; animation opt-in */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Illustrations are WCAG 1.1.1 surface: informative illustrations get text alternatives (adjacent copy or aria), decorative ones are hidden - and animation on illustrations must respect reduced-motion (a11y repo media-alt-text + skill-animation guide 12). */
+/* Fallback: If per-illustration alt copy is missing, ensure every illustration is paired with adjacent explanatory text - the pairing satisfies 1.1.1 even with an empty alt. */

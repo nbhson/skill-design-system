@@ -1,0 +1,27 @@
+/* ============================================================
+ * Line-Height & Rhythm - starter design tokens (CSS custom properties)
+ * Skill id: line-height (#03 of 12)
+ *
+ * Leading inversely proportional to size: 1.1-1.2 display, 1.5 body, 1.7 long-form - plus the vertical rhythm that aligns text to the 4px grid.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-line-height-display: 1.1; /* Hero/marketing display sizes */
+  --type-line-height-heading: 1.2; /* h1-h4; tight but safe for diacritics at 2xl+ */
+  --type-line-height-body: 1.5; /* Default paragraphs; WCAG 1.4.12 floor */
+  --type-line-height-relaxed: 1.7; /* Long-form articles, documentation */
+  --type-line-height-ui: 1.35; /* Buttons, list items, labels - compact but uncramped */
+  --type-paragraph-gap: var(--space-4); /* Paragraph spacing from the 4px grid, not margin guesses */
+  --type-rhythm-grid: 4px; /* Vertical rhythm snaps to the spacing scale */
+  --type-line-height-cjk: 1.8; /* CJK locale variant; taller boxes for dense glyphs */
+  --type-diacritic-headroom: 1.5-min; /* Vietnamese stacked marks never clip below 1.5 */
+  --type-measure-default: 65ch; /* Paragraph max-width; see readability-legibility guide */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Unitless leading is the WCAG 1.4.4/1.4.12 guarantee: text scales with user settings and layouts tolerate user spacing overrides; the 1.5 body floor serves dyslexic and low-vision readers. */
+/* Fallback: If tight display leading clips diacritics, raise that step's line-height - aesthetics yield to legibility every time. */

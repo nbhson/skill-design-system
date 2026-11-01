@@ -1,0 +1,27 @@
+/* ============================================================
+ * Accessible & Inclusive Writing - starter design tokens (CSS custom properties)
+ * Skill id: accessible-writing (#11 of 12)
+ *
+ * Writing for assistive tech and cognition: alt text as copy, descriptive links, reading order, and plain-language inclusion.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-alt-text-rule: purpose-descriptive; /* Decorative images: alt empty */
+  --uxw-alt-length: ~1-sentence; /* Longer descriptions: longdesc/adjacent text */
+  --uxw-link-text: destination-named; /* WCAG 2.4.4; never 'click here' */
+  --uxw-heading-outline: no-skips+summaries; /* Heading text summarizes its section */
+  --uxw-aria-label-voice: same-charter-as-visible; /* Machine-read strings are copy too */
+  --uxw-reading-order: dom-matches-visual; /* Deviations documented */
+  --uxw-front-load-rule: payload-first; /* 'Error: ...' not 'Oops, ...: error' */
+  --uxw-reading-level: grade-8; /* Shared with writing-principles */
+  --uxw-inclusive-language: people-first+neutral; /* Default stance; house style may adjust */
+  --uxw-abbr-expansion: first-use; /* Abbreviations expanded once, then free */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide is the phrasing layer of WCAG 1.1.1, 1.3.1/1.3.2, 2.4.4, 2.4.6, and 3.1.5: descriptive alt, named links, ordered reading, and plain language - the craft decisions that make the a11y repo's structural criteria read well. */
+/* Fallback: If AT testing is unavailable in the loop, run the link-list and heading-outline reviews manually (browser extensions show both) - those two passes catch the majority of copy-level failures. */

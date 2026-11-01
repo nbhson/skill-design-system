@@ -1,0 +1,25 @@
+/* ============================================================
+ * Maximalism — starter design tokens (CSS custom properties)
+ * Style id: maximalism
+ *
+ * 'More is more': controlled visual energy built from vibrant colors, patterns, layered imagery, and bold typography.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-dominant-color: #7c3aed; /* Vivid purple - large backgrounds, titles */
+  --color-secondary-background: #fde047; /* Lemon yellow - large accent blocks */
+  --color-hot-accent: #ff3ea5; /* Neon pink - CTAs, badges */
+  --color-cool-accent: #22d3ee; /* Cyan - links, hover states */
+  --color-text-contrast: #1a1024; /* Deep purple-black - text on light backgrounds */
+  --color-soft-background: #fff1f2; /* Light pink - long content areas */
+  --font-heading: "Clash Display", sans-serif; /* Clash Display (or Archivo Black, Space Grotesk Bold); Sub-head: Space Grotesk 24-32px / 600 */
+  --font-body: "Inter; Label/decoration: DM Mono", sans-serif; /* Inter; Label/decoration: DM Mono (or Anybody) 12-14px / 500, wide letter-spacing */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on soft background: #1A1024 on #FFF1F2 = 16.72:1 — PASS */
+/* accent text on soft background: #7C3AED on #FFF1F2 = 5.19:1 — PASS */

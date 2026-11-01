@@ -1,0 +1,27 @@
+/* ============================================================
+ * Content & Microcopy Audit - starter design tokens (CSS custom properties)
+ * Skill id: content-microcopy-audit (#09 of 12)
+ *
+ * The strings pass: error completeness, label specificity, reading level, and glossary adherence - checked per surface.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-error-completeness: what+why+fix-required; /* Missing parts = finding */
+  --rev-button-specificity: verb-first-no-generic; /* OK/Submit on consequential = finding */
+  --rev-placeholder-check: no-placeholder-labels; /* Mechanical, high-cost */
+  --rev-link-text: destination-named; /* 2.4.4; 'click here' = finding */
+  --rev-glossary-adherence: one-concept-one-term; /* Drift logged */
+  --rev-reading-level: grade-8-sampled; /* Long strings sampled */
+  --rev-tone-match: tone-matrix-criteria; /* voice-tone contract */
+  --rev-hidden-strings-audited: alt+aria+tooltip; /* Same audit as visible copy */
+  --rev-front-load-check: meaning-first-40-chars; /* Truncation-safe strings */
+  --rev-content-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The content audit covers the copy side of WCAG 3.3.1-3.3.3, 2.4.4, 2.4.6, and 1.1.1: complete errors, named links, real labels, and alt text - hidden strings (aria, alt) are first-class audit targets, not exemptions. */
+/* Fallback: If the full string walk is too heavy, audit errors + links + icon names first - those three string classes carry the highest a11y and trust impact. */

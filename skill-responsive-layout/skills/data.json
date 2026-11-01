@@ -1,0 +1,1570 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": [
+      "skill-ui-ux",
+      "skill-animation",
+      "skill-design-tokens"
+    ]
+  },
+  "skills": [
+    {
+      "id": "grid-systems",
+      "name": "Grid Systems",
+      "summary": "Column grids, gutters, and content max-widths: the alignment skeleton every layout composes on, from 12-col desktop to single-column mobile.",
+      "sections": {
+        "definition": "A grid system is the alignment contract of a layout: columns, gutters, and margins that every component snaps to. The web standard is a 12-column grid (divisible by 2, 3, 4, 6) with fluid gutters and a content max-width; mobile collapses to fewer columns or one. The grid is invisible when right - everything aligns for reasons users feel rather than see - and it is the substrate the other layout skills compose on.",
+        "principles": [
+          "12 columns on desktop, 8 on tablet, 4 on mobile: fewer columns as space shrinks; spans stay meaningful at every tier.",
+          "Gutters are tokens, not guesses: 16px mobile, 24px desktop from the spacing scale - gutters never invented per section.",
+          "Content max-width bounds reading: 1200-1440px on desktop; a 66ch reading measure inside it (typography guide 08).",
+          "Margins grow with viewport: edge padding scales (16/24/32/48px) so content never touches screen edges on large displays.",
+          "Components span columns, they do not define grids: sections consume grid classes; the grid definition is singular and global.",
+          "Grid alignment beats perfect symmetry: optical alignment (icons, text edges) may override mathematical edges - judge optically after building mathematically.",
+          "Breakpoint changes alter columns, not component anatomy: a card is the same card spanning 12 or 4 columns."
+        ],
+        "tokens": [
+          {
+            "role": "grid-columns-desktop",
+            "value": "12",
+            "notes": "Desktop standard; divisible by 2/3/4/6"
+          },
+          {
+            "role": "grid-columns-tablet",
+            "value": "8",
+            "notes": "768-1023px tier"
+          },
+          {
+            "role": "grid-columns-mobile",
+            "value": "4",
+            "notes": "Under 768px; cards may span all 4"
+          },
+          {
+            "role": "grid-gutter-mobile",
+            "value": "16px",
+            "notes": "From the 4px spacing scale"
+          },
+          {
+            "role": "grid-gutter-desktop",
+            "value": "24px",
+            "notes": "Desktop gutter tier"
+          },
+          {
+            "role": "grid-margin-mobile",
+            "value": "16px",
+            "notes": "Edge padding, small screens"
+          },
+          {
+            "role": "grid-margin-desktop",
+            "value": "48px",
+            "notes": "Edge padding grows with viewport"
+          },
+          {
+            "role": "content-max-width",
+            "value": "1440px",
+            "notes": "App shell ceiling; reading content nested inside"
+          },
+          {
+            "role": "reading-measure",
+            "value": "66ch",
+            "notes": "Text content bound inside the grid"
+          },
+          {
+            "role": "grid-implementation",
+            "value": "css-grid-12",
+            "notes": "Native CSS Grid; no framework grid CSS"
+          }
+        ],
+        "composition": [
+          "Composes with css-grid-patterns and flexbox-patterns: the grid system is the vocabulary; those guides are its sentence patterns.",
+          "Composes with spacing tokens (skill-design-tokens guide 03): gutters and margins are spacing tokens - density modes re-map them once.",
+          "Composes with layout-compositions: sidebar, split, and bento layouts are named compositions of this grid."
+        ],
+        "patterns": [
+          "Grid class vocabulary: .col-4/.col-6/.col-12 utilities generated from the token definition - one source, consistent spans.",
+          "Optical audit: after grid math, nudge optically (icon baselines, text edges) and document overrides - math first, eyes second."
+        ],
+        "useCases": [
+          "App shells: sidebar + content grids for dashboards and admin tools.",
+          "Marketing pages: hero, feature, and footer sections snapping to one grid.",
+          "Audit: elements floating off-grid, gutter drift, margin chaos."
+        ],
+        "combinations": {
+          "good": [
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [
+            "intrinsic-design"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Grid per section: every section redefining its own grid until nothing aligns across sections",
+          "Pixel-position layouts: absolute-positioned elements that shatter at any viewport change",
+          "Invisible gutters drift: 15px here, 18px there - alignment erodes one component at a time",
+          "Framework grid lock-in: Bootstrap columns overriding the token-defined grid"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Grid alignment serves WCAG 1.4.4/1.4.10: layouts that snap to tokens survive zoom and reflow; DOM order must follow visual column order (a11y repo keyboard-navigation).",
+          "fallback": "When a design cannot fit the grid, extend the grid via governance - never float an element off-grid as a one-off."
+        }
+      }
+    },
+    {
+      "id": "breakpoints-strategy",
+      "name": "Breakpoints Strategy",
+      "summary": "Content-driven breakpoints (not device names): a small tier set, mobile-first queries, and when container queries replace them.",
+      "sections": {
+        "definition": "Breakpoints are the viewport widths where layout reorganizes - and the strategy question is how few you can afford. Modern practice: mobile-first (base styles are the small-screen truth, min-width queries add complexity upward), 4-5 content-driven tiers (640/768/1024/1280/1536) named by what changes, never by devices (devices multiply; content is stable). Container queries (guide 03) are replacing page-level breakpoints for component-level adaptation.",
+        "principles": [
+          "Mobile-first: base CSS is the mobile layout; min-width queries add columns and chrome as space allows.",
+          "Content defines breakpoints: add a tier when the design breaks, not when a new iPad ships - devices are an implementation detail.",
+          "Few tiers, named by change: 5 tiers maximum, each named for what reorganizes (nav-collapse, sidebar-reveal, 3-col).",
+          "One unit system per concern: px for viewport queries, em for component queries (respects user font size).",
+          "Every tier is tested: layouts are signed off at each tier's width, not just desktop and 'roughly mobile'.",
+          "No breakpoint inside components that own a container: components with container queries ignore viewport tiers - one owner per adaptation.",
+          "Ranges never overlap: min-width chains exclusive (max-width: 767.98px patterns die; single-axis min-width stacks)."
+        ],
+        "tokens": [
+          {
+            "role": "bp-strategy",
+            "value": "mobile-first-min-width",
+            "notes": "Base = mobile; queries add complexity upward"
+          },
+          {
+            "role": "bp-sm",
+            "value": "640px",
+            "notes": "Large phones / small tablets"
+          },
+          {
+            "role": "bp-md",
+            "value": "768px",
+            "notes": "Tablet portrait; nav may collapse"
+          },
+          {
+            "role": "bp-lg",
+            "value": "1024px",
+            "notes": "Tablet landscape / laptop; sidebar reveals"
+          },
+          {
+            "role": "bp-xl",
+            "value": "1280px",
+            "notes": "Desktop; 3-col layouts unlock"
+          },
+          {
+            "role": "bp-2xl",
+            "value": "1536px",
+            "notes": "Wide desktop; content max-width governs beyond"
+          },
+          {
+            "role": "bp-naming",
+            "value": "by-what-changes",
+            "notes": "sm/md/lg aliases documented per product"
+          },
+          {
+            "role": "component-bp-unit",
+            "value": "em",
+            "notes": "Container queries size in em (user-font aware)"
+          },
+          {
+            "role": "test-widths",
+            "value": "320,640,768,1024,1280,1536",
+            "notes": "Screenshot matrix per release"
+          },
+          {
+            "role": "container-query-first",
+            "value": "prefer",
+            "notes": "Components adapt via container queries; page tiers only for shell"
+          }
+        ],
+        "composition": [
+          "Composes with grid-systems: tiers change grid column counts and margins - the grid is the thing being reorganized.",
+          "Composes with fluid-container-queries: the strategy decides what adapts at page level vs container level; overlap is the failure mode.",
+          "Composes with mobile-navigation (guide 08): nav collapse is the most common breakpoint-driven change."
+        ],
+        "patterns": [
+          "Tier-per-change map: a table of tiers x what changes (columns, nav, sidebar, density) reviewed before building - unowned tiers get deleted.",
+          "min-width stack: one-directional media queries layered in source order; no max-width unless a legacy base demands it."
+        ],
+        "useCases": [
+          "App shells with responsive sidebars and nav.",
+          "Marketing pages with tiered section layouts.",
+          "Audit: dead breakpoints, device-named tiers, overlapping ranges."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [
+            "fluid-container-queries",
+            "intrinsic-design"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design"
+          ],
+          "caution": [
+            "collage-art",
+            "maximalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Device-named tiers: iPad-Pro-2 breakpoints that multiply every product cycle",
+          "Breakpoint soup: 14 overlapping queries nobody dares delete",
+          "Desktop-first shrink: max-width overrides fighting the base layout instead of mobile-first growth",
+          "Untested tiers: layouts signed off at 1440px and broken at 1024px where half the users are"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Breakpoints must preserve WCAG 1.4.4/1.4.10: zoom to 400% reflows to the single-column tier - test at zoom widths, not just device widths; em-based component queries respect user font size.",
+          "fallback": "If a tier cannot be tested in time, degrade to the nearest tested tier and ship the gap as a documented known issue - never an untested silent tier."
+        }
+      }
+    },
+    {
+      "id": "fluid-container-queries",
+      "name": "Fluid Layout & Container Queries",
+      "summary": "Components that adapt to their container, not the viewport: container queries, cqi units, and fluid spacing/type between bounds.",
+      "sections": {
+        "definition": "Container queries invert responsive design: instead of components asking 'how wide is the viewport', they ask 'how wide is my container' - so a card renders its compact variant in a sidebar and its full variant in the main column, with no viewport knowledge. Combined with fluid spacing/type (clamp on cqi units) and intrinsic sizing (min/max-content), layouts become truly reusable: the same component works anywhere it is dropped.",
+        "principles": [
+          "Container queries for components, media queries for the shell: page chrome (nav, sidebar reveal) stays viewport-driven; widgets adapt to their slot.",
+          "Name containers by role: .card-container, .widget-container - containment is explicit, never accidental global containment.",
+          "cqi/cqw for internal fluid sizing: container query units make internal type/spacing scale with the container, not the screen.",
+          "Every container-queried component has 2-3 named states: compact / standard / expanded - states documented like the breakpoints they replaced.",
+          "Fallbacks for legacy browsers: modern targets are fine (container queries are Baseline 2023), but feature-detect rather than assume in long-support products.",
+          "Fluid bounds are tokens: clamp() endpoints come from the spacing/type scales - fluidity never introduces off-scale values.",
+          "Test components in their narrowest slot: a card tested only full-width will break in the sidebar it was promised to work in."
+        ],
+        "tokens": [
+          {
+            "role": "cq-strategy",
+            "value": "components-over-viewport",
+            "notes": "Widgets adapt to containers; shell uses media queries"
+          },
+          {
+            "role": "cq-type",
+            "value": "inline-size",
+            "notes": "Default containment; height queries are rare"
+          },
+          {
+            "role": "cq-compact-below",
+            "value": "320px",
+            "notes": "Compact state trigger (container width)"
+          },
+          {
+            "role": "cq-standard-range",
+            "value": "320-640px",
+            "notes": "Standard state"
+          },
+          {
+            "role": "cq-expanded-above",
+            "value": "640px",
+            "notes": "Expanded state trigger"
+          },
+          {
+            "role": "fluid-space",
+            "value": "clamp(1rem, 3cqi, 2rem)",
+            "notes": "Internal padding scales with container"
+          },
+          {
+            "role": "fluid-heading-cq",
+            "value": "clamp(1.25rem, 4cqi, 1.953rem)",
+            "notes": "Widget title scales in container space"
+          },
+          {
+            "role": "intrinsic-width",
+            "value": "min-content/max-content",
+            "notes": "Intrinsic sizing before container math"
+          },
+          {
+            "role": "cq-fallback",
+            "value": "@supports-feature-detect",
+            "notes": "Legacy path: viewport query equivalent"
+          },
+          {
+            "role": "cq-test-slots",
+            "value": "sidebar,main,modal",
+            "notes": "Every container component tested in its 3 slots"
+          }
+        ],
+        "composition": [
+          "Composes with grid-systems and layout-compositions: containers are the slots the grid creates; components adapt inside them.",
+          "Composes with breakpoints-strategy: the strategy split (shell vs component) prevents double adaptation - one owner per responsive decision.",
+          "Composes with typography fluid tokens (skill-typography guide 06): cqi-based type inside containers follows the same clamp discipline."
+        ],
+        "patterns": [
+          "Slot-tested components: each container-aware component ships with a test page rendering it in sidebar/main/modal slots simultaneously.",
+          "Progressive containment: add container-type to wrappers; components declare @container rules that no-op gracefully without a named ancestor."
+        ],
+        "useCases": [
+          "Design systems: one card component that works in every slot.",
+          "Dashboard widgets rearranged per user (masonry/bento).",
+          "CMS-driven pages where component placement is unpredictable."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [
+            "breakpoints-strategy"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "maximalism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Double adaptation: a component with both media and container queries fighting over the same decision",
+          "Anonymous containment: container-type sprinkled globally, changing layout for everything downstream",
+          "Viewport-brained components: widgets that ask viewport width and break in sidebars",
+          "Untested narrow slots: container components shipped after testing only full-width"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Container adaptation must keep WCAG 1.4.4/1.4.10 floors: compact states never shrink text below 12px or targets below 24px - adapt the layout, not the legibility.",
+          "fallback": "If container queries are unsupported in a required target, the feature-detect fallback renders the standard (viewport-based) variant - compact variants are progressive enhancement."
+        }
+      }
+    },
+    {
+      "id": "flexbox-patterns",
+      "name": "Flexbox Patterns",
+      "summary": "One-dimensional layout patterns: nav bars, media objects, toolbars, and the alignment/gap idioms that solve 80% of component layout.",
+      "sections": {
+        "definition": "Flexbox solves one-dimensional layout: rows and columns of items that distribute space, align, and wrap. Its patterns cover most component-level layout - nav bars, media objects, button groups, toolbars, form rows - with gap, align-items, and flex shorthand as the core vocabulary. The skill is knowing when flex is wrong: two-dimensional layouts belong to CSS Grid (guide 05), and content-flow documents belong to normal flow.",
+        "principles": [
+          "One axis = flexbox: toolbars, nav rows, button groups, media objects - if items flow in one direction, flex is the tool.",
+          "Two dimensions = grid: page scaffolding and card grids belong to CSS Grid; forcing flex grids creates wrapper-div soup.",
+          "gap over margins: flex gap handles spacing without :last-child overrides and works with wrap.",
+          "flex: 1 is 'fill remaining', not 'equal': flex-grow distributes leftover space; min-width: 0 is required for content to shrink (the classic overflow bug).",
+          "align-items for cross-axis truth: center alignment of mixed-height content (icon + two-line text) is flex's killer feature.",
+          "wrap is a layout decision: flex-wrap on toolbars that must reflow; nowrap with overflow handling on scrollable rails.",
+          "Respect intrinsic content: flex items size to content first - forcing equal widths needs flex-basis or grid, not min-width hacks."
+        ],
+        "tokens": [
+          {
+            "role": "flex-nav-pattern",
+            "value": "space-between+center",
+            "notes": "Nav bars: logo left, actions right, centered items"
+          },
+          {
+            "role": "flex-media-object",
+            "value": "gap+align-start",
+            "notes": "Icon/avatar + content rows; the workhorse pattern"
+          },
+          {
+            "role": "flex-toolbar",
+            "value": "wrap+gap-2",
+            "notes": "Button/action toolbars that reflow"
+          },
+          {
+            "role": "flex-fill",
+            "value": "flex: 1 + min-width: 0",
+            "notes": "Fill-remaining items; truncation needs min-width 0"
+          },
+          {
+            "role": "flex-gap-unit",
+            "value": "space tokens",
+            "notes": "gap consumes the 4px scale"
+          },
+          {
+            "role": "flex-truncate",
+            "value": "ellipsis-on-flex-child",
+            "notes": "min-width: 0 + overflow hidden + nowrap"
+          },
+          {
+            "role": "flex-sticky-footer",
+            "value": "column + mt-auto",
+            "notes": "Page shell: header/content/footer pattern"
+          },
+          {
+            "role": "flex-rail",
+            "value": "overflow-x + scroll-snap",
+            "notes": "Horizontal card rails; pairs with scroll-animation"
+          },
+          {
+            "role": "flex-centering",
+            "value": "place-center",
+            "notes": "Absolute-free centering for badges/empty states"
+          },
+          {
+            "role": "flex-vs-grid",
+            "value": "one-dim-vs-two-dim",
+            "notes": "The documented decision rule"
+          }
+        ],
+        "composition": [
+          "Composes with css-grid-patterns: grid lays the page, flex lays the components inside grid areas - the standard two-layer architecture.",
+          "Composes with spacing tokens: gap values are space tokens; density modes tighten gaps once at the token tier.",
+          "Composes with rtl-i18n-layout: flex follows direction automatically (row-reverse not needed) - logical properties keep RTL free."
+        ],
+        "patterns": [
+          "Media-object everywhere: avatar/icon + text rows (comments, list items, notifications) as one shared pattern class.",
+          "Toolbar contract: action bars use flex-wrap + gap so overflow reflows instead of clipping; overflow rails are a named exception."
+        ],
+        "useCases": [
+          "Component-level layout inside grid areas: cards, list items, form rows.",
+          "App shell header/footer with sticky-footer pattern.",
+          "Horizontal scroll rails for card carousels."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "scroll-animation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Flex-as-grid: nesting three wrapper divs to fake two-dimensional layout that grid expresses in one rule",
+          "Shrink-less overflow: flex children without min-width: 0 pushing parents wider than the screen",
+          "Margin-based spacing: :last-child margin overrides instead of gap",
+          "Infinite nowrap: toolbars that clip actions instead of wrapping"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Flex order is visual order: never use order/row-reverse to fix visual sequence at the cost of DOM/tab order mismatch (a11y repo 2.4.3) - reorder the DOM.",
+          "fallback": "If a flex pattern cannot preserve DOM=visual order, restructure the markup; visual-only reordering of interactive elements is a blocker."
+        }
+      }
+    },
+    {
+      "id": "css-grid-patterns",
+      "name": "CSS Grid Patterns",
+      "summary": "Two-dimensional layout: page shells, card grids with auto-fit, named areas, and subgrid - the patterns that replaced framework grids.",
+      "sections": {
+        "definition": "CSS Grid is two-dimensional layout: rows and columns designed together. Its patterns cover page scaffolding (header/main/sidebar/footer in one rule), responsive card grids (auto-fill/auto-fit with minmax), named template areas that make layout readable, and subgrid for aligning nested content. Grid made framework grid systems optional - the native primitives are more capable and token-friendly.",
+        "principles": [
+          "Grid for the page skeleton: header/main/aside/footer in one grid-template-areas rule - readable, reorderable per breakpoint.",
+          "auto-fill + minmax for card grids: repeat(auto-fill, minmax(240px, 1fr)) responds to available space without breakpoints.",
+          "Named areas are documentation: grid-template-areas strings read like layout diagrams - prefer them over numbered lines.",
+          "minmax() encodes constraints: minimum comfortable card width + maximum stretch in one declaration.",
+          "Subgrid aligns nested rhythm: card internals (title/meta rows) align across a grid row with subgrid.",
+          "gap consumes space tokens: grid gap is the 4px scale - gutters stay consistent with the rest of the system.",
+          "Implicit grid is a smell: auto-placed items are fine, but important placements get explicit areas - debuggable and RTL-safe."
+        ],
+        "tokens": [
+          {
+            "role": "grid-shell-areas",
+            "value": "'header header' 'aside main' 'footer footer'",
+            "notes": "App shell in one template-areas rule"
+          },
+          {
+            "role": "grid-card-min",
+            "value": "240px",
+            "notes": "Card grid minmax minimum"
+          },
+          {
+            "role": "grid-card-template",
+            "value": "repeat(auto-fill, minmax(240px, 1fr))",
+            "notes": "The responsive card grid one-liner"
+          },
+          {
+            "role": "grid-gap",
+            "value": "space tokens",
+            "notes": "Row/column gap from the 4px scale"
+          },
+          {
+            "role": "grid-sidebar-template",
+            "value": "minmax(240px, 280px) 1fr",
+            "notes": "Sidebar + fluid main"
+          },
+          {
+            "role": "grid-subgrid",
+            "value": "subgrid",
+            "notes": "Nested alignment for card internals"
+          },
+          {
+            "role": "grid-named-lines",
+            "value": "[main-start]",
+            "notes": "Named lines for complex placements"
+          },
+          {
+            "role": "grid-masonry-fallback",
+            "value": "columns-fallback",
+            "notes": "Until masonry ships: columns() or JS masonry"
+          },
+          {
+            "role": "grid-dense-packing",
+            "value": "grid-auto-flow: dense",
+            "notes": "Backfill holes in mixed-size grids (bento)"
+          },
+          {
+            "role": "grid-vs-flex",
+            "value": "two-dim-vs-one-dim",
+            "notes": "The decision rule (flexbox guide)"
+          }
+        ],
+        "composition": [
+          "Composes with grid-systems: the 12-col system can be implemented AS a CSS grid pattern; named areas implement the compositions.",
+          "Composes with flexbox-patterns: grid areas hold flex components - the two-layer rule that keeps both readable.",
+          "Composes with layout-compositions: bento, split, and sidebar layouts are named grid-template-areas strings."
+        ],
+        "patterns": [
+          "Area-string breakpoints: layout reorganization expressed by swapping grid-template-areas per tier - the whole page change in 3 lines.",
+          "minmax card catalog: the design system documents its minmax presets (card 240px, table 480px, widget 320px) once."
+        ],
+        "useCases": [
+          "App shells and dashboard scaffolding.",
+          "Responsive card/product grids without breakpoints.",
+          "Bento/marketing grids with mixed-size cells."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "maximalism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "12-wrapper-col markup: framework-style div.col-md-6 wrappers instead of native minmax/auto-fill",
+          "Magic line numbers: grid-column: 3 / 7 scattered without named lines or areas",
+          "Fixed-height rows: hardcoded row heights that break with dynamic content",
+          "Grid-inside-grid confusion: subgrid ignored where nested alignment was the actual goal"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Grid reordering must keep DOM order aligned with visual reading order (a11y 1.3.2/2.4.3): template-areas reorganization is visual only - the source order stays logical; grid-dense packing must not create confusing tab sequences.",
+          "fallback": "If a grid pattern reorders interactive elements visually, restructure the DOM to match - visual-only reordering of focusable content is a blocker."
+        }
+      }
+    },
+    {
+      "id": "layout-compositions",
+      "name": "Named Layout Compositions",
+      "summary": "The catalog: sidebar, split, stack, cluster, bento, holy-grail - named, token-driven compositions instead of re-solved layout problems.",
+      "sections": {
+        "definition": "Layout compositions are named solutions to recurring layout problems: the sidebar+main shell, the split-pane, the stack (vertical rhythm), the cluster (wrapped chips), the bento grid, the holy grail. Giving them names and token-driven implementations turns layout from per-page problem-solving into a catalog - designers and engineers say 'split with 320px sidebar' and both know exactly what renders.",
+        "principles": [
+          "Name every reusable layout: unnamed layouts cannot be reused or audited - the catalog is the API.",
+          "Compositions consume tokens: sidebar widths, gaps, and max-widths are tokens - a composition has no magic numbers.",
+          "Each composition declares its responsive behavior: how it collapses (sidebar -> drawer, split -> stack) is part of the name's contract.",
+          "Stack is the default; complexity is earned: most content is a stack with gaps - reach for sidebar/split only when hierarchy demands it.",
+          "Bento grids need hierarchy rules: mixed-size cells must follow a size grammar (1 large + 2 medium + n small), not random tiles.",
+          "Compositions nest predictably: sidebar contains stacks and clusters; nesting is documented, depth-capped (3 levels).",
+          "Every composition is RTL-safe and container-aware: logical properties + container queries are baked into the catalog, not added per use."
+        ],
+        "tokens": [
+          {
+            "role": "comp-sidebar",
+            "value": "minmax(240px, 280px) 1fr",
+            "notes": "Sidebar + fluid main; collapses to drawer under lg"
+          },
+          {
+            "role": "comp-split",
+            "value": "1fr 1fr + gap space-6",
+            "notes": "Equal split panes; stacks under md"
+          },
+          {
+            "role": "comp-stack",
+            "value": "flex column + gap space-4",
+            "notes": "The default vertical rhythm container"
+          },
+          {
+            "role": "comp-cluster",
+            "value": "flex wrap + gap space-2",
+            "notes": "Chips, tags, filter rows"
+          },
+          {
+            "role": "comp-bento",
+            "value": "auto-fit minmax + dense",
+            "notes": "Mixed-size dashboard grid"
+          },
+          {
+            "role": "comp-holy-grail",
+            "value": "'header header' 'aside main' 'footer footer'",
+            "notes": "The classic shell, grid-areas named"
+          },
+          {
+            "role": "comp-center",
+            "value": "place-items-center + min-height",
+            "notes": "Empty states, loaders, splash"
+          },
+          {
+            "role": "comp-sidebar-collapse",
+            "value": "drawer-under-1024px",
+            "notes": "The documented responsive contract"
+          },
+          {
+            "role": "comp-nesting-depth",
+            "value": "max-3",
+            "notes": "Composition nesting ceiling"
+          },
+          {
+            "role": "comp-catalog-owner",
+            "value": "design-system",
+            "notes": "The catalog lives in the DS; pages consume it"
+          }
+        ],
+        "composition": [
+          "Compositions are the consuming layer of grid-systems, flexbox-patterns, and css-grid-patterns - the patterns become named products.",
+          "Composes with fluid-container-queries: compositions declare container-type so nested components adapt per slot.",
+          "Composes with skill-component-recipes: component recipes assume the catalog (tables render inside 'sidebar' or 'split' compositions)."
+        ],
+        "patterns": [
+          "Catalog-as-code: each composition is a small class/utility with token inputs and documented collapse behavior - pages compose them.",
+          "Collapse-contract table: one table listing every composition x its mobile behavior; new compositions fill a row before shipping."
+        ],
+        "useCases": [
+          "Design systems shipping layout primitives (Radix/Every Layout style).",
+          "Rapid page assembly from named layouts instead of bespoke CSS.",
+          "Audit: pages re-implementing 'sidebar' badly instead of consuming the composition."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "maximalism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "page-transitions",
+            "entrance-exit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Bespoke everything: every page re-solving sidebar layout with different values",
+          "Magic-number compositions: named layouts with hardcoded px inside",
+          "Undeclared collapse: compositions whose mobile behavior is discovered in QA",
+          "Nesting spirals: 6-deep composition stacks where 2 would do"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Composition collapse behavior is an accessibility surface: sidebar->drawer must preserve focus management and DOM order (a11y repo guides 03/04); collapse must never hide content from AT without disclosure.",
+          "fallback": "If a composition cannot collapse accessibly (e.g. bento on mobile), it stacks in DOM order - visual bento is a wide-screen enhancement only."
+        }
+      }
+    },
+    {
+      "id": "responsive-images",
+      "name": "Responsive Images & Media",
+      "summary": "srcset/sizes, art direction, modern formats, and lazy loading: images that ship the right bytes for every slot and bandwidth.",
+      "sections": {
+        "definition": "Images dominate page weight; responsive image technique ships the right pixels for the slot: srcset/sizes for resolution switching, <picture> for art direction (different crops per viewport), AVIF/WebP with fallbacks, lazy loading below the fold, and aspect-ratio boxes that reserve space (zero CLS). The skill is treating images as layout citizens - sized by tokens, loaded strategically, never causing shift.",
+        "principles": [
+          "srcset + sizes for the common case: let the browser pick from a width descriptor list; sizes must match the actual rendered slot.",
+          "Art direction via <picture> only when crops differ: mobile hero needs a different crop - that is picture; mere resizing is srcset.",
+          "AVIF first, WebP fallback: modern formats cut 30-50% of JPEG weight; the type attribute negotiates per browser.",
+          "Lazy-load below the fold: loading=lazy on non-critical images; above-the-fold stays eager + preload for LCP.",
+          "Aspect-ratio boxes kill CLS: width/height or aspect-ratio on every img - space reserved before bytes arrive.",
+          "Object-fit for slot-filling: cover/contain semantics explicit - never distort; focal point via object-position for crops.",
+          "LCP image is special: preload it, fetchpriority=high, no lazy - the largest contentful paint drives perceived speed.",
+          "Alt text is part of the image contract: every meaningful image ships with alt (a11y repo media-alt-text)."
+        ],
+        "tokens": [
+          {
+            "role": "img-resolution-srcset",
+            "value": "480w,800w,1200w,2000w",
+            "notes": "Standard width descriptor ladder"
+          },
+          {
+            "role": "img-sizes-policy",
+            "value": "match-rendered-slot",
+            "notes": "sizes attr mirrors the layout's real slot width"
+          },
+          {
+            "role": "img-format-stack",
+            "value": "avif,webp,jpeg",
+            "notes": "<picture> type negotiation order"
+          },
+          {
+            "role": "img-art-direction",
+            "value": "picture-only-for-crops",
+            "notes": "Different crops per viewport; not mere resizing"
+          },
+          {
+            "role": "img-loading-fold",
+            "value": "eager-above-lazy-below",
+            "notes": "loading=lazy below fold; eager + preload for LCP"
+          },
+          {
+            "role": "img-lcp",
+            "value": "preload+fetchpriority-high",
+            "notes": "Hero/LCP image contract"
+          },
+          {
+            "role": "img-aspect-reserved",
+            "value": "aspect-ratio-set",
+            "notes": "Zero CLS: space reserved pre-load"
+          },
+          {
+            "role": "img-object-fit",
+            "value": "cover-or-contain",
+            "notes": "Slot-filling semantics; never distort"
+          },
+          {
+            "role": "img-max-width",
+            "value": "100%",
+            "notes": "Fluid base: images never overflow containers"
+          },
+          {
+            "role": "img-decode-async",
+            "value": "decoding-async",
+            "notes": "Off-main-thread decode for large images"
+          }
+        ],
+        "composition": [
+          "Composes with layout compositions: slot sizes (sidebar, card, hero) generate the sizes attribute values - layout informs loading.",
+          "Composes with perceived-performance (skill-design-review guide 10): LCP/CLS from images are the top perceptual-speed factors.",
+          "Composes with skill-animation scroll-animation: parallax/lazy-reveal images follow the same loading discipline."
+        ],
+        "patterns": [
+          "Image component with slots: one <Image> wrapper consuming slot tokens (card/hero/sidebar) and emitting correct srcset/sizes/lazy/preload.",
+          "Zero-CLS rule: CI checks every img for explicit dimensions/aspect-ratio; a shift-causing image fails the build."
+        ],
+        "useCases": [
+          "E-commerce grids: hundreds of product images sized right per card.",
+          "Editorial/hero pages with art-direction crops.",
+          "Perf audits: LCP, CLS, wasted bytes from oversized images."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "collage-art"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "scroll-animation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Desktop images everywhere: 2000w hero rendered in a 300px slot",
+          "CLS by images: no dimensions on img - the whole page jumps on load",
+          "Lazy LCP: loading=lazy on the hero image, tanking the largest paint",
+          "Distorted fills: stretched thumbnails from missing object-fit"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Every informative image carries alt (a11y repo guide 09); decorative images alt='' - and aspect-ratio reservation prevents the layout jumps that disorient zoom and screen-magnifier users.",
+          "fallback": "If art direction cannot be produced per viewport, ship one well-cropped 16:9 master with object-fit - a single good crop beats three bad ones."
+        }
+      }
+    },
+    {
+      "id": "mobile-navigation",
+      "name": "Mobile Navigation",
+      "summary": "Bottom bars, drawers, and the thumb zone: navigation patterns that work at 360px with one thumb - and when to collapse what.",
+      "sections": {
+        "definition": "Mobile navigation reorganizes for a 360px viewport and a thumb-reachable zone: top bars shrink to logo + actions, primary destinations move to a bottom bar (3-5 items), everything else tucks into drawers or full-screen menus. The craft is deciding what earns a bottom-bar slot, what collapses, and how the drawer preserves focus and context (a11y repo guides 03/04).",
+        "principles": [
+          "3-5 items in the bottom bar: thumb-reachable, icon + label, current item visually and semantically marked (aria-current).",
+          "Thumb zone rules: primary actions bottom-right for right-handed reach; destructive actions away from the thumb's resting arc.",
+          "Top bar shrinks, never stacks: 56px max; logo + title + one-two actions; everything else moves down.",
+          "Drawers and sheets for secondary nav: slide-in panels with focus trap, Escape/scrim close, and focus return (dialog contract).",
+          "Menus collapse by importance, not alphabet: the nav audit ranks destinations by frequency; the cut line is data-driven.",
+          "Breadcrumb or back over deep menus: mobile hierarchy favors back-stack and breadcrumbs over mega-menus.",
+          "44px targets everywhere: nav items meet the touch floor; icon-only items get labels or aria-label (a11y repo 2.5.8)."
+        ],
+        "tokens": [
+          {
+            "role": "mobnav-bottom-bar-items",
+            "value": "3-5",
+            "notes": "Thumb-zone primary destinations"
+          },
+          {
+            "role": "mobnav-bar-height",
+            "value": "56px",
+            "notes": "Top bar ceiling on mobile"
+          },
+          {
+            "role": "mobnav-target-size",
+            "value": "44px",
+            "notes": "WCAG 2.5.8 floor for nav items"
+          },
+          {
+            "role": "mobnav-drawer-width",
+            "value": "min(84vw, 360px)",
+            "notes": "Slide-in drawer width cap"
+          },
+          {
+            "role": "mobnav-drawer-motion",
+            "value": "240ms ease-standard",
+            "notes": "Motion tokens from skill-animation"
+          },
+          {
+            "role": "mobnav-current-mark",
+            "value": "aria-current+visual",
+            "notes": "Current page: semantic + visual (double signal)"
+          },
+          {
+            "role": "mobnav-icon-plus-label",
+            "value": "always",
+            "notes": "Bottom bar icons carry labels (recognition over recall)"
+          },
+          {
+            "role": "mobnav-scrim",
+            "value": "rgba(0,0,0,0.60)",
+            "notes": "Drawer scrim; dismiss on tap"
+          },
+          {
+            "role": "mobnav-collapse-rank",
+            "value": "by-usage-data",
+            "notes": "Cut line from analytics, not alphabet"
+          },
+          {
+            "role": "mobnav-safe-area",
+            "value": "env(safe-area-inset-*)",
+            "notes": "Notched-device bottom padding"
+          }
+        ],
+        "composition": [
+          "Composes with breakpoints-strategy: nav collapse is the lg-tier change (bottom bar appears, sidebar becomes drawer).",
+          "Composes with layout-compositions: the shell composition declares its mobile nav contract (which comp collapses to what).",
+          "Composes with a11y focus-management: drawers implement the trap-and-return dialog contract exactly."
+        ],
+        "patterns": [
+          "Bottom-bar + drawer stack: primary destinations in the bar, the long tail in a 'More' sheet - the standard mobile IA.",
+          "Nav-collapse contract: the layout catalog documents where each nav tier lives (desktop sidebar / tablet drawer / mobile bar+sheet)."
+        ],
+        "useCases": [
+          "Responsive web apps adapting desktop IA to mobile.",
+          "PWA/mobile-first products designing thumb-first from the start.",
+          "Audit: unlabeled icon nav, unreachable menus, trap-less drawers."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [
+            "data-tables-responsive"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism"
+          ],
+          "caution": [
+            "skeuomorphism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "page-transitions",
+            "feedback-confirmation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Hamburger everything: all navigation hidden behind one icon - discovery dies",
+          "Icon-only bottom bars: unlabeled glyphs users must memorize",
+          "Top-bar overflow: 8 actions crammed into a 56px bar",
+          "Trap-less drawers: slide-ins without focus management or Escape"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Mobile nav is an a11y hotspot: bottom-bar items need aria-current + labels, drawers need the full dialog contract (trap, Escape, return), and 44px targets (2.5.8) are the floor - see a11y repo guides 03/04/06.",
+          "fallback": "If drawer focus management cannot be built in time, use a full-page menu (normal document flow, no trap) - simpler and accessible by default."
+        }
+      }
+    },
+    {
+      "id": "data-tables-responsive",
+      "name": "Responsive Data Tables",
+      "summary": "Tables that survive narrow screens: priority columns, card fallback, sticky headers, and horizontal scroll done honestly.",
+      "sections": {
+        "definition": "Data tables are the hardest responsive problem: they are dense, two-dimensional, and comparison-oriented - exactly what small screens hate. The strategy ladder: (1) reduce columns by priority, (2) allow honest horizontal scroll with sticky first column, (3) restructure to stacked cards per row as last resort (losing comparability). The choice is per-table by data type - and horizontal scroll with sticky headers beats pseudo-card tables for comparison tasks.",
+        "principles": [
+          "Cut before you adapt: mobile tables show priority columns (2-4); the rest live in a detail view - column priority is an IA decision.",
+          "Horizontal scroll is honest: a scrollable table with sticky header + sticky identifier column preserves comparability; hide-scroll-by-crop is a lie.",
+          "Card-stack is the last resort: stacked rows lose column comparison - use only when rows are self-contained records (orders, messages).",
+          "Sticky first column = row identity: the identifier column pins so users never lose which row they are reading.",
+          "Row height and touch targets: 48px rows; row actions as a menu, not a hover-only toolbar (hover does not exist on touch).",
+          "Numeric columns stay tabular: tnum figures + right alignment (typography guide 10) - alignment survives adaptation.",
+          "Scroll indicators are visible: a faded edge or shadow marks truncation; users must know more exists (3.2.x predictability)."
+        ],
+        "tokens": [
+          {
+            "role": "table-priority-cols",
+            "value": "2-4-on-mobile",
+            "notes": "IA decision: which columns survive mobile"
+          },
+          {
+            "role": "table-scroll-mode",
+            "value": "horizontal+sticky-id",
+            "notes": "Default adaptation: honest scroll, pinned identity"
+          },
+          {
+            "role": "table-sticky-header",
+            "value": "position-sticky-top",
+            "notes": "Column headers persist on vertical scroll"
+          },
+          {
+            "role": "table-row-height",
+            "value": "48px",
+            "notes": "Touch-comfortable rows; 40px compact tier"
+          },
+          {
+            "role": "table-card-fallback",
+            "value": "self-contained-rows-only",
+            "notes": "Card stacking only for record-like rows"
+          },
+          {
+            "role": "table-actions",
+            "value": "menu-not-hover",
+            "notes": "Row actions in a kebab menu on touch"
+          },
+          {
+            "role": "table-numeric-align",
+            "value": "right+tabular",
+            "notes": "Numbers right-aligned, tabular figures"
+          },
+          {
+            "role": "table-scroll-indicator",
+            "value": "edge-fade",
+            "notes": "Visible truncation cue"
+          },
+          {
+            "role": "table-empty-width",
+            "value": "min-100%",
+            "notes": "Tables never compress below readable column width"
+          },
+          {
+            "role": "table-sort-targets",
+            "value": "44px-header-buttons",
+            "notes": "Sort headers meet the touch floor"
+          }
+        ],
+        "composition": [
+          "Composes with grid-systems: tables span the full content column; their scroll container respects the shell's margins.",
+          "Composes with skill-component-recipes guide 03 (tables): the recipe owns features (sort/filter/pagination); this guide owns responsive behavior.",
+          "Composes with numeric-tabular (skill-typography guide 10): alignment and figure style are shared contracts."
+        ],
+        "patterns": [
+          "Priority-column matrix: per table, document columns x importance (mobile/core/extended); the mobile set falls out of the matrix.",
+          "Sticky-scroll pattern: scroll container + position-sticky th + sticky first column + edge fade - the reusable honest-scroll implementation."
+        ],
+        "useCases": [
+          "Admin/enterprise tools where tables are the primary surface.",
+          "Finance and analytics products with comparison-critical tables.",
+          "Audit: hover-only actions, cropped scroll, card-tables that lost comparability."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "intrinsic-design",
+            "rtl-i18n-layout",
+            "responsive-testing",
+            "mobile-navigation"
+          ],
+          "caution": [
+            "mobile-navigation"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [
+            "data-animation"
+          ],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Crop-scroll lie: tables that silently clip columns with no scroll affordance",
+          "Card-table everything: comparison data stacked into cards, destroying the only reason it was a table",
+          "Hover-only row actions: toolbars invisible to touch and keyboard users",
+          "Squeezed columns: letting tables compress until cells wrap into unreadable slivers"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Tables need real <table> semantics (th scope, caption) regardless of visual adaptation (a11y repo aria-fundamentals); scroll containers must stay keyboard-scrollable and actions keyboard-reachable (2.1.1).",
+          "fallback": "If the card fallback is used, keep a 'switch to table view' control - comparability is user-selectable, not design-fated."
+        }
+      }
+    },
+    {
+      "id": "intrinsic-design",
+      "name": "Intrinsic Layout",
+      "summary": "Layouts from content, not viewport: min/max/clamp sizing, aspect-ratio, and the Every-Layout approach that needs fewer breakpoints.",
+      "sections": {
+        "definition": "Intrinsic design builds layouts from the content's own size preferences instead of viewport assumptions: min-content, max-content, fit-content, clamp(), and aspect-ratio let components absorb available space gracefully across any width. Popularized by Every Layout, the approach produces layouts that need dramatically fewer media queries - the content flexes, the viewport merely bounds it. It is the philosophy behind why modern CSS needs fewer breakpoints, not more.",
+        "principles": [
+          "Sizing from content: min-content and max-content describe what content needs; layout math starts there, not from a guessed px value.",
+          "clamp() is the workhorse: min 0, ideal some fraction, max 1 - the sidebar pattern minmax(auto, 1fr) absorbs space without queries.",
+          "The 'sidebar' pattern needs no breakpoint: grid-template-columns: fit-content(280px) 1fr collapses naturally as space shrinks.",
+          "aspect-ratio reserves space declaratively: media boxes and cards hold their shape without padding hacks.",
+          "Fewer queries is a symptom of good intrinsic math: if every component needs 3 queries, the sizing strategy is wrong.",
+          "Intrinsic + container queries compose: intrinsic sizing decides how a component wants to flex; container queries decide which variant renders.",
+          "Intrinsic does not mean uncontrolled: max-width tokens and ch measures still bound growth - content-flexing within documented limits."
+        ],
+        "tokens": [
+          {
+            "role": "intrinsic-strategy",
+            "value": "content-first-fewer-queries",
+            "notes": "Sizing math before media queries"
+          },
+          {
+            "role": "intrinsic-sidebar",
+            "value": "fit-content(280px) 1fr",
+            "notes": "Breakpoint-free sidebar pattern"
+          },
+          {
+            "role": "intrinsic-clamp-space",
+            "value": "clamp(1rem, 50vw - 10rem, 2rem)",
+            "notes": "Fluid spacing without queries"
+          },
+          {
+            "role": "intrinsic-min-width",
+            "value": "min-content",
+            "notes": "The floor a flex item may shrink to"
+          },
+          {
+            "role": "intrinsic-max-width",
+            "value": "max-content",
+            "notes": "The ceiling content occupies naturally"
+          },
+          {
+            "role": "intrinsic-fit",
+            "value": "fit-content(66ch)",
+            "notes": "Reading measure as an intrinsic bound"
+          },
+          {
+            "role": "intrinsic-aspect",
+            "value": "aspect-ratio 16/9",
+            "notes": "Media boxes reserve shape declaratively"
+          },
+          {
+            "role": "intrinsic-minmax-absorb",
+            "value": "minmax(min-content, 1fr)",
+            "notes": "Columns that absorb space, never overflow"
+          },
+          {
+            "role": "intrinsic-query-budget",
+            "value": "only-when-content-breaks",
+            "notes": "Media queries added when content, not viewport, demands"
+          },
+          {
+            "role": "intrinsic-test-range",
+            "value": "240px-2560px",
+            "notes": "Continuous resize test, no fixed tier set"
+          }
+        ],
+        "composition": [
+          "Composes with fluid-container-queries: intrinsic sizing is the pre-CQ philosophy; together they cover 'how it flexes' and 'which variant renders'.",
+          "Caution with grid-systems and breakpoints-strategy: fixed 12-col tiers and fixed tier sets answer a different question - document which approach owns each surface instead of mixing both in one component.",
+          "Composes with responsive-images: aspect-ratio and intrinsic width are shared contracts between layout and media."
+        ],
+        "patterns": [
+          "The Every Layout primitives: stack, cluster, sidebar, switcher, center, cover, grid - implemented once as reusable, query-light classes.",
+          "Query-budget audit: count media/container queries per component; more than 1-2 signals the intrinsic math should be redone."
+        ],
+        "useCases": [
+          "Content-of-unknown-length surfaces: CMS pages, i18n text, user-generated content.",
+          "Component libraries meant to work in any slot without slot knowledge.",
+          "Refactors reducing breakpoint count without losing responsive quality."
+        ],
+        "combinations": {
+          "good": [
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "rtl-i18n-layout",
+            "responsive-testing"
+          ],
+          "caution": [
+            "grid-systems",
+            "breakpoints-strategy"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art",
+            "maximalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Viewport-brained defaults: fixed widths everywhere with queries papering over the cracks",
+          "Query inflation: 4 queries per component because the sizing strategy was never intrinsic",
+          "Unbounded flexing: intrinsic sizing with no max-width tokens - text lines run to 200ch on wide screens",
+          "Cargo-cult minimalism: refusing any breakpoint where a genuine content break exists"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Intrinsic sizing is a zoom/accessibility ally: content-driven layouts survive 200%-400% zoom and text-spacing overrides better than fixed-width ones (WCAG 1.4.4/1.4.10) - flexing content IS the reflow strategy.",
+          "fallback": "Where intrinsic patterns cannot express a required design, add the minimal named breakpoint and document it - pragmatism over dogma."
+        }
+      }
+    },
+    {
+      "id": "rtl-i18n-layout",
+      "name": "RTL & i18n Layout",
+      "summary": "Layouts that flip, reflow, and re-text for every locale: logical properties, RTL mirroring, text expansion, and internationalization-safe responsive design.",
+      "sections": {
+        "definition": "An internationalized layout survives translation: Arabic/Hebrew flip it horizontally (RTL), German lengthens labels by 35%, Thai changes line-breaking rules, and CJK changes both reading and type expectations. The modern toolkit makes this cheap: CSS logical properties (margin-inline, padding-block, inset-inline) replace physical directions, flex/grid follow direction automatically, and text expansion budgets are planned in component design - so localization becomes configuration, not a layout rewrite.",
+        "principles": [
+          "Logical properties everywhere: margin-inline-start, not margin-left; padding-block, not padding-top - direction becomes a single dir attribute flip.",
+          "Flex and grid are direction-aware: row follows writing direction; row-reverse to 'fix' RTL is a bug, not a fix.",
+          "Plan for 30-40% text expansion: German/Finnish labels grow; buttons, nav items, and table headers need flexible widths, never fixed.",
+          "Mirroring is semantic, not absolute: media players, progress bars, and timelines flip direction; logos, media controls for playback, and clock faces do not.",
+          "dir attribute is set at the html level and corrected per-fragment: user-generated RTL content inside LTR pages gets dir=auto.",
+          "Icons and arrows flip when directional: back arrows, chevrons, and indent icons mirror; brand marks and checkmarks do not.",
+          "Test the full locale matrix: one RTL locale (Arabic), one long-word locale (German), one CJK (Japanese) - the minimum QA set."
+        ],
+        "tokens": [
+          {
+            "role": "i18n-spacing-model",
+            "value": "logical-properties-only",
+            "notes": "margin-inline/padding-block; physical directions lint-blocked"
+          },
+          {
+            "role": "i18n-direction-source",
+            "value": "html-dir-attr",
+            "notes": "dir=rtl|ltr at root; dir=auto for user content"
+          },
+          {
+            "role": "i18n-text-expansion",
+            "value": "40%-budget",
+            "notes": "Labels/UI strings sized to survive German-length translations"
+          },
+          {
+            "role": "i18n-mirror-list",
+            "value": "documented-per-icon",
+            "notes": "Which icons/glyphs flip in RTL; the rest never do"
+          },
+          {
+            "role": "i18n-flex-behavior",
+            "value": "follow-dir-naturally",
+            "notes": "No row-reverse hacks; direction flows from dir"
+          },
+          {
+            "role": "i18n-test-locales",
+            "value": "ar,de,ja",
+            "notes": "Minimum QA locale set: RTL + long-word + CJK"
+          },
+          {
+            "role": "i18n-line-break",
+            "value": "line-break-rules-per-script",
+            "notes": "Thai/CJK breaking; overflow-wrap: anywhere fallbacks"
+          },
+          {
+            "role": "i18n-numerals",
+            "value": "locale-formats",
+            "notes": "Date/number formatting via Intl, never hand-rolled"
+          },
+          {
+            "role": "i18n-nav-flip",
+            "value": "mirror-shell",
+            "notes": "Sidebar/logo/actions mirror; content order stays DOM order"
+          },
+          {
+            "role": "i18n-font-fallback",
+            "value": "per-script-stacks",
+            "notes": "Arabic/CJK/Thai faces in the fallback chain where needed"
+          }
+        ],
+        "composition": [
+          "Composes with grid-systems and layout-compositions: the shell's mirroring contract (what flips, what does not) is documented per composition.",
+          "Composes with flexbox-patterns: flex follows direction automatically - patterns here must never hardcode physical directions.",
+          "Composes with multilingual-vietnamese (skill-typography guide 07): script coverage and fallback stacks are shared contracts."
+        ],
+        "patterns": [
+          "Logical-property migration: codemod margin-left/right/top/bottom to inline/block equivalents repo-wide; lint blocks new physical properties.",
+          "RTL smoke page: one page rendering nav, forms, tables, and icons under dir=rtl, screenshotted per release against the mirror list."
+        ],
+        "useCases": [
+          "Products launching Arabic/Hebrew/Urdu markets.",
+          "Global products keeping one responsive system across 20+ locales.",
+          "Audit: hardcoded margin-left, non-mirroring arrows, buttons that explode with German labels."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "responsive-testing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design"
+          ],
+          "caution": [
+            "collage-art",
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "page-transitions",
+            "easing-timing"
+          ],
+          "caution": [
+            "scroll-animation"
+          ],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Physical-direction CSS: margin-left sprinkled through codebase, making RTL a rewrite instead of an attribute",
+          "Row-reverse band-aids: 'fixing' RTL by reversing flex instead of trusting dir",
+          "Fixed-width labels: buttons sized for English that shatter with translated strings",
+          "Everything-mirrors: flipping logos, clocks, and playback controls that read wrong mirrored"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Correct dir attributes are an accessibility requirement (WCAG 1.3.2 meaningful sequence; H58 dir usage): screen readers switch reading behavior with dir - wrong direction is wrong narration; DOM order must remain logical in both directions.",
+          "fallback": "If full RTL support cannot ship for a locale, disable that locale's UI (content-only mode) rather than shipping a broken mirrored interface."
+        }
+      }
+    },
+    {
+      "id": "responsive-testing",
+      "name": "Responsive Testing & QA",
+      "summary": "The verification layer: viewport test matrix, visual regression, real-device checks, and zoom/RTL/locale passes that prove layouts work.",
+      "sections": {
+        "definition": "Responsive testing is the discipline that keeps every other layout skill honest: a defined viewport/device matrix, automated visual regression at each width, manual passes for zoom (200%/400%), RTL, and long-locale strings, and real-device spot checks for touch behaviors. Layout quality claims ('it's responsive') are replaced by evidence: which widths, which locales, and which zoom levels passed, and when.",
+        "principles": [
+          "A written viewport matrix, not vibes: the tier widths (320/640/768/1024/1280/1536) plus 200%/400% zoom are the documented pass set.",
+          "Visual regression automates the matrix: screenshot diffs at every tier width on every PR catch the overflow nobody eyeballed.",
+          "Zoom IS a responsive test: 400% zoom on a 1280px laptop renders a 320px effective width - low-vision users live in your mobile tier (WCAG 1.4.4/1.4.10).",
+          "Locale passes are layout passes: German (35% longer), Arabic (RTL), and Japanese (CJK line rules) are the minimum string-stress set.",
+          "Real devices verify what emulators cannot: touch targets, safe areas, scroll physics, and OS-level font scaling (iOS/Android accessibility sizes).",
+          "Test content, not lorem ipsum: longest real strings, empty states, and worst-case data volumes are the fixtures that find overflow.",
+          "Findings are tickets with a width attached: 'broken at 768px with German copy' - reproducible beats 'looks weird sometimes'."
+        ],
+        "tokens": [
+          {
+            "role": "test-viewport-matrix",
+            "value": "320,640,768,1024,1280,1536",
+            "notes": "The documented width pass set"
+          },
+          {
+            "role": "test-zoom-levels",
+            "value": "200%,400%",
+            "notes": "Zoom passes included in the matrix (1.4.4/1.4.10)"
+          },
+          {
+            "role": "test-locale-set",
+            "value": "ar,de,ja",
+            "notes": "RTL + long-word + CJK stress locales"
+          },
+          {
+            "role": "test-content-fixtures",
+            "value": "longest-real-strings",
+            "notes": "Overflow fixtures: longest label, empty state, max rows"
+          },
+          {
+            "role": "test-visual-regression",
+            "value": "per-PR-all-widths",
+            "notes": "Screenshot diff gate on every pull request"
+          },
+          {
+            "role": "test-device-pass",
+            "value": "quarterly-real-devices",
+            "notes": "iOS/Android spot checks: targets, safe areas, OS font scale"
+          },
+          {
+            "role": "test-rtl-smoke",
+            "value": "per-release",
+            "notes": "dir=rtl page render vs the mirror list"
+          },
+          {
+            "role": "test-orientation",
+            "value": "portrait-and-landscape",
+            "notes": "Both orientations where supported (WCAG 1.3.4)"
+          },
+          {
+            "role": "test-os-font-scale",
+            "value": "largest-accessibility-size",
+            "notes": "OS-level text scaling verified on devices"
+          },
+          {
+            "role": "test-finding-format",
+            "value": "width+locale+evidence",
+            "notes": "Bugs cite width, locale, and screenshot"
+          }
+        ],
+        "composition": [
+          "Composes with breakpoints-strategy and fluid-container-queries: the tier set and slot list define exactly which widths and containers the matrix covers.",
+          "Composes with sibling layout guides: every layout pattern ships with its test slot (sidebar/main/modal) registered in the matrix.",
+          "Composes with zoom-reflow (skill-accessibility guide 11): the zoom and reflow passes are shared contracts between both repos."
+        ],
+        "patterns": [
+          "Matrix-as-config: the viewport/locale/zoom matrix lives in a config file consumed by the visual-regression tool - tests and docs stay in sync.",
+          "Overflow canary: an automated probe walks pages at each width and fails on horizontal scroll of reading content or clipped interactive elements."
+        ],
+        "useCases": [
+          "Design systems gating component releases on the full matrix.",
+          "i18n product launches: locale stress passes before market open.",
+          "Ongoing QA: regression gates keeping responsive debt from accumulating."
+        ],
+        "combinations": {
+          "good": [
+            "grid-systems",
+            "breakpoints-strategy",
+            "fluid-container-queries",
+            "flexbox-patterns",
+            "css-grid-patterns",
+            "layout-compositions",
+            "responsive-images",
+            "mobile-navigation",
+            "data-tables-responsive",
+            "intrinsic-design",
+            "rtl-i18n-layout"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Two-width testing: signing off at 375px and 1440px while the 768-1024 middle tier rots",
+          "Lorem ipsum QA: placeholder strings that never overflow, hiding the German-label explosion",
+          "Emulator-only trust: declaring touch and safe-area work without ever holding a device",
+          "Ungated regressions: visual diffs run manually, after the overflow already shipped"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Zoom and OS-font-scale passes are accessibility conformance tests (WCAG 1.4.4/1.4.10), not polish: low-vision users browse at widths your matrix must include - the 400% zoom pass IS a responsive test.",
+          "fallback": "If the full matrix cannot run before release, run the subset in priority order: 320px, 400% zoom, RTL locale, then widest - and ship the remainder as documented known issues with owners."
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Responsive Testing & QA - starter design tokens (CSS custom properties)
+ * Skill id: responsive-testing (#12 of 12)
+ *
+ * The verification layer: viewport test matrix, visual regression, real-device checks, and zoom/RTL/locale passes that prove layouts work.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-test-viewport-matrix: 320,640,768,1024,1280,1536; /* The documented width pass set */
+  --layout-test-zoom-levels: 200%,400%; /* Zoom passes included in the matrix (1.4.4/1.4.10) */
+  --layout-test-locale-set: ar,de,ja; /* RTL + long-word + CJK stress locales */
+  --layout-test-content-fixtures: longest-real-strings; /* Overflow fixtures: longest label, empty state, max rows */
+  --layout-test-visual-regression: per-PR-all-widths; /* Screenshot diff gate on every pull request */
+  --layout-test-device-pass: quarterly-real-devices; /* iOS/Android spot checks: targets, safe areas, OS font scale */
+  --layout-test-rtl-smoke: per-release; /* dir=rtl page render vs the mirror list */
+  --layout-test-orientation: portrait-and-landscape; /* Both orientations where supported (WCAG 1.3.4) */
+  --layout-test-os-font-scale: largest-accessibility-size; /* OS-level text scaling verified on devices */
+  --layout-test-finding-format: width+locale+evidence; /* Bugs cite width, locale, and screenshot */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Zoom and OS-font-scale passes are accessibility conformance tests (WCAG 1.4.4/1.4.10), not polish: low-vision users browse at widths your matrix must include - the 400% zoom pass IS a responsive test. */
+/* Fallback: If the full matrix cannot run before release, run the subset in priority order: 320px, 400% zoom, RTL locale, then widest - and ship the remainder as documented known issues with owners. */

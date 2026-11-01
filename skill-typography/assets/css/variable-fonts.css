@@ -1,0 +1,27 @@
+/* ============================================================
+ * Variable Fonts - starter design tokens (CSS custom properties)
+ * Skill id: variable-fonts (#11 of 12)
+ *
+ * One file, many styles: weight/optical axes, named instances, and when a variable font beats static weights - plus the loading math.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-vf-strategy: one-file-per-family; /* Variable replaces static weights; never both */
+  --type-vf-weight-range: 100-900; /* wght axis range as loaded (subset if narrower) */
+  --type-vf-optical: auto; /* font-optical-sizing: auto when opsz axis exists */
+  --type-vf-named-weights: 400,600,700; /* The tokenized subset users may pick */
+  --type-vf-experimental-axes: review-gated; /* Custom axes (slnt, GRAD) need design review */
+  --type-vf-animation-policy: no-text-weight-anim; /* Weight animation on reading text forbidden */
+  --type-vf-size-budget: under-120kb; /* Per-family variable file ceiling */
+  --type-vf-grade-axis: emphasis-only; /* GRAD axes for subtle emphasis, not hierarchy */
+  --type-vf-fallback: size-adjust-tuned; /* Same fallback discipline as static */
+  --type-vf-support-policy: modern-browsers; /* Variable fonts have universal modern support */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Named instances protect predictability: screen magnifier and low-vision users rely on consistent weights; weight animation on text also violates reduced-motion norms (perpetual motion). */
+/* Fallback: If variable font behavior is unpredictable in a target browser, fall back to static weights of the same family - identical tokens, different delivery. */

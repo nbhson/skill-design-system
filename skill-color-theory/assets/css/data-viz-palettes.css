@@ -1,0 +1,27 @@
+/* ============================================================
+ * Data Visualization Palettes - starter design tokens (CSS custom properties)
+ * Skill id: data-viz-palettes (#08 of 12)
+ *
+ * Categorical, sequential, and diverging palettes built for comprehension: distinguishability, colorblind safety, and 3:1 against surfaces.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-categorical-set: 8-hue-l-and-c-varied; /* Differing in hue + lightness; CVD-verified */
+  --clr-categorical-max: 8-series; /* Beyond 8: small multiples, not more colors */
+  --clr-sequential-ramp: viridis-class-uniform; /* Perceptually uniform; single-hue or multi-hue */
+  --clr-sequential-steps: 5-7-displayed; /* Displayed steps; ramps store more */
+  --clr-diverging-center: true-neutral-midpoint; /* Data zero = neutral; hues diverge outward */
+  --clr-diverging-hues: opposing-hue-pair; /* e.g. blue↔orange (CVD-safe axis) */
+  --clr-viz-contrast-floor: 3:1-vs-surface; /* WCAG 1.4.11 for marks/series */
+  --clr-viz-cvd-check: deuteranopia-verified; /* All palettes pass deuteranopia/protanopia simulation */
+  --clr-viz-non-color-channel: label-or-pattern; /* Direct labels/patterns accompany series color */
+  --clr-viz-palette-owner: token-set-versioned; /* One viz palette set consumed by every chart */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Viz palettes implement WCAG 1.4.11 (non-text contrast) and 1.4.1 (color alone) at the chart level: 3:1 marks, CVD-tested sets, and a non-color channel on every series - plus charts ship accessible data tables (a11y repo guide 09). */
+/* Fallback: When categorical sets exceed 8 series, switch to small multiples or a legend-driven highlight model - more colors is never the fix. */

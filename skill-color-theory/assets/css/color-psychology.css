@@ -1,0 +1,27 @@
+/* ============================================================
+ * Color Psychology & Brand Fit - starter design tokens (CSS custom properties)
+ * Skill id: color-psychology (#03 of 12)
+ *
+ * What hues signal and when signals misfire: emotion, category conventions, and matching brand personality to palette temperature.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-brand-personality-map: adjectives-to-hue-temp-chroma; /* Documented mapping before palette design */
+  --clr-temperature-fit: product-session-mood; /* Warm energizes; cool calms; chosen per product */
+  --clr-chroma-personality: high-playful-low-premium; /* The chroma-to-maturity axis */
+  --clr-category-convention-check: required; /* Fintech blue / health green / food red audited consciously */
+  --clr-signal-role-protection: status-hues-locked; /* Danger/success/warning hues never brand-swapped */
+  --clr-cta-energy: warm-or-high-chroma; /* Primary actions earn attention via temperature/chroma */
+  --clr-context-test: in-real-screens; /* Psychology verified in UI, not swatch grids */
+  --clr-photography-harmony: palette-complements-media; /* Brand palette chosen to harmonize with real content imagery */
+  --clr-palette-drift-guard: campaigns-derive; /* Campaigns derive from the brand scheme, never fork it */
+  --clr-rebrand-audit: association-refresh; /* Psychology mapping re-validated at every rebrand */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Psychological signals must not rely on hue alone: 'red = danger' reaches color-blind users as the text, icon, and position around the hue (guide 11) - psychology informs, multi-signal design delivers. */
+/* Fallback: When brand personality and category convention conflict, convention wins on status/safety hues and brand expresses through non-status surfaces - personality yields where misreading costs. */

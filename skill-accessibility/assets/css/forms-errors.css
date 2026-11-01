@@ -1,0 +1,27 @@
+/* ============================================================
+ * Forms & Error Handling - starter design tokens (CSS custom properties)
+ * Skill id: forms-errors (#07 of 12)
+ *
+ * Labels, descriptions, and error wiring that make forms operable and recoverable: 3.3.1, 3.3.2, 3.3.3, 4.1.3 done as wiring, not styling.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-label-policy: programmatic-required; /* <label for> or aria-labelledby; lint-blocks orphans */
+  --a11y-hint-wiring: aria-describedby; /* Format hints read after the label, before input */
+  --a11y-error-wiring: aria-describedby+aria-invalid; /* Error text linked per field; flag on the input */
+  --a11y-error-summary: focus-on-submit-fail; /* Summary list receives focus; each item links to its field */
+  --a11y-status-announce: aria-live-polite; /* Saved/sent confirmations; never assertive for success */
+  --a11y-required-signal: text-plus-aria-required; /* Asterisk alone is not enough; say 'required' */
+  --a11y-error-message-style: cause-plus-fix; /* 3.3.3: state what is wrong and how to fix it */
+  --a11y-input-preservation: never-wipe; /* Failed submits keep all user input */
+  --a11y-validation-timing: blur-or-submit; /* No per-keystroke validation noise */
+  --a11y-autocomplete-attrs: name,email,tel...; /* WCAG 1.3.5: standard autocomplete attributes */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide owns WCAG 3.3.1-3.3.8 and 4.1.2/4.1.3: forms are where legal risk concentrates because they are the path to every service. */
+/* Fallback: If field-level wiring fails, the error summary pattern alone (focus + linked list + text) keeps the form accessible even with imperfect inline wiring. */

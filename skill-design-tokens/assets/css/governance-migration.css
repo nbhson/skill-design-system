@@ -1,0 +1,25 @@
+/* ============================================================
+ * Governance & Migration - starter design tokens (CSS custom properties)
+ * Skill id: governance-migration (#12 of 12)
+ *
+ * The process layer: contribution rules, semantic versioning, deprecation windows, linting, and adoption tracking that keep the token system alive.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-governance-versioning: semver; /* MAJOR.MINOR.PATCH per token release; consumers pin ranges */
+  --dt-governance-deprecation-window: 2-releases; /* Warn then remove; window published in changelog */
+  --dt-governance-coverage-target: 90%; /* Share of color/space/type usage flowing through alias+ tiers */
+  --dt-governance-lint-css: stylelint-declaration-strict-value; /* Rejects raw hex/px where tokens are required */
+  --dt-governance-review-sla: 5-days; /* Token proposal review turnaround; keeps contributions flowing */
+  --dt-governance-changelog: keep-a-changelog; /* Every token change is a changelog entry with migration notes */
+  --dt-governance-owners: design-dsg; /* Named steward group in CODEOWNERS for token paths */
+  --dt-migration-stride: one-tier-per-release; /* Big migrations sliced by tier; each release ships a working state */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Governance enforces the accessibility contract at scale: contrast pairing manifests, reduced-motion fallback presence, and a11y lint rules are CI gates - a token change that degrades accessibility cannot merge, regardless of who proposes it. */
+/* Fallback: When an emergency fix must bypass the normal window (security, legal), it ships as a patch with a retroactive review within 5 days - governance bends the process, never the thresholds. */

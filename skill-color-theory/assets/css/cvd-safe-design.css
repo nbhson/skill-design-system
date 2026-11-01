@@ -1,0 +1,27 @@
+/* ============================================================
+ * Color Vision Deficiency Safety - starter design tokens (CSS custom properties)
+ * Skill id: cvd-safe-design (#11 of 12)
+ *
+ * Designing for the 8% who see color differently: CVD types, simulation testing, safe hue pairs, and palettes that survive deuteranopia.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-cvd-simulation-gate: deutan-protan-tritan; /* Three simulation passes required for adoption */
+  --clr-safe-pair-axis: blue-orange; /* The default CVD-safe opposing axis */
+  --clr-unsafe-pairs: red-green-primary; /* Disallowed as differentiators */
+  --clr-lightness-separation: 0.08+-L-between-series; /* Series distinguishable by L alone */
+  --clr-non-color-signal: icon-text-position; /* Meaning carried on 3 channels minimum */
+  --clr-chart-cvd-check: per-chart-per-release; /* Dashboards re-simulated with real data colors */
+  --clr-status-cvd-check: badge-simulation-pass; /* Status badges distinguishable without hue */
+  --clr-cvd-prevalence-target: 8%-men-covered; /* Design floor: all common CVD types pass */
+  --clr-pattern-overlay-option: texture-for-critical-charts; /* Patterns on top of color for critical series */
+  --clr-cvd-audit-cadence: per-palette-change; /* Simulation re-run on every palette edit */
+}
+
+/* Accessibility contract (required) */
+/* Notes: CVD safety is core accessibility (WCAG 1.4.1's most common real-world failure): every hue-meaning pairing must survive deuteranopia simulation - this guide turns that from aspiration into a gate. */
+/* Fallback: When a required pairing cannot be made CVD-distinguishable, add a non-color channel (pattern, label, position) strong enough to carry the meaning without the hue - then re-simulate. */

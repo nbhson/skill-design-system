@@ -1,0 +1,27 @@
+/* ============================================================
+ * Voice & Tone - starter design tokens (CSS custom properties)
+ * Skill id: voice-tone (#02 of 12)
+ *
+ * Voice is constant, tone flexes: defining the brand voice dimensions and the tone matrix that shifts with user emotional state.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-voice-dimensions: formal-casual,playful-serious,concise-elaborate; /* Three axes; products mark their point */
+  --uxw-tone-matrix-states: neutral,stressed,celebrating,frustrated; /* Tone keyed to user emotional state */
+  --uxw-tone-error-policy: calm-specific-noblame; /* No humor in error paths */
+  --uxw-tone-success-policy: quiet-warm; /* Celebrate briefly; do not gloat */
+  --uxw-tone-empty-policy: personality-allowed; /* Empty states carry brand warmth */
+  --uxw-tone-stress-rule: humor-off; /* Payments, deletes, outages: precision only */
+  --uxw-tone-localization-flag: wordplay-marked; /* Tone-risky strings tagged for i18n review */
+  --uxw-voice-charter: versioned-doc; /* One page, with example rewrites */
+  --uxw-tone-examples-required: per-state; /* Matrix ships with do/dont examples */
+  --uxw-voice-consistency-owner: copy-audit-guide; /* Audit checks charter adherence */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Tone serves cognition: under stress, plain language and predictability are the accessible choice (WCAG 3.1.5, a11y cognitive-content) - the stress rule (humor off) is also an accessibility rule. */
+/* Fallback: If the tone matrix is unwritten, adopt the default row: neutral-calm, active voice, no humor in error/payment/delete paths - then document from there. */

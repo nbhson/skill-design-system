@@ -1,0 +1,28 @@
+/* ============================================================
+ * Modular Type Scale - starter design tokens (CSS custom properties)
+ * Skill id: type-scale (#02 of 12)
+ *
+ * A root-16px modular scale (ratio ~1.25) that covers body through display in 9 steps - hierarchy by stepping, never by improvising.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-scale-base: 1rem; /* 16px body root; the scale's step 0 */
+  --type-scale-ratio: 1.25; /* Major third; 1.2 dense, 1.333 dramatic */
+  --type-size-2xs: 0.75rem; /* 12px captions/legal floor */
+  --type-size-xs: 0.875rem; /* 14px secondary text */
+  --type-size-sm: 1rem; /* 16px body default */
+  --type-size-md: 1.25rem; /* 20px lead/emphasis */
+  --type-size-lg: 1.563rem; /* 25px h4/card titles */
+  --type-size-xl: 1.953rem; /* 31px h3/section headers */
+  --type-size-2xl: 2.441rem; /* 39px h2/page titles */
+  --type-size-3xl: 3.052rem; /* 49px h1/hero */
+  --type-size-4xl: 3.815rem; /* 61px marketing display (extends upward only) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: A rem-based scale is the WCAG 1.4.4 guarantee: the whole hierarchy multiplies with user font-size settings; the 12px floor keeps small text legible. */
+/* Fallback: If a display step overflows containers at 200% zoom, allow wrapping (never shrink the step) and check the fluid-responsive clamp bounds. */

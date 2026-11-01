@@ -1,0 +1,1587 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": [
+      "skill-ui-ux",
+      "skill-animation",
+      "skill-design-tokens"
+    ]
+  },
+  "skills": [
+    {
+      "id": "writing-principles",
+      "name": "Writing Principles",
+      "summary": "The foundation: clarity-first, user-first, plain language, active voice, and brevity - the rules every other copy discipline inherits.",
+      "sections": {
+        "definition": "Interface writing has one job: help users act with confidence. The foundational principles are clarity before cleverness, the user's words before the system's, brevity before completeness, and verbs before nouns. Every other guide in this repo - errors, empties, forms, notifications - inherits these rules; this guide is the constitution the rest cite.",
+        "principles": [
+          "Clarity beats cleverness: a joke that confuses is a bug; if a line can be misread, rewrite it.",
+          "User-first ordering: lead with what the user can do, not what the system did - 'Save your draft' not 'Draft saved to server'.",
+          "Active voice, present tense: 'We couldn't process your card' not 'Your card could not be processed by the system'.",
+          "Brevity with a floor: cut every wasted word, but never cut the why or the fix - short and complete beats short and hollow.",
+          "Plain language is for everyone: 8th-grade reading level is a target, not a concession - experts skim, novices depend on it.",
+          "Sentence case everywhere: 'Save changes' not 'Save Changes' - capitalization is not emphasis.",
+          "One idea per sentence, one action per paragraph: interface copy is scanned in foveal gulps, not read linearly.",
+          "Consistency is grammar: one concept, one term - 'workspace' everywhere, never 'workspace/team/project/site' interchangeably."
+        ],
+        "tokens": [
+          {
+            "role": "reading-level-target",
+            "value": "grade-8",
+            "notes": "Plain-language floor for all UI copy"
+          },
+          {
+            "role": "voice-case",
+            "value": "sentence-case",
+            "notes": "Titles, buttons, labels - no title case"
+          },
+          {
+            "role": "voice-person",
+            "value": "second-person-active",
+            "notes": "Address the user as 'you'; active voice"
+          },
+          {
+            "role": "line-max",
+            "value": "2-lines",
+            "notes": "Body copy in UI rarely earns a third line"
+          },
+          {
+            "role": "button-verb-first",
+            "value": "verb+object",
+            "notes": "'Save changes', not 'Changes will be saved'"
+          },
+          {
+            "role": "error-structure",
+            "value": "what+why+fix",
+            "notes": "The three-part message contract"
+          },
+          {
+            "role": "no-jargon-rule",
+            "value": "banned-unless-domain",
+            "notes": "System terms translated to user terms"
+          },
+          {
+            "role": "terminology-single-source",
+            "value": "glossary-owned",
+            "notes": "copy-audit guide owns the glossary"
+          },
+          {
+            "role": "numbers-format",
+            "value": "digits-in-ui",
+            "notes": "'3 files' not 'three files' in interfaces"
+          },
+          {
+            "role": "punctuation-policy",
+            "value": "minimal",
+            "notes": "No periods on buttons/labels; full sentences keep periods"
+          }
+        ],
+        "composition": [
+          "Composes with accessible-writing (guide 11): plain language and reading level are shared contracts - this guide sets them, that guide operationalizes for AT.",
+          "Composes with copy-audit (guide 12): the glossary and lint rules enforce these principles at scale.",
+          "Composes with component-recipes (skill-component-recipes): every component's copy (labels, errors, empties) inherits these rules."
+        ],
+        "patterns": [
+          "The voice charter: one page documenting person, tense, case, and tone range - reviewed with brand, cited in every copy PR.",
+          "The rewrite ladder: for any string, test system-voice -> user-voice -> shorter -> plainest; each pass removes a failure mode."
+        ],
+        "useCases": [
+          "New products establishing their writing voice from zero.",
+          "Teams with inconsistent copy across surfaces (the usual state).",
+          "Onboarding writers and engineers to a shared copy standard."
+        ],
+        "combinations": {
+          "good": [
+            "button-labels",
+            "error-messages",
+            "empty-states",
+            "onboarding-copy",
+            "component-microcopy",
+            "forms-labels",
+            "notifications",
+            "voice-tone",
+            "localization-i18n",
+            "accessible-writing",
+            "copy-audit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "maximalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "feedback-confirmation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "System-voice strings: 'An error has occurred in module X' - the user is the subject, not the server",
+          "Cleverness first: puns and jokes in error paths that confuse under stress",
+          "Capitalization-as-emphasis: SHOUTING LABELS and Title Case Everything",
+          "Term drift: the same object called four names across four screens"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Plain language is WCAG 3.1.5 (reading level) territory: 8th-grade target, expanded abbreviations on first use, and meaning carried by words - not by case, punctuation, or decoration (a11y repo cognitive-content guide).",
+          "fallback": "If a legal/domain string cannot reach grade-8, pair it with a plain-language summary beside it - the summary carries comprehension, the original carries precision."
+        }
+      }
+    },
+    {
+      "id": "voice-tone",
+      "name": "Voice & Tone",
+      "summary": "Voice is constant, tone flexes: defining the brand voice dimensions and the tone matrix that shifts with user emotional state.",
+      "sections": {
+        "definition": "Voice is the personality that never changes; tone is how it bends to context. A product can be confident and warm in celebration, quieter and more direct in an error. This guide defines the voice dimensions (formal-casual, playful-serious, concise-elaborate), the tone matrix keyed to user emotional state (neutral, stressed, celebrating, frustrated), and the guardrails that stop 'brand personality' from undermining comprehension when users are anxious.",
+        "principles": [
+          "Voice is constant, tone flexes: the personality dimensions hold across every surface; intensity is what changes.",
+          "Tone tracks user state, not brand mood: match energy to the user's emotional context - success celebrates, errors reassure and instruct.",
+          "Stress kills humor: error, payment, and destructive paths drop jokes entirely - clarity is the only voice under stress.",
+          "Humor has a home: empty states, loading, and success moments may carry personality; forms and errors carry precision.",
+          "Tone range is documented per state: the matrix lists allowed traits (e.g. errors: calm, specific, no blame) - writers pick from the matrix, not from mood.",
+          "Never at comprehension's expense: a personality flourish that adds reading effort has failed, whatever the brand deck says.",
+          "Localization checks tone: wordplay, slang, and formality registers rarely translate - the tone matrix flags tone-risky strings for i18n review.",
+          "The voice charter is versioned: tone decisions ship as docs with examples - tribal voice knowledge does not survive team growth."
+        ],
+        "tokens": [
+          {
+            "role": "voice-dimensions",
+            "value": "formal-casual,playful-serious,concise-elaborate",
+            "notes": "Three axes; products mark their point"
+          },
+          {
+            "role": "tone-matrix-states",
+            "value": "neutral,stressed,celebrating,frustrated",
+            "notes": "Tone keyed to user emotional state"
+          },
+          {
+            "role": "tone-error-policy",
+            "value": "calm-specific-noblame",
+            "notes": "No humor in error paths"
+          },
+          {
+            "role": "tone-success-policy",
+            "value": "quiet-warm",
+            "notes": "Celebrate briefly; do not gloat"
+          },
+          {
+            "role": "tone-empty-policy",
+            "value": "personality-allowed",
+            "notes": "Empty states carry brand warmth"
+          },
+          {
+            "role": "tone-stress-rule",
+            "value": "humor-off",
+            "notes": "Payments, deletes, outages: precision only"
+          },
+          {
+            "role": "tone-localization-flag",
+            "value": "wordplay-marked",
+            "notes": "Tone-risky strings tagged for i18n review"
+          },
+          {
+            "role": "voice-charter",
+            "value": "versioned-doc",
+            "notes": "One page, with example rewrites"
+          },
+          {
+            "role": "tone-examples-required",
+            "value": "per-state",
+            "notes": "Matrix ships with do/dont examples"
+          },
+          {
+            "role": "voice-consistency-owner",
+            "value": "copy-audit-guide",
+            "notes": "Audit checks charter adherence"
+          }
+        ],
+        "composition": [
+          "Composes with writing-principles (guide 01): the charter implements those principles as personality.",
+          "Composes with error-messages (guide 03): the error tone row (calm, specific, no blame) is this guide's contract applied.",
+          "Composes with localization-i18n (guide 10): tone-risky strings (humor, puns, idiom) are flagged in the string inventory."
+        ],
+        "patterns": [
+          "The tone matrix: rows = user states, columns = tone traits + example do/dont strings - the single reference writers keep open.",
+          "Voice charter with rewrite pairs: real before/after examples per state - 'Welcome aboard!' vs 'Your account is ready' teaches faster than adjectives."
+        ],
+        "useCases": [
+          "Brand relaunches where voice decisions were implicit tribal knowledge.",
+          "Support-heavy products where frustrated users meet tone daily.",
+          "Audit: jokes in error paths, gloating success messages, toneless mechanical copy."
+        ],
+        "combinations": {
+          "good": [
+            "writing-principles",
+            "error-messages",
+            "empty-states",
+            "onboarding-copy",
+            "notifications",
+            "component-microcopy",
+            "button-labels",
+            "forms-labels",
+            "accessible-writing",
+            "copy-audit",
+            "localization-i18n"
+          ],
+          "caution": [
+            "localization-i18n"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "retro",
+            "maximalism"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "feedback-confirmation",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Humor in error paths: 'Oops, we broke something!' while the user's work is gone",
+          "Tone-void copy: personality stripped everywhere until the product reads as a manual",
+          "Gloating success: over-celebrating trivial actions with full-screen confetti copy",
+          "Undocumented voice: personality that lives in one writer's head"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Tone serves cognition: under stress, plain language and predictability are the accessible choice (WCAG 3.1.5, a11y cognitive-content) - the stress rule (humor off) is also an accessibility rule.",
+          "fallback": "If the tone matrix is unwritten, adopt the default row: neutral-calm, active voice, no humor in error/payment/delete paths - then document from there."
+        }
+      }
+    },
+    {
+      "id": "button-labels",
+      "name": "Button & Action Labels",
+      "summary": "Verb-first, specific, outcome-visible labels: what the button does, phrased in the user's terms - never 'OK', 'Submit', or 'Yes'.",
+      "sections": {
+        "definition": "Button labels are microcopy's highest-stakes surface: they are the moment of commitment. The discipline is verb-first phrasing ('Save changes', 'Delete project'), specificity over abstraction (the vague 'OK'/'Submit'/'Continue' family is banned from consequential actions), outcome visibility ('Send invitation' not 'Send'), and consequence signaling for destructive actions ('Delete 3 files' with the count). Labels also carry the undo affordance decision: destructive-but-reversible actions label the action, then offer 'Undo' as a toast.",
+        "principles": [
+          "Verb first, always: labels start with the verb - 'Save changes', not 'Changes' or 'Saving'.",
+          "Specific beats generic: 'Create project' not 'OK'; the generic family (OK/Yes/Submit/Apply) is reserved for genuinely symmetric confirmations.",
+          "Name the outcome: the label states what happens - 'Send invitation', 'Publish post', not 'Send', not 'Done'.",
+          "Destructive labels carry the count: 'Delete 3 files', not 'Delete' - the label itself is the confirmation surface.",
+          "Symmetric pairs read as a question: dialog button pairs answer the title ('Discard draft?' -> 'Discard' / 'Keep editing') - never 'Yes/No' where the question requires re-reading.",
+          "Primary hierarchy is positional + labeled: the primary action sits right (LTR), and its label is more specific than the secondary's.",
+          "Length budget: 2-4 words for actions; longer labels become sentences - if it needs 6 words, the flow is wrong.",
+          "Loading/disabled copy is planned: the loading state announces ('Saving...'), and disabled buttons explain the unlock condition nearby."
+        ],
+        "tokens": [
+          {
+            "role": "label-structure",
+            "value": "verb-first+specific",
+            "notes": "The two-part label contract"
+          },
+          {
+            "role": "label-length",
+            "value": "2-4-words",
+            "notes": "Longer labels signal flow problems"
+          },
+          {
+            "role": "banned-generic",
+            "value": "ok-yes-submit-for-consequential",
+            "notes": "Generic labels only for symmetric confirms"
+          },
+          {
+            "role": "destructive-count",
+            "value": "verb+count",
+            "notes": "'Delete 3 files' - label as confirmation"
+          },
+          {
+            "role": "pair-symmetry",
+            "value": "answer-the-title",
+            "notes": "Dialog pairs respond to the question"
+          },
+          {
+            "role": "primary-position",
+            "value": "right-ltr",
+            "notes": "Primary action placement convention"
+          },
+          {
+            "role": "undo-label",
+            "value": "undo+object",
+            "notes": "Toast undo path for reversible actions"
+          },
+          {
+            "role": "loading-announce",
+            "value": "verb+ing-ellipsis",
+            "notes": "'Saving...' state copy planned"
+          },
+          {
+            "role": "disabled-explain",
+            "value": "unlock-condition-visible",
+            "notes": "Why disabled, near the button"
+          },
+          {
+            "role": "icon-button-name",
+            "value": "aria-label-required",
+            "notes": "Icon-only buttons named (a11y contract)"
+          }
+        ],
+        "composition": [
+          "Composes with writing-principles (guide 01): verb-first and plain language are inherited contracts.",
+          "Composes with buttons-badges (skill-component-recipes): the component owns states/sizes; this guide owns the string.",
+          "Composes with confirmation-destructive flows via component-recipes modals-dialogs: label pairs must read against the dialog title."
+        ],
+        "patterns": [
+          "The label spec sheet: every shipped action string listed with variant, state copy (loading/disabled), and undo pairing - a string inventory for actions.",
+          "The pair test: for every two-button dialog, read title + buttons aloud as one sentence - if it does not parse, rewrite the pair."
+        ],
+        "useCases": [
+          "Any action surface: forms, toolbars, dialogs, cards, empty states.",
+          "Design systems: the label conventions ship inside the button component docs.",
+          "Audit: OK/Submit sprawl, unnamed destructive buttons, Yes/No dialogs."
+        ],
+        "combinations": {
+          "good": [
+            "writing-principles",
+            "error-messages",
+            "empty-states",
+            "component-microcopy",
+            "forms-labels",
+            "notifications",
+            "onboarding-copy",
+            "voice-tone",
+            "accessible-writing",
+            "copy-audit",
+            "localization-i18n"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "feedback-confirmation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The OK family: 'OK' on a payment, 'Submit' on an adoption form - specificity is free",
+          "Yes/No labyrinths: confirmations whose buttons force re-reading the title",
+          "Unlabeled destruction: 'Delete' with no object and no count",
+          "Label sentences: 9-word button labels that are really paragraph copy"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Accessible names are WCAG 2.4.6/4.1.2 territory: labels describe purpose, icon-only buttons carry aria-label, and label text must survive being read in isolation - AT users hear 'button' + label without surrounding context.",
+          "fallback": "If a label cannot be specific within the length budget, add the specificity to the dialog title or helper text instead - the pair (title + label) carries the meaning together."
+        }
+      }
+    },
+    {
+      "id": "error-messages",
+      "name": "Error Messages",
+      "summary": "The three-part contract: what went wrong, why (in user terms), and the fix - blame-free, specific, and never a stack trace.",
+      "sections": {
+        "definition": "Error messages are where products are judged: users meeting an error are already stressed, and the copy either recovers trust or burns it. The discipline is the three-part contract - what happened, why (translated to user terms), what to do next - phrased blame-free ('We couldn't process your card' not 'You entered an invalid card'), with specific fixes ('Enter a valid email like name@domain.com'), and a hard ban on error codes as primary text, stack traces, and dead ends.",
+        "principles": [
+          "The three-part contract is mandatory: what + why + fix; any message missing a part is incomplete.",
+          "Blame-free framing: the system takes responsibility - 'We couldn't load this page', never 'You made an error'.",
+          "Fixes are specific and actionable: 'Enter a valid email like name@domain.com', not 'Invalid input'.",
+          "No error codes as primary text: codes (0x8007) go in a details expander for support - humans read the sentence.",
+          "Errors are visible and persistent where it matters: form errors stay until fixed; toast errors do not auto-dismiss.",
+          "Position at the point of failure: inline next to the field, or as an error summary with anchor links on submit.",
+          "One voice for all errors: the error taxonomy (network/permission/not-found/validation) ships approved copy patterns - engineers pick, not invent.",
+          "Errors pair with recovery paths: retry, request access, contact support - a message without a path is a dead end."
+        ],
+        "tokens": [
+          {
+            "role": "error-structure",
+            "value": "what+why+fix",
+            "notes": "The three-part message contract"
+          },
+          {
+            "role": "error-blame",
+            "value": "system-responsibility",
+            "notes": "Blame-free phrasing always"
+          },
+          {
+            "role": "error-fix-specificity",
+            "value": "example-included",
+            "notes": "Show the correct format inline"
+          },
+          {
+            "role": "error-code-policy",
+            "value": "details-expander-only",
+            "notes": "Codes for support, not primary text"
+          },
+          {
+            "role": "error-persistence",
+            "value": "until-fixed-or-dismissed",
+            "notes": "No auto-dismiss for errors"
+          },
+          {
+            "role": "error-position",
+            "value": "inline-or-anchored-summary",
+            "notes": "At the point of failure"
+          },
+          {
+            "role": "error-taxonomy",
+            "value": "network,permission,not-found,validation",
+            "notes": "Approved copy pattern per class"
+          },
+          {
+            "role": "error-recovery",
+            "value": "retry-or-alternative",
+            "notes": "Every error has a path forward"
+          },
+          {
+            "role": "error-flag",
+            "value": "aria-invalid+describedby",
+            "notes": "Programmatic association (a11y)"
+          },
+          {
+            "role": "error-focus",
+            "value": "summary-on-submit",
+            "notes": "Failed submit focuses the error list"
+          }
+        ],
+        "composition": [
+          "Composes with writing-principles (guide 01): blame-free and plain language are inherited.",
+          "Composes with forms-labels (guide 08): field-level validation copy is the highest-traffic error surface.",
+          "Composes with skill-accessibility forms-errors + component-recipes forms-inputs: the wiring (aria-invalid, summaries) is the component layer of this copy."
+        ],
+        "patterns": [
+          "The error taxonomy: one approved copy pattern per error class (network/permission/not-found/validation) with slots for specifics - scale without drift.",
+          "The three-part template: 'We couldn't [action]. [Why in user terms]. [Fix/next step].' - engineers fill slots; the structure guarantees completeness."
+        ],
+        "useCases": [
+          "Form validation, payments, uploads, and any async failure surface.",
+          "Support deflection: specific errors reduce ticket volume measurably.",
+          "Audit: bare 'Error' toasts, codes as text, dead-end messages."
+        ],
+        "combinations": {
+          "good": [
+            "writing-principles",
+            "forms-labels",
+            "notifications",
+            "component-microcopy",
+            "button-labels",
+            "empty-states",
+            "accessible-writing",
+            "copy-audit",
+            "voice-tone",
+            "onboarding-copy",
+            "localization-i18n"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "feedback-confirmation",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The dead-end error: 'Something went wrong' with no cause and no path",
+          "Stack traces in UI: technical internals shown to users as primary content",
+          "Blame framing: 'You entered an invalid...' - the system owns the failure",
+          "Disappearing errors: toast errors that vanish before they are read"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Errors implement WCAG 3.3.1/3.3.3 and 4.1.3: text identification of errors, suggestions for correction, and polite narration - error copy must be programmatically associated (aria-describedby) or narrated, never color-only (a11y repo guide 07).",
+          "fallback": "If programmatic association cannot ship per field, an error summary on submit with focus + anchor links satisfies the contract - completeness of message before per-field elegance."
+        }
+      }
+    },
+    {
+      "id": "empty-states",
+      "name": "Empty State Copy",
+      "summary": "First-use, no-results, and cleared states as teaching moments: explain the value, then hand over the next action.",
+      "sections": {
+        "definition": "Empty states are copy with a job: convert a blank box into an orientation moment. The taxonomy is threefold - first-use (no data yet: teach the value, provide the create action), no-results (data exists but the query matched nothing: explain, then suggest relaxing the search), and cleared (data existed and was removed: offer restore). Each state has its own copy formula, and all three share one rule: never leave the user without a next action.",
+        "principles": [
+          "Every empty state carries an action: 'Create your first project' with the button - a blank panel with only text is a dead end.",
+          "First-use teaches value, not features: 'Projects keep your work organized by client' - the why before the how.",
+          "No-results explains and relaxes: 'No projects match \"acme projct\". Try fewer words or clear filters.'",
+          "Cleared offers restore: 'You deleted all notifications' + 'Undo' - cleared states acknowledge what happened.",
+          "One idea per empty state: value statement + action - onboarding essays do not belong in panels.",
+          "Empty copy is the tone-safe zone: personality is allowed here (voice-tone guide) - it is a low-stakes, high-visibility moment.",
+          "Illustrations support, text carries: the image sets mood; the copy carries the instruction - never illustration-only.",
+          "Empty states are announced: AT users hear the state change - the region is labelled and the CTA keyboard-reachable."
+        ],
+        "tokens": [
+          {
+            "role": "empty-taxonomy",
+            "value": "first-use,no-results,cleared",
+            "notes": "Three states, three copy formulas"
+          },
+          {
+            "role": "empty-cta-required",
+            "value": "every-state-has-action",
+            "notes": "No dead-end blanks"
+          },
+          {
+            "role": "empty-first-use",
+            "value": "value-teaching",
+            "notes": "Why the feature matters, briefly"
+          },
+          {
+            "role": "empty-no-results",
+            "value": "explain+relax-suggestion",
+            "notes": "Query echo + relaxation tip"
+          },
+          {
+            "role": "empty-cleared",
+            "value": "acknowledge+restore",
+            "notes": "Undo path for cleared content"
+          },
+          {
+            "role": "empty-length",
+            "value": "1-2-lines",
+            "notes": "Panel copy budget"
+          },
+          {
+            "role": "empty-illustration-role",
+            "value": "mood-only",
+            "notes": "Text carries the instruction"
+          },
+          {
+            "role": "empty-tone",
+            "value": "personality-allowed",
+            "notes": "The voice-tone safe zone"
+          },
+          {
+            "role": "empty-announce",
+            "value": "labelled-region",
+            "notes": "State change narrated"
+          },
+          {
+            "role": "empty-coverage",
+            "value": "every-collection-surface",
+            "notes": "Lists/tables/dashboards ship empties"
+          }
+        ],
+        "composition": [
+          "Composes with onboarding-copy (guide 05): first-use empties are onboarding's atomic unit - the contracts are shared.",
+          "Composes with component-recipes empty-loading-error: that recipe owns the state components; this guide owns the strings.",
+          "Composes with skill-icons-illustration: empty-state illustrations are the most common illustration surface - direction is shared."
+        ],
+        "patterns": [
+          "The empty-state formula: [value statement] + [next action button] + optional [illustration] - every empty surface composes the same three parts.",
+          "The no-results recipe: echo the query, explain the mismatch, offer one relaxation ('Clear filters' / 'Try fewer words') - never a bare zero."
+        ],
+        "useCases": [
+          "First-run products where empty states are the onboarding surface.",
+          "Search-heavy products where no-results quality drives retention.",
+          "Audit: blank boxes, empty states without CTAs, illustration-only panels."
+        ],
+        "combinations": {
+          "good": [
+            "onboarding-copy",
+            "writing-principles",
+            "notifications",
+            "component-microcopy",
+            "button-labels",
+            "error-messages",
+            "voice-tone",
+            "accessible-writing",
+            "copy-audit",
+            "forms-labels",
+            "localization-i18n"
+          ],
+          "caution": [
+            "onboarding-copy"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "collage-art"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "illustration-lottie"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The blank box: unstyled empty surfaces shipping to production",
+          "Empty essay: three paragraphs of feature tour in an empty panel",
+          "Illustration-only: a drawing with no text and no action",
+          "Dead-end zero: 'No results' with no suggestion and no escape"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Empty states are state-change announcements (WCAG 4.1.3): labelled regions, keyboard-reachable CTAs, and text that does not depend on the illustration for meaning (1.1.1) - the copy must fully stand alone.",
+          "fallback": "If labelled-region wiring is unavailable, move focus to the empty-state heading on state change - focus movement is the narration fallback."
+        }
+      }
+    },
+    {
+      "id": "onboarding-copy",
+      "name": "Onboarding & First-Run Copy",
+      "summary": "First-run guidance that respects intelligence: progressive disclosure, show-don't-tour, and copy that gets users to value fast.",
+      "sections": {
+        "definition": "Onboarding copy is the first conversation with a new user, and its success metric is time-to-value - not tour completion. The discipline covers first-run copy (welcome without wall-of-text), progressive disclosure (explain at the moment of need, not upfront), empty-state-first onboarding (the best tour is a well-written empty state plus a CTA), and the anti-tour principle: users skip carousels and dismiss tooltips; copy that intervenes at the moment of action survives.",
+        "principles": [
+          "Time-to-value is the metric: every onboarding string either shortens the path to first value or gets deleted.",
+          "Show, don't tour: the best onboarding is an empty state with a CTA - not a carousel explaining a product the user can't touch yet.",
+          "Explain at the moment of need: contextual hints ('Your API key lives here') beat upfront documentation every time.",
+          "Progressive disclosure, not firehose: one concept per screen; the next concept waits until this one is done.",
+          "Respect the skip: every tour dismisses persistently and never re-shows - re-forcing onboarding teaches resentment.",
+          "First session earns the second: 'Do this one thing' beats 'Complete all 12 setup steps' - momentum over completionism.",
+          "Checklists externalize progress: 'Set up your profile' with visible completion state - progress motivates better than prose.",
+          "Sample data beats explanation: pre-filled demo content with a 'replace with yours' path teaches by example."
+        ],
+        "tokens": [
+          {
+            "role": "onboarding-metric",
+            "value": "time-to-value",
+            "notes": "The only success measure"
+          },
+          {
+            "role": "onboarding-mode",
+            "value": "empty-state-first",
+            "notes": "Well-written empties over tours"
+          },
+          {
+            "role": "onboarding-disclosure",
+            "value": "at-moment-of-need",
+            "notes": "Contextual over upfront"
+          },
+          {
+            "role": "onboarding-concept-load",
+            "value": "1-per-screen",
+            "notes": "Firehose is failure"
+          },
+          {
+            "role": "onboarding-skip",
+            "value": "persistent-dismiss",
+            "notes": "Never re-show skipped tours"
+          },
+          {
+            "role": "onboarding-checklist",
+            "value": "visible-progress",
+            "notes": "Externalized completion state"
+          },
+          {
+            "role": "onboarding-first-cta",
+            "value": "one-thing",
+            "notes": "Single first action, not a list"
+          },
+          {
+            "role": "onboarding-sample-data",
+            "value": "demo+replace-path",
+            "notes": "Example over explanation"
+          },
+          {
+            "role": "onboarding-hint-timing",
+            "value": "after-first-idle",
+            "notes": "Hints appear on dwell, not on load"
+          },
+          {
+            "role": "onboarding-copy-length",
+            "value": "headline+1-line",
+            "notes": "Overlays stay tiny"
+          }
+        ],
+        "composition": [
+          "Composes with empty-states (guide 04): empty-state-first onboarding makes guide 04 the primary surface.",
+          "Composes with component-microcopy (guide 07): contextual hints are microcopy with onboarding timing.",
+          "Composes with component-recipes empty-loading-error + cards-lists: checklists and welcome cards are component surfaces carrying this copy."
+        ],
+        "patterns": [
+          "The setup checklist: 3-6 tasks with visible progress and per-task copy - the durable onboarding pattern that respects skip behavior.",
+          "The contextual hint: one tooltip/spotlight per surface, timed to dwell, dismissed persistently - intervention at need."
+        ],
+        "useCases": [
+          "SaaS first-run: workspace setup, first project, invite flow.",
+          "Feature adoption: launching a new capability to existing users.",
+          "Audit: unskippable tours, wall-of-text welcomes, re-forced onboarding."
+        ],
+        "combinations": {
+          "good": [
+            "empty-states",
+            "writing-principles",
+            "component-microcopy",
+            "button-labels",
+            "notifications",
+            "forms-labels",
+            "voice-tone",
+            "accessible-writing",
+            "copy-audit",
+            "error-messages",
+            "localization-i18n"
+          ],
+          "caution": [
+            "empty-states"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "illustration-lottie"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The mandatory tour: carousels blocking first use of the product",
+          "Firehose onboarding: twelve concepts on the first screen",
+          "Re-forced onboarding: dismissals ignored, hints returning forever",
+          "Prose over example: paragraphs explaining what a pre-filled demo would show"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Onboarding must not trap or rush: tours are keyboard-operable, dismissible, and pause under reduced-motion (a11y repo cognitive-content) - hint timing must respect screen reader pacing, and overlays announce politely.",
+          "fallback": "If interactive tours cannot be made a11y-clean, replace them with written setup checklists (plain HTML) - a checklist is inherently accessible and respects the skip."
+        }
+      }
+    },
+    {
+      "id": "component-microcopy",
+      "name": "Component Microcopy",
+      "summary": "The small strings with big jobs: tooltips, hints, placeholders, helper text, toggle labels - and the placeholder-is-not-a-label rule.",
+      "sections": {
+        "definition": "Component microcopy is the connective tissue of UI: tooltips, hint text, placeholder examples, helper text, toggle labels, section headers. Small strings, large cumulative effect. The discipline covers what each string type is for (hint persists, placeholder is an example and disappears, tooltip is a supplement), the placeholder-is-not-a-label rule, and the writing mechanics: parallel phrasing in lists, consistent verb forms in toggles, and tooltip length budgets.",
+        "principles": [
+          "Placeholders are examples, not labels: the placeholder disappears on focus and must never carry the only instruction.",
+          "Hints persist, placeholders vanish: helper text lives below the field and stays; format hints ('MM/YYYY') may appear inside but repeat in the label context.",
+          "Tooltips supplement, never replace: the control carries its own accessible name - a tooltip is bonus context (WCAG 1.4.13 contract).",
+          "Parallel phrasing in lists: menu items, settings rows, and options share grammatical form - verbs with verbs, nouns with nouns.",
+          "Toggles read as states or actions, one way: 'Email notifications: On' - not 'Enable email notifications' beside a switch that shows state.",
+          "Microcopy has length budgets: tooltips ~100 chars, hints one line, toggle labels 1-3 words - budgets force clarity.",
+          "Link labels are destinations: 'Pricing' or 'View pricing', never 'Click here' - links are read out of context by AT.",
+          "Consistency is enforced by inventory: shipped strings live in the string inventory (copy-audit guide) with their component."
+        ],
+        "tokens": [
+          {
+            "role": "placeholder-role",
+            "value": "example-only",
+            "notes": "Never the only label (3.3.2)"
+          },
+          {
+            "role": "hint-persistence",
+            "value": "always-visible",
+            "notes": "Helper text below the field"
+          },
+          {
+            "role": "tooltip-budget",
+            "value": "~100-chars",
+            "notes": "Supplement; control has own name"
+          },
+          {
+            "role": "tooltip-contract",
+            "value": "dismissible-hoverable-persistent",
+            "notes": "WCAG 1.4.13 behavior triple"
+          },
+          {
+            "role": "toggle-label-form",
+            "value": "state-or-action-pick-one",
+            "notes": "Consistent per system"
+          },
+          {
+            "role": "list-parallelism",
+            "value": "shared-grammar",
+            "notes": "Menu/option phrasing in parallel"
+          },
+          {
+            "role": "link-label-rule",
+            "value": "destination-named",
+            "notes": "No 'click here' (2.4.4)"
+          },
+          {
+            "role": "hint-length",
+            "value": "1-line",
+            "notes": "Budget forces precision"
+          },
+          {
+            "role": "microcase",
+            "value": "sentence-case",
+            "notes": "Inherited from writing-principles"
+          },
+          {
+            "role": "string-inventory",
+            "value": "component-owned",
+            "notes": "Shipped strings tracked (copy-audit)"
+          }
+        ],
+        "composition": [
+          "Composes with forms-labels (guide 08): field labels/hints/errors are microcopy's densest surface - contracts shared.",
+          "Composes with component-recipes dropdowns-menus + forms-inputs: menu parallelism and field wiring are the component layer.",
+          "Composes with copy-audit (guide 12): the string inventory is where microcopy consistency is enforced."
+        ],
+        "patterns": [
+          "The string spec per component: every component doc ships its string slots (label/hint/placeholder/tooltip) with budgets and examples - copy is spec, not afterthought.",
+          "The parallelism pass: before shipping lists/menus, read all items as one column - broken grammar jumps out when read in parallel."
+        ],
+        "useCases": [
+          "Design systems documenting component copy slots.",
+          "Product surfaces dense with small strings: settings, filters, toolbars.",
+          "Audit: placeholder-as-label, tooltip-only names, 'click here' links."
+        ],
+        "combinations": {
+          "good": [
+            "forms-labels",
+            "writing-principles",
+            "button-labels",
+            "empty-states",
+            "error-messages",
+            "notifications",
+            "onboarding-copy",
+            "accessible-writing",
+            "copy-audit",
+            "voice-tone",
+            "localization-i18n"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Placeholder-as-label: instructions that vanish on first keystroke",
+          "Tooltip-only names: icon controls whose identity lives in hover",
+          "Click here: link labels that name the mechanism, not the destination",
+          "Broken parallelism: 'Add user / Removing / Deletion of file' in one menu"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Microcopy is WCAG 3.3.2, 2.4.4, and 1.4.13 territory: visible labels or instructions, descriptive link text, and the dismissible/hoverable/persistent tooltip contract - accessible names must exist independent of hover.",
+          "fallback": "Where tooltips cannot meet 1.4.13, convert them to always-visible hint text - persistent text is always the safer default."
+        }
+      }
+    },
+    {
+      "id": "forms-labels",
+      "name": "Form Labels & Help Text",
+      "summary": "The form copy layer: label phrasing, hint placement, required/optional marking, and validation copy timed to forgive.",
+      "sections": {
+        "definition": "Forms are where copy and structure fuse: label phrasing (questions vs imperatives), hint placement (above, beside, below), required/optional convention (mark optional, not required), inline validation copy (timing that forgives mid-typing), and the error summary. This guide owns the strings of the form layer; the component-recipes field recipe owns the wiring, and skill-accessibility guide 07 owns the criteria - three layers, one contract.",
+        "principles": [
+          "Labels are questions or imperatives - pick one per form: 'What's your email?' or 'Email address', never mixed within a form.",
+          "Mark optional, not required: an asterisk convention requires teaching; marking the few optional fields teaches nothing.",
+          "Hints live below labels, above errors: persistent helper text, never placeholder-only (3.3.2).",
+          "Validation forgives: validate on blur or submit, never per-keystroke - 'Enter a valid email' firing mid-typing is scolding.",
+          "Error copy shows the fix inline: 'Enter a valid email like name@domain.com' - the format is part of the message.",
+          "Error summaries on submit: top-of-form list with anchor links + focus - never silent top-of-form failure.",
+          "Input purpose copy matches autofill: labels align with autocomplete tokens (name, email, tel - WCAG 1.3.5).",
+          "Group labels for choice sets: fieldsets with legends for radio/checkbox groups - 'Notification preferences' wrapping its options."
+        ],
+        "tokens": [
+          {
+            "role": "label-form",
+            "value": "question-or-imperative",
+            "notes": "One style per form, not mixed"
+          },
+          {
+            "role": "optional-marking",
+            "value": "mark-optional",
+            "notes": "Asterisks require teaching; (optional) does not"
+          },
+          {
+            "role": "hint-position",
+            "value": "below-label-persistent",
+            "notes": "Never placeholder-only"
+          },
+          {
+            "role": "validation-timing",
+            "value": "blur-or-submit",
+            "notes": "Forgiving; no keystroke scolding"
+          },
+          {
+            "role": "validation-copy",
+            "value": "fix-inline-with-example",
+            "notes": "Format shown in the message"
+          },
+          {
+            "role": "error-summary",
+            "value": "top-of-form+anchors+focus",
+            "notes": "Failed submits are loud"
+          },
+          {
+            "role": "error-clear",
+            "value": "clears-on-fix",
+            "notes": "Errors retract when corrected"
+          },
+          {
+            "role": "autofill-alignment",
+            "value": "label-matches-attr",
+            "notes": "WCAG 1.3.5 support"
+          },
+          {
+            "role": "group-labelling",
+            "value": "fieldset+legend",
+            "notes": "Choice sets have group labels"
+          },
+          {
+            "role": "required-policy",
+            "value": "explained-once",
+            "notes": "If asterisks used, legend explains"
+          }
+        ],
+        "composition": [
+          "Composes with error-messages (guide 03): validation copy is the taxonomy's validation class applied to fields.",
+          "Composes with component-microcopy (guide 07): labels/hints are microcopy slots with form-specific budgets.",
+          "Composes with skill-accessibility forms-errors + component-recipes forms-inputs: criteria and wiring layers of the same contract."
+        ],
+        "patterns": [
+          "The form copy sheet: per form - label style, optional convention, validation copy per field, summary behavior - reviewed before build.",
+          "The forgiving-validation pattern: blur validation with clearing-on-fix copy - the timing and the retract are one pattern."
+        ],
+        "useCases": [
+          "Signup, checkout, settings, and any multi-field surface.",
+          "High-stakes forms (payments, applications) where copy errors cost conversions.",
+          "Audit: placeholder-labels, asterisk sprawl, keystroke scolding, silent failed submits."
+        ],
+        "combinations": {
+          "good": [
+            "error-messages",
+            "component-microcopy",
+            "writing-principles",
+            "button-labels",
+            "empty-states",
+            "onboarding-copy",
+            "notifications",
+            "accessible-writing",
+            "copy-audit",
+            "voice-tone",
+            "localization-i18n"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "feedback-confirmation",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Placeholder-as-label: the vanish-on-focus instruction",
+          "Asterisk sprawl: every field starred, meaning nothing is required",
+          "Keystroke scolding: 'Invalid' firing before the user finishes typing",
+          "Silent failed submits: form returns to top with no summary and no focus"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "This guide implements the copy layer of WCAG 3.3.1-3.3.5 and 1.3.5: visible labels, correct-by-construction hints, suggested fixes, purpose-matched autofill - the a11y repo guide 07 criteria expressed as strings.",
+          "fallback": "If per-field validation copy cannot ship in v1, ship submit-time summary + inline red text at minimum - the summary carries the a11y contract."
+        }
+      }
+    },
+    {
+      "id": "notifications",
+      "name": "Notification & Toast Copy",
+      "summary": "Scannable, non-alarming, self-sufficient: toast and notification strings that work when skimmed and when read by AT.",
+      "sections": {
+        "definition": "Notification copy is read in two hostile conditions: skimmed for 1-2 seconds, and read aloud by a screen reader without context. The discipline covers toast copy (object + result: 'Invitation sent to Lan'), notification center entries (title + body + time, self-sufficient out of context), the quiet-success/loud-error split, and the anti-alarm principle: exclamation marks, urgency words, and ALL CAPS are banned except for genuine system-critical alerts.",
+        "principles": [
+          "Toast copy is object + result: 'Invitation sent to Lan', 'Project Acme archived' - what and to/from whom, in one line.",
+          "Self-sufficiency for notification center: entries must make sense days later, out of context - no 'It's done!'.",
+          "Quiet success, loud error: success is subtle and brief; errors persist, carry the fix, and link to recovery.",
+          "The anti-alarm rules: no exclamation marks in system copy, no urgency words ('URGENT', 'IMPORTANT'), no ALL CAPS - alarm is earned by genuine critical events only.",
+          "Notifications narrate politely: toast strings pass through aria-live=polite - copy is written to be heard without seeing.",
+          "Timing is part of the copy: 4-8s read budget means one line for toasts - longer content goes to the notification center.",
+          "Actions are named in the copy: 'Archived - Undo', not a bare undo icon - the action is offered in words.",
+          "Notification copy respects the inbox: titles summarize, bodies carry detail, and previews truncate gracefully (front-load meaning)."
+        ],
+        "tokens": [
+          {
+            "role": "toast-structure",
+            "value": "object+result",
+            "notes": "'Invitation sent to Lan'"
+          },
+          {
+            "role": "toast-length",
+            "value": "1-line",
+            "notes": "4-8s read budget; detail goes to center"
+          },
+          {
+            "role": "self-sufficiency",
+            "value": "out-of-context-readable",
+            "notes": "Center entries stand alone"
+          },
+          {
+            "role": "success-policy",
+            "value": "quiet-brief",
+            "notes": "No celebration theater"
+          },
+          {
+            "role": "error-policy",
+            "value": "persist+fix+link",
+            "notes": "Errors carry recovery"
+          },
+          {
+            "role": "anti-alarm",
+            "value": "no-!-no-caps-no-urgent",
+            "notes": "Alarm earned by critical events only"
+          },
+          {
+            "role": "narration",
+            "value": "aria-live-polite",
+            "notes": "Written to be heard (4.1.3)"
+          },
+          {
+            "role": "action-in-copy",
+            "value": "named-undo",
+            "notes": "'Archived - Undo' not bare icons"
+          },
+          {
+            "role": "front-load",
+            "value": "meaning-first-40-chars",
+            "notes": "Previews truncate at the wrong end otherwise"
+          },
+          {
+            "role": "center-entry",
+            "value": "title+body+time",
+            "notes": "The notification center structure"
+          }
+        ],
+        "composition": [
+          "Composes with component-recipes toasts-notifications: that recipe owns the service/timing/stacking; this guide owns the strings.",
+          "Composes with error-messages (guide 03): error toasts follow the three-part contract, persisted.",
+          "Composes with voice-tone (guide 02): the tone matrix's success/error rows govern these strings."
+        ],
+        "patterns": [
+          "The toast formula: [object] + [result verb] + optional [undo/fix action] - one line, self-sufficient, polite.",
+          "The front-load pass: write the string, then cut it to 40 chars and check it still communicates - that is what the preview shows."
+        ],
+        "useCases": [
+          "Any async feedback surface: saves, sends, uploads, syncs.",
+          "Notification centers and email digests.",
+          "Audit: exclamation-toast spam, context-free 'Done!', auto-dismissing errors."
+        ],
+        "combinations": {
+          "good": [
+            "error-messages",
+            "writing-principles",
+            "component-microcopy",
+            "button-labels",
+            "empty-states",
+            "onboarding-copy",
+            "voice-tone",
+            "accessible-writing",
+            "copy-audit",
+            "forms-labels",
+            "localization-i18n"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "feedback-confirmation",
+            "entrance-exit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Exclamation spam: 'Saved!' 'Sent!' 'Updated!' - punctuated enthusiasm as system voice",
+          "Context-free results: 'Done!' with no object - done with what?",
+          "Auto-dismissing errors: critical failures vanishing on a timer",
+          "Back-loaded meaning: previews that truncate to 'Your project has been...'"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Notification copy is WCAG 4.1.3 surface: polite narration, durations a reader can meet, and copy written to be heard - strings must survive being the only thing announced, with no reliance on visual position.",
+          "fallback": "If a toast cannot narrate (legacy stack), pair the action with an inline status line on the page - somewhere, the outcome must be text."
+        }
+      }
+    },
+    {
+      "id": "localization-i18n",
+      "name": "Localization & i18n Writing",
+      "summary": "Writing for translation: externalized strings, ICU plurals, expansion room, pseudo-localization, and tone that survives translation.",
+      "sections": {
+        "definition": "Localization-aware writing starts at the source string: externalize every string (no copy in components), use message formats (ICU MessageFormat) for plurals/gender/selection, leave room for expansion (German runs ~35% longer), avoid embedding numbers and units mid-sentence, and never bake word order into concatenation. The discipline also covers tone-risky strings (puns, idiom, cultural references), RTL considerations, and pseudo-localization as the build-time smoke test.",
+        "principles": [
+          "Externalize everything: no user-visible copy hardcoded in components - every string lives in the message catalog.",
+          "Message formats over concatenation: ICU plurals/select ('{count, plural, one {# item} other {# items}}') - concatenated fragments shatter in translation.",
+          "No mid-sentence number splicing: '{count} files selected' as one string, not 'You have ' + n + ' files' - word order differs per language.",
+          "Plan for expansion: layout reserves ~35% over English; buttons/labels auto-size - fixed-width English layouts break German.",
+          "Pseudo-localization is a build gate: accented-padding strings ([Ýõû àré ¡n thê ÚÌ!]) surface hard-coded text and clipping before real locales do.",
+          "Tone-risky strings are flagged: humor, idiom, and wordplay are marked in the catalog for translator adaptation, not literal translation.",
+          "Dates, times, numbers are locale-formatted: the copy layer never formats dates by hand - Intl APIs or format tokens only.",
+          "RTL is a layout contract: mirrored layout with logical properties; icons with direction (arrows, progress) are un-mirrored deliberately."
+        ],
+        "tokens": [
+          {
+            "role": "externalization",
+            "value": "all-strings-catalogued",
+            "notes": "Zero hardcoded copy in components"
+          },
+          {
+            "role": "message-format",
+            "value": "icu-plural-select",
+            "notes": "No concatenation, ever"
+          },
+          {
+            "role": "expansion-budget",
+            "value": "35%-over-english",
+            "notes": "Layout headroom for de/ru/fi"
+          },
+          {
+            "role": "pseudo-localization",
+            "value": "build-gate",
+            "notes": "Accented-padding smoke test in CI"
+          },
+          {
+            "role": "number-splicing",
+            "value": "interpolation-not-concat",
+            "notes": "'{count} files' as one string"
+          },
+          {
+            "role": "tone-risk-flags",
+            "value": "humor-idiom-marked",
+            "notes": "Translator adaptation notes in catalog"
+          },
+          {
+            "role": "locale-formatting",
+            "value": "intl-apis-only",
+            "notes": "Dates/numbers never hand-formatted"
+          },
+          {
+            "role": "rtl-policy",
+            "value": "logical-properties+mirror",
+            "notes": "Directional icons un-mirrored deliberately"
+          },
+          {
+            "role": "translation-context",
+            "value": "screenshots+notes",
+            "notes": "Strings ship with usage context"
+          },
+          {
+            "role": "locale-coverage",
+            "value": "audit-per-locale",
+            "notes": "copy-audit runs per active locale"
+          }
+        ],
+        "composition": [
+          "Composes with voice-tone (guide 02): tone-risky strings (humor/idiom) are flagged for adaptation - caution pairing is by design.",
+          "Composes with copy-audit (guide 12): locale coverage is an audit dimension - missing keys and clipping are audit findings.",
+          "Composes with skill-responsive-layout rtl-i18n-layout: that guide owns the layout mirror; this guide owns the strings."
+        ],
+        "patterns": [
+          "The localization-ready string review: new strings checked for ICU usage, context notes, length budget, and tone-risk flags before merge.",
+          "The pseudo-loc CI pass: build with pseudo-localized catalogs; screenshots compared for overflow/hardcoded text - catching i18n debt at build time."
+        ],
+        "useCases": [
+          "Products serving multiple locales from day one.",
+          "Vietnamese/global products where diacritics and string length matter.",
+          "Audit: concatenated strings, clipped German buttons, hand-formatted dates."
+        ],
+        "combinations": {
+          "good": [
+            "writing-principles",
+            "copy-audit",
+            "button-labels",
+            "error-messages",
+            "component-microcopy",
+            "forms-labels",
+            "notifications",
+            "empty-states",
+            "onboarding-copy",
+            "accessible-writing",
+            "voice-tone"
+          ],
+          "caution": [
+            "voice-tone",
+            "copy-audit"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "retro"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Concatenated sentences: 'You have ' + n + ' new messages' - untranslatable word order",
+          "Hardcoded copy: strings buried in JSX/components escaping the catalog",
+          "Fixed-width English: buttons that clip the moment German arrives",
+          "Literal tone translation: puns carried word-for-word into languages where they are noise"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Localization is accessibility at scale: WCAG 3.1.1/3.1.2 (language of page/parts), lang attributes per locale, and translated alt text/labels - an untranslated string is an accessibility gap for that locale's users.",
+          "fallback": "If full ICU adoption is too heavy, adopt one rule immediately - never concatenate sentence fragments - and externalize incrementally; the fragment rule prevents the worst breakage."
+        }
+      }
+    },
+    {
+      "id": "accessible-writing",
+      "name": "Accessible & Inclusive Writing",
+      "summary": "Writing for assistive tech and cognition: alt text as copy, descriptive links, reading order, and plain-language inclusion.",
+      "sections": {
+        "definition": "Accessible writing treats every string as something that may be read aloud or processed under cognitive load: alt text is copy (descriptive, purposeful, brief), link text names destinations, headings form an outline, aria-labels follow the same voice standards as visible text, and reading order matches visual order. The discipline bridges ux-writing and skill-accessibility: the criteria live there; the phrasing craft lives here.",
+        "principles": [
+          "Alt text is copy: it describes purpose ('Chart: revenue up 34% Q3'), not appearance ('bar chart image') - and decorative images get empty alt.",
+          "Link text names the destination: 'Read the migration guide', never 'Click here' - AT users navigate by link list.",
+          "Headings are the outline: h1-h6 without skips; users with screen readers navigate by heading - heading text must summarize its section.",
+          "Aria-labels follow the voice charter: machine-read strings get the same clarity, specificity, and tone as visible copy.",
+          "Reading order = visual order (or is deliberate): DOM order matches presentation unless the deviation is a documented pattern.",
+          "Plain language is the cognitive default: 8th-grade target, expanded abbreviations, meaning carried by words not formatting.",
+          "Front-load meaning in strings: AT and truncated previews both cut the tail - put the payload first ('Error: payment declined').",
+          "Inclusive by default: people-first, gender-neutral where the language allows, and no idioms that exclude non-native readers in critical paths."
+        ],
+        "tokens": [
+          {
+            "role": "alt-text-rule",
+            "value": "purpose-descriptive",
+            "notes": "Decorative images: alt empty"
+          },
+          {
+            "role": "alt-length",
+            "value": "~1-sentence",
+            "notes": "Longer descriptions: longdesc/adjacent text"
+          },
+          {
+            "role": "link-text",
+            "value": "destination-named",
+            "notes": "WCAG 2.4.4; never 'click here'"
+          },
+          {
+            "role": "heading-outline",
+            "value": "no-skips+summaries",
+            "notes": "Heading text summarizes its section"
+          },
+          {
+            "role": "aria-label-voice",
+            "value": "same-charter-as-visible",
+            "notes": "Machine-read strings are copy too"
+          },
+          {
+            "role": "reading-order",
+            "value": "dom-matches-visual",
+            "notes": "Deviations documented"
+          },
+          {
+            "role": "front-load-rule",
+            "value": "payload-first",
+            "notes": "'Error: ...' not 'Oops, ...: error'"
+          },
+          {
+            "role": "reading-level",
+            "value": "grade-8",
+            "notes": "Shared with writing-principles"
+          },
+          {
+            "role": "inclusive-language",
+            "value": "people-first+neutral",
+            "notes": "Default stance; house style may adjust"
+          },
+          {
+            "role": "abbr-expansion",
+            "value": "first-use",
+            "notes": "Abbreviations expanded once, then free"
+          }
+        ],
+        "composition": [
+          "Composes with writing-principles (guide 01): plain language and front-loading are inherited contracts.",
+          "Composes with skill-accessibility screen-readers + cognitive-content: those guides own the criteria; this guide owns the phrasing.",
+          "Composes with component-microcopy (guide 07): aria-labels, tooltips, and hint text are the machine-read half of microcopy."
+        ],
+        "patterns": [
+          "The AT read-through: any new surface is read with a screen reader (or VoR) before ship - the copy is edited where the narration stumbles.",
+          "The alt-text decision tree: informative (describe purpose) -> functional (state action: 'Search') -> decorative (empty alt) - every image classified."
+        ],
+        "useCases": [
+          "Every surface with images, links, or headings - i.e., every surface.",
+          "Government/education products with WCAG conformance mandates.",
+          "Audit: 'click here' links, appearance-describing alt, skipped headings."
+        ],
+        "combinations": {
+          "good": [
+            "writing-principles",
+            "component-microcopy",
+            "error-messages",
+            "forms-labels",
+            "empty-states",
+            "button-labels",
+            "notifications",
+            "onboarding-copy",
+            "copy-audit",
+            "voice-tone",
+            "localization-i18n"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "reduced-motion",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Appearance alt: 'image of a graph' telling screen reader users nothing",
+          "Click here: link lists rendered useless in AT navigation",
+          "Heading skips: h2 to h5 jumps breaking the document outline",
+          "Verbose aria-labels: machine strings stuffed with marketing copy"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "This guide is the phrasing layer of WCAG 1.1.1, 1.3.1/1.3.2, 2.4.4, 2.4.6, and 3.1.5: descriptive alt, named links, ordered reading, and plain language - the craft decisions that make the a11y repo's structural criteria read well.",
+          "fallback": "If AT testing is unavailable in the loop, run the link-list and heading-outline reviews manually (browser extensions show both) - those two passes catch the majority of copy-level failures."
+        }
+      }
+    },
+    {
+      "id": "copy-audit",
+      "name": "Copy Audit & Governance",
+      "summary": "Keeping copy consistent at scale: the glossary, string inventory, linting, and the per-surface audit pass.",
+      "sections": {
+        "definition": "Copy quality decays without governance: term drift, style splits, and dead strings accumulate. This guide is the governance layer: the glossary (one concept, one term, with approved/avoided lists), the string inventory (every shipped string mapped to its component and locale), automated linting (sentence case, exclamation bans, placeholder-as-label detection), and the per-surface audit pass that scores copy against the repo's guides before release.",
+        "principles": [
+          "One concept, one term: the glossary is the single source - 'workspace' everywhere; synonyms are listed as banned.",
+          "The glossary ships with anti-terms: approved term + banned synonyms + example sentence - definitions without bans do not enforce.",
+          "The string inventory is component-mapped: every string knows its component, states, and locale keys - orphaned strings get pruned.",
+          "Lint what is mechanical: sentence case, exclamation marks, title case, 'click here', double spaces - machines check rules so humans judge meaning.",
+          "Human review judges what lint cannot: tone, clarity, and completeness (the three-part error contract) are review dimensions, not regex targets.",
+          "Audits are per-surface, scored: the audit pass walks a surface against guides 01-11 with a scorecard - findings, not vibes.",
+          "Findings become tickets, audits become trends: audit results tracked over time show copy debt shrinking - or not.",
+          "Governance has an owner: a named person (or rotating pair) maintains glossary and lint rules - unowned standards decay."
+        ],
+        "tokens": [
+          {
+            "role": "glossary",
+            "value": "term+banned+example",
+            "notes": "One concept, one term, anti-terms listed"
+          },
+          {
+            "role": "glossary-owner",
+            "value": "named-owner",
+            "notes": "Unowned standards decay"
+          },
+          {
+            "role": "string-inventory",
+            "value": "component+locale-mapped",
+            "notes": "Orphans pruned on schedule"
+          },
+          {
+            "role": "lint-rules",
+            "value": "case+!+click-here+caps",
+            "notes": "Mechanical rules automated"
+          },
+          {
+            "role": "lint-enforcement",
+            "value": "PR-blocking",
+            "notes": "Mechanical rules block, humans judge"
+          },
+          {
+            "role": "review-dimensions",
+            "value": "tone+clarity+completeness",
+            "notes": "The human review trio"
+          },
+          {
+            "role": "audit-scope",
+            "value": "per-surface-scorecard",
+            "notes": "Walked against guides 01-11"
+          },
+          {
+            "role": "audit-frequency",
+            "value": "per-release+quarterly",
+            "notes": "Release gates + trend reviews"
+          },
+          {
+            "role": "findings-to-tickets",
+            "value": "tracked-over-time",
+            "notes": "Copy debt made visible"
+          },
+          {
+            "role": "locale-audit",
+            "value": "per-active-locale",
+            "notes": "Missing keys + clipping per locale"
+          }
+        ],
+        "composition": [
+          "Composes with every guide in this repo: the audit scorecard references each guide's contracts as its criteria.",
+          "Composes with skill-design-review: the review repo's content-audit section consumes this guide's scorecard format.",
+          "Composes with localization-i18n (guide 10): locale coverage and pseudo-loc gates are audit dimensions."
+        ],
+        "patterns": [
+          "The copy audit scorecard: per-surface checklist (glossary adherence, error completeness, alt text, lint status) with scores per guide - the audit's artifact.",
+          "The lint + review split: PR-blocking mechanical rules + human review for tone/clarity - automation where objective, judgment where subjective."
+        ],
+        "useCases": [
+          "Pre-release copy reviews for major surfaces.",
+          "Copy debt cleanup campaigns across legacy screens.",
+          "Design systems adding copy governance to component docs."
+        ],
+        "combinations": {
+          "good": [
+            "writing-principles",
+            "button-labels",
+            "error-messages",
+            "empty-states",
+            "component-microcopy",
+            "forms-labels",
+            "notifications",
+            "voice-tone",
+            "localization-i18n",
+            "accessible-writing",
+            "onboarding-copy"
+          ],
+          "caution": [
+            "localization-i18n"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Glossary without bans: a definitions list that enforces nothing",
+          "Lint-only governance: mechanical rules passing while clarity rots",
+          "Orphan strings: dead keys in the catalog shipped to no surface",
+          "Unowned standards: copy rules nobody maintains after the launch memo"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "The audit scorecard includes the accessibility dimensions (alt text, link text, reading order, plain language) as first-class rows - copy governance is where accessible-writing compliance is actually enforced per release.",
+          "fallback": "If a full governance program cannot start, begin with two artifacts - the glossary and the lint rules - and add the audit scorecard when the surface area grows."
+        }
+      }
+    }
+  ]
+}

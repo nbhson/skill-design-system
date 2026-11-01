@@ -1,0 +1,32 @@
+/* ============================================================
+ * Entrance & Exit Choreography — starter motion tokens (CSS custom properties)
+ * Skill id: entrance-exit (#03 of 12)
+ *
+ * How elements appear and disappear: reveals, staggers, and coordinated sequences that establish hierarchy instead of dumping everything on screen at once.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-enter-distance: 16px; /* Default translateY/X offset for fade-in reveals */
+  --motion-enter-duration: 240ms; /* Per-item entrance with ease-decelerate */
+  --motion-exit-duration: 160ms; /* Per-item exit with ease-accelerate */
+  --motion-stagger-step: 40ms; /* Delay between sibling items */
+  --motion-stagger-cap: 300ms; /* Maximum total stagger window */
+  --motion-collapse-duration: 200ms; /* Height/scale collapse for removal */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Keep the reveal but remove displacement and stagger; single short opacity fade for the whole group. */
+/* Fallback: All items opacity-only at duration-fast, no stagger. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

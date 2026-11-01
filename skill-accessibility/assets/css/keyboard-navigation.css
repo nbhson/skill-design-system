@@ -1,0 +1,27 @@
+/* ============================================================
+ * Keyboard Navigation - starter design tokens (CSS custom properties)
+ * Skill id: keyboard-navigation (#03 of 12)
+ *
+ * Everything operable by mouse works by keyboard: tab order, skip links, roving tabindex, and shortcut discipline (WCAG 2.1.1/2.4.3).
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-nav-model: dom-order; /* Tab order follows DOM; visual reordering must preserve semantics */
+  --a11y-skip-link-required: true; /* First tabbable element on pages with repeated nav blocks */
+  --a11y-escape-releases-trap: true; /* WCAG 2.1.2: modal focus traps always exit via Escape */
+  --a11y-roving-tabindex: pattern-owned; /* Composite widgets (tabs/listbox/grid) own arrow-key roving */
+  --a11y-arrow-key-semantics: in-group-only; /* Arrows move inside a widget; Tab moves between widgets */
+  --a11y-shortcut-policy: remappable-or-focus-only; /* WCAG 2.1.4 character key shortcuts */
+  --a11y-interactive-min-target: 44px; /* Keyboard focus + touch share the target-size floor (2.5.8) */
+  --a11y-modal-focus-policy: trap-and-return; /* Trap inside modal; return to trigger on close */
+  --a11y-tabindex-policy: 0-or-negative-only; /* tabindex=1+ is a build failure in review */
+  --a11y-keyboard-test: mouse-unplugged; /* The 5-minute audit: complete a core task keyboard-only */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This skill exists for WCAG 2.1.1/2.4.3/2.1.2/2.1.4: keyboard operability is non-negotiable and cannot have an 'alternative path' short-cut - the keyboard path IS the alternative path for mouse-inaccessible UI. */
+/* Fallback: If a control cannot be made keyboard-operable, replace it with a native control; a broken custom widget is never shipped alongside a documented apology. */

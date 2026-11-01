@@ -1,0 +1,27 @@
+/* ============================================================
+ * Dark Mode Theming - starter design tokens (CSS custom properties)
+ * Skill id: dark-mode (#06 of 12)
+ *
+ * Re-pointing semantic aliases into a dark theme: surface inversion, elevation physics, saturation control, and contrast that survives inversion.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-color-scheme: light dark; /* Declares both schemes; enables native form/scrollbar adaptation */
+  --dt-color-bg-default-dark: #0A0A0A; /* Page background; never pure #000 for long sessions */
+  --dt-color-bg-surface-dark: #1C1C1E; /* Cards, sheets at elevation-1 */
+  --dt-color-bg-elevated-dark: #2C2C2E; /* Dropdowns/modals; lightness carries altitude */
+  --dt-color-text-primary-dark: #FAFAFA; /* Body text; 17.9:1 on bg-default-dark, no halation */
+  --dt-color-text-secondary-dark: #A3A3A3; /* Meta text; 7.1:1 on bg-default-dark */
+  --dt-color-border-dark: #2E2E30; /* Replaces shadows as the depth cue at every elevation */
+  --dt-color-action-primary-dark: #60A5FA; /* Desaturated brand step; #0A0A0A text on it passes 8.9:1 */
+  --dt-color-overlay-scrim: rgba(0, 0, 0, 0.60); /* Modal scrim; lighten to 0.40 in dark to avoid pitch-black */
+  --dt-elevation-2-dark: 0 0 0 1px #2E2E30, 0 4px 12px rgba(0,0,0,0.50); /* Border-led shadow variant for dark elevation-2 */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Dark mode is an accessibility feature and an accessibility risk at once: it serves photosensitive and low-vision users, but every alias pairing must re-pass WCAG 1.4.3/1.4.11 in the dark theme, and state axes (hover/focus) must keep a visible delta. */
+/* Fallback: If a component's dark pairing fails contrast, ship the component in light-forced mode behind an explicit ticket rather than shipping a failing dark pairing. */

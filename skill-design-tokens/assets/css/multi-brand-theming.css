@@ -1,0 +1,26 @@
+/* ============================================================
+ * Multi-Brand Theming - starter design tokens (CSS custom properties)
+ * Skill id: multi-brand-theming (#07 of 12)
+ *
+ * White-label theming at the alias tier: per-brand primitive overrides, locked shared vocabulary, and a brand matrix that does not explode.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-brand-a-primary: #2563EB; /* Brand A anchor; full sibling ramp validated around it */
+  --dt-brand-a-on-primary: #FFFFFF; /* Text on A-primary: 4.6:1 */
+  --dt-brand-b-primary: #16A34A; /* Brand B anchor; white text fails 3.0:1 - use neutral-900 */
+  --dt-brand-b-on-primary: #052E16; /* Dark text on B-primary: 10.9:1 - proves on-primary must be per-brand */
+  --dt-brand-c-primary: #9333EA; /* Brand C anchor; white on it passes 4.9:1 */
+  --dt-brand-radius-override: 12px; /* Optional per-brand radius personality at alias tier */
+  --dt-brand-font-override: 'Brand Sans', Inter, sans-serif; /* Family swap only; size scale inherited */
+  --dt-theming-strategy: alias-tier-override; /* The documented mechanism; component forks are forbidden */
+  --dt-brand-logo-max-width: 160px; /* Layout slot contract so brand marks cannot break headers */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Brand identity never lowers the bar: each brand's on-primary, link, and feedback pairings pass WCAG 1.4.3 in every theme cell; on-primary text color is per-brand precisely because a shared white fails on some anchors. */
+/* Fallback: If a brand's anchor cannot reach 4.5:1 with any text, the anchor changes or its text role darkens - brand preference loses to contrast. */

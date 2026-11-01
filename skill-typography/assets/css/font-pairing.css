@@ -1,0 +1,27 @@
+/* ============================================================
+ * Font Pairing & Selection - starter design tokens (CSS custom properties)
+ * Skill id: font-pairing (#01 of 12)
+ *
+ * Choosing type families that work together: contrast strategies, superfamily and companion approaches, licensing, and fallback stacks.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-pairing-strategy: display-plus-text; /* The documented strategy: superfamily | display+text | mono-add-on */
+  --type-font-display: 'Space Grotesk', Inter, sans-serif; /* Headlines; contrasts with text face */
+  --type-font-text: 'Source Sans 3', system-ui, sans-serif; /* Body reading; humanist, high x-height */
+  --type-font-mono: ui-monospace, 'SF Mono', Menlo, monospace; /* Code, tabular data, token names */
+  --type-x-height-tolerance: 5%; /* Pairing compatibility threshold */
+  --type-fallback-metrics: size-adjust-matched; /* Fallback stack tuned with size-adjust/ascent-override */
+  --type-license-scope: webfont-plus-app; /* Documented per family; renewal tracked */
+  --type-language-coverage: latin-ext-vietnamese; /* Must cover all product locales before adoption */
+  --type-display-max-weights: 2; /* Display face loads 2 weights max */
+  --type-text-max-weights: 3; /* Text face loads 3 weights max (400/600/700) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Pairing serves accessibility directly: adequate x-height, open apertures, and unambiguous letterforms (I/l/1, O/0) reduce reading errors - and language coverage is an inclusion decision, not a nice-to-have. */
+/* Fallback: If a preferred face lacks Vietnamese coverage, the fallback face takes the whole product rather than mixing per-locale - mixed systems break rhythm. */

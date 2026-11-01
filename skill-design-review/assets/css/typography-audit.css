@@ -1,0 +1,27 @@
+/* ============================================================
+ * Typography Audit - starter design tokens (CSS custom properties)
+ * Skill id: typography-audit (#06 of 12)
+ *
+ * Scale adherence, hierarchy in text, line-length/readability, and the type crimes: justified widows, tracking all-caps, mixed scales.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-scale-adherence: type-ramp-only; /* Off-ramp sizes = mechanical finding */
+  --rev-heading-hierarchy: real-headings-no-skips; /* Styled-div headings flagged */
+  --rev-line-length: 45-75ch; /* Paragraph comfort band */
+  --rev-line-height: body-1.4-1.6; /* Role-matched leading */
+  --rev-type-crimes: tracked-lower,caps-strings,widows,rivers; /* Named checks */
+  --rev-fluid-check: clamp-320-to-1440; /* Breakpoint-verified */
+  --rev-tabular-figures: tables+metrics; /* Aligned numbers contract */
+  --rev-font-load-check: no-fout-foit; /* Loading strategy verified */
+  --rev-contrast-in-text: 4.5:1; /* Shared with a11y-audit */
+  --rev-typography-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The audit covers WCAG 1.4.3 (contrast), 1.4.4 (resize text), 1.4.12 (text spacing override tolerance), and 2.4.6 (headings/labels): text must survive user text-spacing overrides and 200% resize without clipping - checked by toggling the spacing overrides. */
+/* Fallback: If line-length or fluid checks are inconclusive, run the text-spacing override bookmarklet + 200% zoom pass - both are 5-minute checks with high yield. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Contrast Models & Math - starter design tokens (CSS custom properties)
+ * Skill id: contrast-models (#10 of 12)
+ *
+ * WCAG luminance ratios vs APCA: what each model measures, when each applies, and the computation discipline behind every validated pairing.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-wcag-body-min: 4.5:1; /* WCAG 1.4.3 AA body text */
+  --clr-wcag-large-min: 3:1; /* Large text (24px/19px bold) */
+  --clr-wcag-ui-min: 3:1; /* WCAG 1.4.11 components/graphics */
+  --clr-apca-body-lc: Lc-75; /* APCA body text quality target */
+  --clr-apca-large-lc: Lc-60; /* APCA large text target */
+  --clr-apca-ui-lc: Lc-45; /* APCA UI component target */
+  --clr-contrast-pairing-manifest: all-roles-all-themes; /* The enumerated, computed pairing table */
+  --clr-luminance-formula: wcag-rel-luminance-gamma; /* Gamma-correct relative luminance */
+  --clr-fix-axis: oklch-lightness; /* Contrast fixes move L, keep hue */
+  --clr-conflict-policy: stricter-readable-wins; /* WCAG/APPCA disagreement resolves to readable */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide IS the mathematical layer of WCAG 1.4.3/1.4.11 and the APCA modernization of it: every pairing decision in every other guide traces back to these formulas and the manifest that applies them. */
+/* Fallback: When models disagree irreconcilably on a pair, the pair is rejected - a pairing that one model says is unreadable is not shipped with the other model's blessing. */

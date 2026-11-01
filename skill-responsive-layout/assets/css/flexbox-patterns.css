@@ -1,0 +1,27 @@
+/* ============================================================
+ * Flexbox Patterns - starter design tokens (CSS custom properties)
+ * Skill id: flexbox-patterns (#04 of 12)
+ *
+ * One-dimensional layout patterns: nav bars, media objects, toolbars, and the alignment/gap idioms that solve 80% of component layout.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-flex-nav-pattern: space-between+center; /* Nav bars: logo left, actions right, centered items */
+  --layout-flex-media-object: gap+align-start; /* Icon/avatar + content rows; the workhorse pattern */
+  --layout-flex-toolbar: wrap+gap-2; /* Button/action toolbars that reflow */
+  --layout-flex-fill: flex: 1 + min-width: 0; /* Fill-remaining items; truncation needs min-width 0 */
+  --layout-flex-gap-unit: space tokens; /* gap consumes the 4px scale */
+  --layout-flex-truncate: ellipsis-on-flex-child; /* min-width: 0 + overflow hidden + nowrap */
+  --layout-flex-sticky-footer: column + mt-auto; /* Page shell: header/content/footer pattern */
+  --layout-flex-rail: overflow-x + scroll-snap; /* Horizontal card rails; pairs with scroll-animation */
+  --layout-flex-centering: place-center; /* Absolute-free centering for badges/empty states */
+  --layout-flex-vs-grid: one-dim-vs-two-dim; /* The documented decision rule */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Flex order is visual order: never use order/row-reverse to fix visual sequence at the cost of DOM/tab order mismatch (a11y repo 2.4.3) - reorder the DOM. */
+/* Fallback: If a flex pattern cannot preserve DOM=visual order, restructure the markup; visual-only reordering of interactive elements is a blocker. */

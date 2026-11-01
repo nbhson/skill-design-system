@@ -1,0 +1,27 @@
+/* ============================================================
+ * Webfont Loading & Performance - starter design tokens (CSS custom properties)
+ * Skill id: webfont-loading (#09 of 12)
+ *
+ * Fast, stable font delivery: subsets, font-display, preload discipline, and layout-shift prevention (CLS) that keeps text readable while fonts arrive.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-font-format: woff2-only; /* Modern browsers; no woff/ttf fallbacks needed */
+  --type-font-display-strategy: swap; /* Text visible immediately in fallback face */
+  --type-preload-policy: primary-subset-only; /* Above-the-fold body font, one request */
+  --type-subset-strategy: unicode-range; /* latin + latin-ext + vietnamese per face */
+  --type-fallback-matching: size-adjust-tuned; /* ascent-override/size-adjust kill CLS */
+  --type-weight-budget: max-3-per-face; /* Matches the closed type-token weight set */
+  --type-total-font-budget: under-100kb; /* All faces+subsets per page view */
+  --type-hosting: self-hosted; /* First-party origin; immutable caching */
+  --type-cache-policy: immutable-1y; /* Versioned filenames, 1-year max-age */
+  --type-cls-target: under-0.02; /* Font-swap layout shift budget */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Loading strategy is an accessibility issue: invisible-text periods hide content from everyone (including screen readers mid-load), and CLS disorients users with motor or low-vision impairments most. */
+/* Fallback: If font loading cannot be optimized in time, system font stacks are a valid, fast, accessible default - custom fonts are an enhancement, never a dependency. */

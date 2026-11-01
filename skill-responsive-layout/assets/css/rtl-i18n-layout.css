@@ -1,0 +1,27 @@
+/* ============================================================
+ * RTL & i18n Layout - starter design tokens (CSS custom properties)
+ * Skill id: rtl-i18n-layout (#11 of 12)
+ *
+ * Layouts that flip, reflow, and re-text for every locale: logical properties, RTL mirroring, text expansion, and internationalization-safe responsive design.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-i18n-spacing-model: logical-properties-only; /* margin-inline/padding-block; physical directions lint-blocked */
+  --layout-i18n-direction-source: html-dir-attr; /* dir=rtl|ltr at root; dir=auto for user content */
+  --layout-i18n-text-expansion: 40%-budget; /* Labels/UI strings sized to survive German-length translations */
+  --layout-i18n-mirror-list: documented-per-icon; /* Which icons/glyphs flip in RTL; the rest never do */
+  --layout-i18n-flex-behavior: follow-dir-naturally; /* No row-reverse hacks; direction flows from dir */
+  --layout-i18n-test-locales: ar,de,ja; /* Minimum QA locale set: RTL + long-word + CJK */
+  --layout-i18n-line-break: line-break-rules-per-script; /* Thai/CJK breaking; overflow-wrap: anywhere fallbacks */
+  --layout-i18n-numerals: locale-formats; /* Date/number formatting via Intl, never hand-rolled */
+  --layout-i18n-nav-flip: mirror-shell; /* Sidebar/logo/actions mirror; content order stays DOM order */
+  --layout-i18n-font-fallback: per-script-stacks; /* Arabic/CJK/Thai faces in the fallback chain where needed */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Correct dir attributes are an accessibility requirement (WCAG 1.3.2 meaningful sequence; H58 dir usage): screen readers switch reading behavior with dir - wrong direction is wrong narration; DOM order must remain logical in both directions. */
+/* Fallback: If full RTL support cannot ship for a locale, disable that locale's UI (content-only mode) rather than shipping a broken mirrored interface. */

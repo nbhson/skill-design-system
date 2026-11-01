@@ -1,0 +1,1581 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": [
+      "skill-ui-ux",
+      "skill-animation",
+      "skill-design-tokens"
+    ]
+  },
+  "skills": [
+    {
+      "id": "icon-style-selection",
+      "name": "Icon Style Selection",
+      "summary": "Choosing the icon language: filled vs outline, stroke weight, corner radius, and the one-style rule across a product.",
+      "sections": {
+        "definition": "Icons are a visual language, and mixing dialects is the most common icon failure. This guide covers the style decision matrix: filled vs outline (and when each reads better), stroke weight consistency (1.5px/2px families), corner treatment (rounded vs sharp matching the product's radius scale), optical vs pixel grids, and the duotone/two-tone option - all governed by the one-style rule: a product ships one icon family, chosen deliberately and documented.",
+        "principles": [
+          "One style per product: filled and outline icons never mix in the same navigation level - consistency is the readability of icons.",
+          "Filled vs outline is a hierarchy signal: filled = active/selected; outline = inactive - the weight difference must survive at 16px.",
+          "Stroke weight is a family commitment: 1.5px and 2px families exist - pick one; mixing stroke weights looks like a rendering bug.",
+          "Corner treatment matches the radius scale: icons inherit the product's radius personality (rounded product, rounded icons).",
+          "Optical sizing beats mathematical sizing: circles and squares optically adjusted (+/- 2%) so equal-sized shapes read equal.",
+          "The style decision is documented: an icon spec sheet records stroke, corner, fill, and grid - so the 50th icon matches the first.",
+          "Density context decides detail: toolbars at 16-20px carry simple glyphs; illustration-adjacent slots at 40px+ can carry more detail.",
+          "Test at target sizes: an icon style chosen at 48px must be re-reviewed at 16px - detail that reads at large sizes turns to mud."
+        ],
+        "tokens": [
+          {
+            "role": "style-family",
+            "value": "one-per-product",
+            "notes": "No mixing in the same nav level"
+          },
+          {
+            "role": "filled-outline-rule",
+            "value": "filled=active,outline=inactive",
+            "notes": "Weight difference survives 16px"
+          },
+          {
+            "role": "stroke-weight",
+            "value": "2px-default",
+            "notes": "1.5px allowed as documented alternate"
+          },
+          {
+            "role": "corner-treatment",
+            "value": "matches-radius-scale",
+            "notes": "Icons inherit product personality"
+          },
+          {
+            "role": "optical-adjustment",
+            "value": "plus-minus-2%",
+            "notes": "Circles/squares optically balanced"
+          },
+          {
+            "role": "style-spec-sheet",
+            "value": "stroke+corner+fill+grid",
+            "notes": "Documented for the 50th icon"
+          },
+          {
+            "role": "size-range",
+            "value": "16-24px-ui",
+            "notes": "Detail budget tied to target size"
+          },
+          {
+            "role": "duotone-policy",
+            "value": "documented-or-banned",
+            "notes": "Two-tone needs explicit rules"
+          },
+          {
+            "role": "density-context",
+            "value": "detail-scales-with-size",
+            "notes": "Toolbars simple; large slots richer"
+          },
+          {
+            "role": "style-review-size",
+            "value": "16px-gate",
+            "notes": "Re-review at smallest target"
+          }
+        ],
+        "composition": [
+          "Composes with icon-grid-sizing (guide 02): style decisions land on the grid - stroke weight and grid are one system.",
+          "Composes with skill-design-tokens: icon color/stroke consume semantic/alias tokens, never raw hex.",
+          "Composes with skill-ui-ux styles: icon personality should match the design style (styleAffinity records the lean)."
+        ],
+        "patterns": [
+          "The icon spec sheet: one document recording family (filled/outline), stroke, corner, grid, and optical rules - the contract every new icon cites.",
+          "The 16px gate: every new icon is reviewed at its smallest shipping size before merge - style choices that fail small are rejected."
+        ],
+        "useCases": [
+          "Design systems choosing their first icon family.",
+          "Products with mixed icon styles (acquisitions, legacy) planning unification.",
+          "Audit: stroke-weight drift, filled/outline chaos, mud-at-16px glyphs."
+        ],
+        "combinations": {
+          "good": [
+            "icon-grid-sizing",
+            "icon-library-management",
+            "icon-usability",
+            "accessible-icons",
+            "svg-optimization",
+            "icon-system-audit",
+            "empty-error-illustrations",
+            "animation-integration",
+            "favicon-app-icons",
+            "illustration-direction",
+            "mascot-character"
+          ],
+          "caution": [
+            "illustration-direction",
+            "mascot-character"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "maximalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Style salad: filled and outline icons side by side in one toolbar",
+          "Stroke drift: 1.5px legacy icons beside 2px new ones",
+          "Mud at 16px: detailed illustrations compressed into navigation glyphs",
+          "Undocumented style: no spec sheet, so every new icon guesses"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Icon style must survive WCAG 1.4.11 (non-text contrast: 3:1 for meaningful graphics) at the smallest size - thin 1px strokes at low contrast fail; paired with accessible-names contract (a11y repo media-alt-text guide).",
+          "fallback": "If a chosen style fails contrast at small sizes, thicken strokes or add a filled variant for active states - the style serves recognition, not fashion."
+        }
+      }
+    },
+    {
+      "id": "icon-grid-sizing",
+      "name": "Icon Grid & Sizing",
+      "summary": "The construction grid: 24px base, 16/20/24/32 scale, padding budgets, keyline shapes, and pixel-snapping for crisp strokes.",
+      "sections": {
+        "definition": "Every icon family is built on a construction grid: a 24px base with keyline shapes (circle, square, portrait, landscape), a padding budget (~2px at 24), and a size ramp (16/20/24/32/48) that maps to UI slots. This guide covers grid setup, keyline shapes that keep optical balance, pixel-snapping so strokes stay crisp at 1x, and how a single 24px master scales (or is redrawn) for smaller sizes.",
+        "principles": [
+          "One grid, one family: all icons share the 24px base grid - alignment across icons is what makes a toolbar read as a set.",
+          "Keyline shapes enforce optical balance: circle, square, portrait, landscape zones - glyphs touching keylines read consistent.",
+          "Padding budget is sacred: ~2px padding at 24px (8% of canvas) - glyphs touching the edge look caged; too much padding looks weak.",
+          "The size ramp maps to slots: 16 (inline text), 20 (dense UI), 24 (default), 32/48 (empty/feature) - sizes are chosen per slot, not ad hoc.",
+          "Pixel-snap strokes: strokes land on half-pixel boundaries at shipping sizes - un-snapped strokes blur at 1x displays.",
+          "Small sizes get redrawn, not squeezed: 16px icons are simplified masters (fewer details), not scaled-down 24px files.",
+          "Corner radius inside icons scales with size: inner radii are proportional to the grid, keeping family feel across the ramp.",
+          "The grid is exported with the family: grid templates and keyline files ship with the icon library for contributors."
+        ],
+        "tokens": [
+          {
+            "role": "base-grid",
+            "value": "24px",
+            "notes": "The master construction size"
+          },
+          {
+            "role": "size-ramp",
+            "value": "16,20,24,32,48",
+            "notes": "Mapped to UI slots"
+          },
+          {
+            "role": "padding-budget",
+            "value": "2px-at-24 (8%)",
+            "notes": "Glyphs never touch canvas edge"
+          },
+          {
+            "role": "keyline-shapes",
+            "value": "circle,square,portrait,landscape",
+            "notes": "Optical balance zones"
+          },
+          {
+            "role": "pixel-snap",
+            "value": "half-pixel-strokes",
+            "notes": "Crisp at 1x displays"
+          },
+          {
+            "role": "small-size-policy",
+            "value": "redrawn-at-16",
+            "notes": "Simplified masters, not scaled"
+          },
+          {
+            "role": "inner-radius",
+            "value": "proportional-to-grid",
+            "notes": "Family feel across sizes"
+          },
+          {
+            "role": "grid-export",
+            "value": "template-shipped",
+            "notes": "Contributors build on the grid"
+          },
+          {
+            "role": "alignment-rule",
+            "value": "cross-icon-consistency",
+            "notes": "Toolbar reads as one set"
+          },
+          {
+            "role": "export-sizes",
+            "value": "per-slot-only",
+            "notes": "No ad-hoc export sizes"
+          }
+        ],
+        "composition": [
+          "Composes with icon-style-selection (guide 01): stroke weight and grid are one system - decisions co-lock.",
+          "Composes with skill-design-tokens spacing/radius scales: icon sizes and inner radii align with the spacing ramp.",
+          "Composes with icon-library-management (guide 03): the grid is enforced at library contribution time."
+        ],
+        "patterns": [
+          "The master-icon workflow: every icon drawn once at 24px on the grid, then simplified masters for 16/20 - a one-way pipeline, not per-size drawing.",
+          "The keyline check: new icons are overlaid on keyline shapes; glyphs violating zones are resized optically before merge."
+        ],
+        "useCases": [
+          "Icon library construction from zero.",
+          "Migrating an ad-hoc icon set to a grid-based system.",
+          "Audit: caged glyphs, blurry 1x strokes, inconsistent optical sizing."
+        ],
+        "combinations": {
+          "good": [
+            "icon-style-selection",
+            "icon-library-management",
+            "icon-usability",
+            "svg-optimization",
+            "accessible-icons",
+            "icon-system-audit",
+            "empty-error-illustrations",
+            "animation-integration",
+            "favicon-app-icons",
+            "illustration-direction",
+            "mascot-character"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Edge-caged glyphs: artwork touching the canvas edge with no padding",
+          "Scaled-down 16px mush: details vanishing because nobody redrew the small master",
+          "Blurry strokes: un-snapped geometry shimmering on 1x screens",
+          "Per-size ad-hoc drawing: 16 and 24 versions drawn independently, drifting apart"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Grid discipline serves WCAG 1.4.11 and 2.5.8: optically balanced glyphs at target sizes keep 3:1 contrast feasible, and consistent padding keeps touch-target sizing predictable - the grid is the a11y foundation of the family.",
+          "fallback": "If redrawn small masters are too costly, restrict small slots to the subset of icons that survive scaling - complexity migrates to larger slots."
+        }
+      }
+    },
+    {
+      "id": "icon-library-management",
+      "name": "Icon Library Management",
+      "summary": "The pipeline: naming conventions, source-of-truth files, versioning, contribution workflow, and pruning dead icons.",
+      "sections": {
+        "definition": "Icons rot without a pipeline: duplicate names, stale exports, and dead glyphs accumulate. This guide covers the library mechanics: naming conventions (category-action, kebab-case), the source of truth (Figma/SVG masters, single source), export automation (SVGO + component generation), versioning (semver for icon families), the contribution workflow (grid check, style check, review), and pruning (usage-based dead icon removal).",
+        "principles": [
+          "Names are category-action: 'chart-bar', 'user-plus' - predictable names are findable names; numbered exports ('icon_24') are banned.",
+          "One source of truth: masters live in one repo/library; product teams consume generated assets - never hand-copied SVGs.",
+          "Exports are automated: SVGO-optimized SVGs + framework components generated from masters - manual export steps are where drift is born.",
+          "Versioning is semver for the family: added icons = minor; renamed/removed = major; restyled = major (visual contract).",
+          "Contribution is gated: new icons pass grid + style + a11y review before merge - the library only grows through the pipeline.",
+          "Usage is tracked: icon usage dashboards (or build-time scans) feed pruning decisions - dead icons get one deprecation cycle then removal.",
+          "Deprecation is visible: deprecated icons are flagged in docs and lint warnings - silent removal breaks builds; silent decay breaks trust.",
+          "Search beats memory: the library is searchable by name, keyword, and category - if contributors cannot find an icon, they will draw a duplicate."
+        ],
+        "tokens": [
+          {
+            "role": "naming-convention",
+            "value": "category-action-kebab",
+            "notes": "'chart-bar', 'user-plus'"
+          },
+          {
+            "role": "source-of-truth",
+            "value": "single-library",
+            "notes": "No hand-copied SVGs"
+          },
+          {
+            "role": "export-pipeline",
+            "value": "svgo+components-generated",
+            "notes": "Automated from masters"
+          },
+          {
+            "role": "versioning",
+            "value": "semver",
+            "notes": "Restyle = major (visual contract)"
+          },
+          {
+            "role": "contribution-gate",
+            "value": "grid+style+a11y-review",
+            "notes": "Growth only via pipeline"
+          },
+          {
+            "role": "usage-tracking",
+            "value": "build-scan+dashboard",
+            "notes": "Feeds pruning"
+          },
+          {
+            "role": "deprecation-policy",
+            "value": "one-cycle-then-remove",
+            "notes": "Flagged, linted, then gone"
+          },
+          {
+            "role": "search-discovery",
+            "value": "name+keyword+category",
+            "notes": "Findable beats duplicatable"
+          },
+          {
+            "role": "library-docs",
+            "value": "browsable-gallery",
+            "notes": "Live preview per icon"
+          },
+          {
+            "role": "duplicate-check",
+            "value": "pre-merge",
+            "notes": "New icons checked against existing"
+          }
+        ],
+        "composition": [
+          "Composes with icon-grid-sizing + icon-style-selection: the contribution gate enforces both contracts.",
+          "Composes with icon-system-audit (guide 12): usage tracking and audit findings share the same data.",
+          "Composes with skill-design-tokens: generated components consume token-based sizing/color props."
+        ],
+        "patterns": [
+          "The generate-don't-copy pipeline: masters in, optimized SVGs + components out - CI regenerates on merge so consumers always match masters.",
+          "The usage-scan prune: quarterly build scans list unused icons; maintainers deprecate with a removal date - the library stays lean."
+        ],
+        "useCases": [
+          "Design systems shipping icon libraries to multiple codebases.",
+          "Multi-brand setups with family variants (filled/outline per brand).",
+          "Audit: hand-copied SVG drift, unversioned restyles, dead-icon bloat."
+        ],
+        "combinations": {
+          "good": [
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "icon-usability",
+            "accessible-icons",
+            "svg-optimization",
+            "icon-system-audit",
+            "animation-integration",
+            "favicon-app-icons",
+            "empty-error-illustrations",
+            "illustration-direction",
+            "mascot-character"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Hand-copied drift: product folders holding mutated copies of library SVGs",
+          "Numbered-export names: 'icon_24_new_final' as the naming system",
+          "Silent removal: icons deleted with no deprecation cycle, breaking builds",
+          "Bloat-by-duplicate: five search icons because nobody could find the first four"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "The library bakes in accessibility: icons ship with accessible-name props (or aria-hidden for decorative use) documented per icon - the a11y contract is part of the generated component, not a downstream responsibility.",
+          "fallback": "If generated components are not in place, ship a documented naming + usage guide with the SVGs and enforce the aria contract in code review - the contract matters more than the tooling."
+        }
+      }
+    },
+    {
+      "id": "icon-usability",
+      "name": "Icon Usability",
+      "summary": "Recognition over recall: when icons need labels, the familiar-glyph rule, target sizes, and testing that catches mystery icons.",
+      "sections": {
+        "definition": "Icons work when users recognize them instantly - and most custom icons fail that test. This guide covers the usability contracts: the familiar-glyph rule (only universally recognized glyphs go unlabeled), the icon+label pairing for ambiguous actions, touch target sizing (44px effective floor), spacing that prevents mis-taps, and the testing protocol (5-second recognition tests, first-use comprehension) that catches mystery icons before they ship.",
+        "principles": [
+          "Familiar glyphs only, or labeled: a bare icon must be universally recognized (home, search, settings) - anything else pairs with a label.",
+          "Icon + label beats icon alone in navigation: labels remove interpretation cost; icon-only nav is a statement, not a default.",
+          "44px effective targets: the clickable area, not the glyph, meets the touch floor (WCAG 2.5.8) - visual size and target size are separate.",
+          "Spacing scales with density: adjacent icon targets keep 8px+ separation - crowded icon rows cause mis-taps.",
+          "Recognition is tested, not assumed: 5-second tests ('what does this do?') on new icons - designer certainty is not user recognition.",
+          "Consistency with platform conventions: save = floppy disk survives by convention; inventing new metaphors for standard actions confuses.",
+          "Tooltips supplement recognition, never replace it: the accessible name exists without hover (WCAG 1.4.13 + 2.4.6).",
+          "Icon-only is a budget: icon-only controls are rationed to toolbars and nav where space is real - forms and dialogs use labels."
+        ],
+        "tokens": [
+          {
+            "role": "familiar-glyph-rule",
+            "value": "universal-or-labeled",
+            "notes": "Mystery icons banned"
+          },
+          {
+            "role": "icon-label-pairing",
+            "value": "default-for-ambiguous",
+            "notes": "Nav items labeled by default"
+          },
+          {
+            "role": "touch-target",
+            "value": "44px-effective",
+            "notes": "WCAG 2.5.8 effective floor"
+          },
+          {
+            "role": "target-spacing",
+            "value": "8px-min-between",
+            "notes": "Mis-tap prevention"
+          },
+          {
+            "role": "recognition-test",
+            "value": "5-second-test",
+            "notes": "New icons tested, not assumed"
+          },
+          {
+            "role": "tooltip-role",
+            "value": "supplement-only",
+            "notes": "Name exists without hover"
+          },
+          {
+            "role": "icon-only-budget",
+            "value": "toolbars+nav-only",
+            "notes": "Forms/dialogs use labels"
+          },
+          {
+            "role": "platform-conventions",
+            "value": "standard-glyphs-standard",
+            "notes": "Save/print/share use convention"
+          },
+          {
+            "role": "visual-vs-target",
+            "value": "decoupled",
+            "notes": "Hit area >= visual size"
+          },
+          {
+            "role": "press-feedback",
+            "value": "visible-state",
+            "notes": "Active states confirm the press"
+          }
+        ],
+        "composition": [
+          "Composes with accessible-icons (guide 05): the naming/aria contracts pair with the recognition contracts here.",
+          "Composes with component-recipes dropdowns-menus + navigation-patterns: icon placement in menus and nav consumes this guide's pairing rules.",
+          "Composes with skill-design-tokens spacing: target padding comes from the spacing scale."
+        ],
+        "patterns": [
+          "The recognition test protocol: every new icon gets a 5-second comprehension check with 5+ users; below-threshold glyphs get labels or redesigns.",
+          "The icon+label default: navigation and action bars ship with labels visible; icon-only is an explicit space-driven exception, documented."
+        ],
+        "useCases": [
+          "Toolbars, bottom navs, and action bars where icons dominate.",
+          "Products with novel domain concepts that lack familiar glyphs.",
+          "Audit: mystery icons, sub-44px targets, tooltip-only labels."
+        ],
+        "combinations": {
+          "good": [
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "accessible-icons",
+            "icon-library-management",
+            "icon-system-audit",
+            "svg-optimization",
+            "empty-error-illustrations",
+            "animation-integration",
+            "favicon-app-icons",
+            "illustration-direction",
+            "mascot-character"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "feedback-confirmation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Mystery meat icons: unlabeled novel glyphs users must hover-hunt",
+          "Tiny targets: 24px glyphs as the entire touch surface",
+          "Crowded icon rows: adjacent targets under 8px apart",
+          "Reinvented metaphors: a custom 'save' glyph that means nothing"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Icon usability implements WCAG 2.5.8 (target size), 2.4.6 (headings and labels), and 1.4.13: 44px effective targets, visible name/label or accessible name, and tooltips that never carry the only meaning - recognition must not require hover precision.",
+          "fallback": "Where labels cannot fit (dense toolbars), ensure aria-labels + tooltips + a documented icon legend - and schedule recognition testing before wide release."
+        }
+      }
+    },
+    {
+      "id": "accessible-icons",
+      "name": "Accessible Icons",
+      "summary": "The aria contract: accessible names for functional icons, aria-hidden for decorative ones, and contrast that survives WCAG 1.4.11.",
+      "sections": {
+        "definition": "Icons are invisible to screen readers unless named, and invisible to low-vision users unless contrasted. This guide covers the aria contract: functional icons carry accessible names (aria-label or visible text), decorative icons are explicitly hidden (aria-hidden, focusable=false), icon buttons are real buttons with names, and meaningful icon graphics meet WCAG 1.4.11's 3:1 contrast against adjacent colors. The decision rule: does the icon carry information? Name it. Is it decoration? Hide it. Never an unnamed interactive icon.",
+        "principles": [
+          "Functional icons are named: aria-label minimum ('Search'), visible text preferred ('Search' beside the glyph).",
+          "Decorative icons are hidden: aria-hidden='true' + focusable='false' - decoration must never enter the AT tree or tab order.",
+          "Icon buttons are real buttons: <button aria-label='...'> - never a clickable div with a background-image glyph.",
+          "3:1 contrast for meaningful graphics: icons that carry information meet WCAG 1.4.11 against adjacent colors - including state changes.",
+          "Names are human phrases, not icon names: 'Delete file', not 'trash-can-2' - the aria-label is the same string the tooltip shows.",
+          "State changes are named: favorite toggles announce state ('Remove from favorites' vs 'Add to favorites') - static names lie about toggles.",
+          "Icon fonts are legacy: they inject junk characters into AT - inline SVG or sprite + name is the default.",
+          "Focus visibility survives icon styling: custom icon buttons keep the focus-ring contract (2px + offset)."
+        ],
+        "tokens": [
+          {
+            "role": "functional-name",
+            "value": "aria-label-required",
+            "notes": "Human phrase, not icon name"
+          },
+          {
+            "role": "decorative-hide",
+            "value": "aria-hidden+focusable-false",
+            "notes": "Decoration out of AT tree"
+          },
+          {
+            "role": "icon-button-element",
+            "value": "real-button",
+            "notes": "Never clickable divs"
+          },
+          {
+            "role": "graphic-contrast",
+            "value": "3:1-meaningful",
+            "notes": "WCAG 1.4.11 vs adjacent colors"
+          },
+          {
+            "role": "name-tooltip-parity",
+            "value": "same-string",
+            "notes": "aria-label matches visible tooltip"
+          },
+          {
+            "role": "toggle-naming",
+            "value": "state-aware",
+            "notes": "Pressed/aria-pressed announced"
+          },
+          {
+            "role": "icon-font-policy",
+            "value": "legacy-banned",
+            "notes": "Inline SVG default"
+          },
+          {
+            "role": "focus-ring",
+            "value": "2px+offset-2px",
+            "notes": "Shared button contract"
+          },
+          {
+            "role": "svg-title-policy",
+            "value": "role-img+title-or-hidden",
+            "notes": "Standalone SVGs named or hidden"
+          },
+          {
+            "role": "name-language",
+            "value": "user-terms",
+            "notes": "Same voice charter as visible copy"
+          }
+        ],
+        "composition": [
+          "Composes with icon-usability (guide 04): recognition (visual) and naming (AT) are the two halves of one contract.",
+          "Composes with skill-accessibility media-alt-text + keyboard-navigation: criteria layer for names, contrast, and focus.",
+          "Composes with icon-library-management: the generated components ship with the aria contract pre-wired."
+        ],
+        "patterns": [
+          "The icon button recipe: <button aria-label='Delete file'> + inline SVG aria-hidden + focus ring + 44px target - one pattern, reused everywhere.",
+          "The decorative/functional audit: every icon instance classified (functional: named; decorative: hidden) - unclassified icons are audit failures."
+        ],
+        "useCases": [
+          "Every icon instance in every product - the most common a11y surface.",
+          "Design systems baking naming into icon components.",
+          "Audit: unnamed icon buttons, icon-font junk in AT, 1.4.11 contrast fails."
+        ],
+        "combinations": {
+          "good": [
+            "icon-usability",
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "icon-library-management",
+            "svg-optimization",
+            "icon-system-audit",
+            "empty-error-illustrations",
+            "animation-integration",
+            "favicon-app-icons",
+            "illustration-direction",
+            "mascot-character"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "reduced-motion",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The unnamed icon button: a clickable glyph no screen reader can explain",
+          "Decoration in the AT tree: aria-hidden missing, icons read as 'graphic' noise",
+          "Icon-font remnants: ligature junk ('') read aloud by AT",
+          "Low-contrast glyphs: 1.2:1 icons invisible to low-vision users"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "This guide implements WCAG 1.1.1 (non-text content), 1.4.11 (non-text contrast), 2.1.1/4.1.2 (keyboard + name/role/value): every functional icon named, every decorative icon hidden, every meaningful glyph contrasted - the aria contract is non-negotiable.",
+          "fallback": "If per-instance naming cannot be enforced immediately, prioritize interactive icons (buttons/links) - unnamed interactive controls are the highest-severity failures; decorative misses degrade gracefully."
+        }
+      }
+    },
+    {
+      "id": "illustration-direction",
+      "name": "Illustration Direction",
+      "summary": "Defining the illustration language: purpose matrix, style lock-up with brand, color discipline, and consistency across artists.",
+      "sections": {
+        "definition": "Illustrations are brand moments inside product UI: onboarding heroes, empty states, success celebrations. This guide covers the direction work: the purpose matrix (where illustration earns its place vs where it is noise), style definition (line weight, palette limits, character rules) locked to the brand, color discipline (illustration consumes brand/semantic ramps, not free palettes), and the consistency system - templates, component libraries, and review - that keeps multiple artists producing one language.",
+        "principles": [
+          "Illustration has a purpose matrix: orient (onboarding), explain (concepts), reward (success), humanize (empty states) - decoration without purpose is noise.",
+          "Style is defined, not felt: line weight, palette, character proportions, and level of detail documented as the illustration spec.",
+          "The style locks to the brand: illustration personality matches the design style (styleAffinity) - playful products get playful lines.",
+          "Color discipline: illustrations consume the brand ramp + a defined illustration palette - never free hex choices that drift from tokens.",
+          "One character system: mascots and people follow proportion rules (head counts, features) - character drift is style drift.",
+          "Scene templates enforce consistency: backgrounds, ground shadows, and framing are reusable components, not redrawn per illustration.",
+          "Detail scales with display size: hero illustrations carry detail; 120px spots stay simple - the detail budget is part of the spec.",
+          "The library is curated: approved illustrations live in a versioned library with usage notes - ad-hoc art dropped into products is banned."
+        ],
+        "tokens": [
+          {
+            "role": "purpose-matrix",
+            "value": "orient,explain,reward,humanize",
+            "notes": "Illustration must serve one"
+          },
+          {
+            "role": "illustration-spec",
+            "value": "line+palette+character+lod",
+            "notes": "The documented style contract"
+          },
+          {
+            "role": "style-brand-lock",
+            "value": "matches-design-style",
+            "notes": "Illustration mirrors product personality"
+          },
+          {
+            "role": "color-discipline",
+            "value": "brand-ramp+palette-limits",
+            "notes": "No free hex in artwork"
+          },
+          {
+            "role": "character-proportions",
+            "value": "documented-rules",
+            "notes": "One character system"
+          },
+          {
+            "role": "scene-templates",
+            "value": "reusable-components",
+            "notes": "Framing/shadows not redrawn"
+          },
+          {
+            "role": "detail-budget",
+            "value": "scales-with-size",
+            "notes": "Spots simple; heroes detailed"
+          },
+          {
+            "role": "illustration-library",
+            "value": "versioned+curated",
+            "notes": "Approved art only"
+          },
+          {
+            "role": "usage-notes",
+            "value": "per-illustration",
+            "notes": "Where/how each asset is used"
+          },
+          {
+            "role": "export-format",
+            "value": "svg+lottie-as-needed",
+            "notes": "Vector first; animation opt-in"
+          }
+        ],
+        "composition": [
+          "Composes with empty-error-illustrations (guide 07): the most common illustration surface - contracts shared.",
+          "Composes with skill-color-theory: illustration palettes are audited against brand ramps and contrast models.",
+          "Composes with skill-ui-ux styles: illustration is where design styles express most strongly - styleAffinity records the direction."
+        ],
+        "patterns": [
+          "The illustration spec + template kit: one style spec document plus reusable scene components - new artists produce on-language work without supervision.",
+          "The curation pipeline: artists submit to the library, a design review checks spec adherence, approved assets are versioned with usage notes."
+        ],
+        "useCases": [
+          "Brand-forward products building an illustration system from zero.",
+          "Multi-artist teams needing one visual language.",
+          "Audit: style drift, off-token colors, purposeless decorative art."
+        ],
+        "combinations": {
+          "good": [
+            "empty-error-illustrations",
+            "mascot-character",
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "svg-optimization",
+            "animation-integration",
+            "icon-library-management",
+            "icon-usability",
+            "accessible-icons",
+            "favicon-app-icons",
+            "icon-system-audit"
+          ],
+          "caution": [
+            "icon-style-selection"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "collage-art",
+            "maximalism",
+            "retro"
+          ],
+          "caution": [
+            "minimalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "illustration-lottie",
+            "ambient-motion"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Style drift: three artists, three visual languages, one product",
+          "Off-token color: artwork in hex values that exist nowhere in the system",
+          "Decoration without purpose: hero art slowing pages where no message is served",
+          "Character chaos: the mascot's proportions changing per artist"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Illustrations are WCAG 1.1.1 surface: informative illustrations get text alternatives (adjacent copy or aria), decorative ones are hidden - and animation on illustrations must respect reduced-motion (a11y repo media-alt-text + skill-animation guide 12).",
+          "fallback": "If per-illustration alt copy is missing, ensure every illustration is paired with adjacent explanatory text - the pairing satisfies 1.1.1 even with an empty alt."
+        }
+      }
+    },
+    {
+      "id": "empty-error-illustrations",
+      "name": "Empty & Error Illustrations",
+      "summary": "The highest-traffic illustration slots: empty states, errors, 404s, and offline - mood-matched, copy-paired, and light-weight.",
+      "sections": {
+        "definition": "Empty and error states are where illustrations earn their keep: a 404 with personality is remembered; a blank box is forgotten. This guide covers the slot-specific contracts: empty states (mood matches the taxonomy - hopeful for first-use, apologetic for no-results), error illustrations (calm, never mocking the failure), 404/offline specials, and the technical floor - illustration paired with copy and action, mood-matched to context, and light enough not to punish the very page that failed.",
+        "principles": [
+          "Illustration + copy + action, always: the drawing sets mood; the text explains; the button moves forward - all three, every slot.",
+          "Mood matches the moment: first-use is hopeful, no-results is apologetic-helpful, errors are calm - a grinning mascot on an error page is a betrayal.",
+          "Errors never mock: the illustration sympathizes with the failure ('we broke it'), never jokes at the user's expense.",
+          "404 is the personality slot: the one page where humor is welcomed - budget it accordingly.",
+          "Offline is designed: a specific illustration + 'You're offline' + retry - not a browser error.",
+          "Weight matters most on failure pages: error/empty illustrations are optimized aggressively (SVG < 30KB) - don't punish the page that already failed.",
+          "Consistent family across slots: the empty/error set is drawn in one style pass - mixed-art error pages read as a broken product.",
+          "Dark mode is a variant: illustrations ship light/dark variants or use CSS-variable-driven colors - a white-background PNG in dark mode is a bug."
+        ],
+        "tokens": [
+          {
+            "role": "slot-trio",
+            "value": "illustration+copy+action",
+            "notes": "All three, every slot"
+          },
+          {
+            "role": "empty-mood",
+            "value": "hopeful-first-use,apologetic-no-results",
+            "notes": "Mood per taxonomy state"
+          },
+          {
+            "role": "error-mood",
+            "value": "calm-sympathetic",
+            "notes": "Never mocking the failure"
+          },
+          {
+            "role": "404-policy",
+            "value": "personality-allowed",
+            "notes": "The humor budget slot"
+          },
+          {
+            "role": "offline-special",
+            "value": "designed+retry",
+            "notes": "Specific illustration + action"
+          },
+          {
+            "role": "weight-budget",
+            "value": "svg-under-30kb",
+            "notes": "Failure pages stay fast"
+          },
+          {
+            "role": "family-consistency",
+            "value": "one-style-pass",
+            "notes": "The set drawn together"
+          },
+          {
+            "role": "dark-mode",
+            "value": "variant-or-css-vars",
+            "notes": "No white-box PNGs in dark UI"
+          },
+          {
+            "role": "alt-pairing",
+            "value": "adjacent-copy-carries",
+            "notes": "Illustration decorative; text carries meaning"
+          },
+          {
+            "role": "reduced-motion",
+            "value": "animation-collapses",
+            "notes": "Animated variants honor the media query"
+          }
+        ],
+        "composition": [
+          "Composes with ux-writing empty-states (skill-ux-writing guide 05): that guide owns the copy; this guide owns the art - the trio is the contract.",
+          "Composes with illustration-direction (guide 06): the empty/error set is drawn under the same spec.",
+          "Composes with component-recipes empty-loading-error: the state components are the slots these illustrations live in."
+        ],
+        "patterns": [
+          "The state-illustration set: one style pass producing the whole family (empty/first-use, no-results, 404, offline, 500, permission) - consistent mood ladder from hope to apology.",
+          "The CSS-variable illustration: artwork built on CSS custom properties so dark mode and theming come free - one SVG, many themes."
+        ],
+        "useCases": [
+          "Empty states across lists, tables, dashboards, and search.",
+          "Error pages: 404, 500, offline, permission-denied.",
+          "Audit: blank boxes, mocking error art, heavy illustrations on failure pages."
+        ],
+        "combinations": {
+          "good": [
+            "illustration-direction",
+            "mascot-character",
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "svg-optimization",
+            "accessible-icons",
+            "animation-integration",
+            "icon-library-management",
+            "icon-usability",
+            "favicon-app-icons",
+            "icon-system-audit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "collage-art",
+            "minimalism",
+            "flat-design"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "illustration-lottie",
+            "entrance-exit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Mocking errors: cheerful art laughing at the user's failed payment",
+          "The heavy 404: a 2MB illustration punishing the page that already failed",
+          "Copy-less art: illustration alone where explanation was needed",
+          "White-box art in dark mode: un-themed illustrations breaking the surface"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "These illustrations are decorative-by-design (the adjacent copy carries meaning - empty alt), must meet contrast for any embedded text, and animated variants collapse under prefers-reduced-motion - state announcements come from the region, not the art.",
+          "fallback": "If animation on empty/error art cannot honor reduced-motion, ship static variants only - mood does not require motion."
+        }
+      }
+    },
+    {
+      "id": "mascot-character",
+      "name": "Mascot & Character Design",
+      "summary": "Brand characters done responsibly: proportion systems, emotion ranges, do/don't placements, and the restraint rule.",
+      "sections": {
+        "definition": "A mascot is a brand investment with a maintenance cost: proportion systems (head-height ratios), emotion ranges (the expressions the character can show), pose libraries, and placement rules (where the character appears and where it never does). This guide covers building the character system - turnaround sheets, expression sheets, usage do/don'ts - and the restraint rule: mascots appear at decision-relevant moments (onboarding, celebration, recovery), not on every surface.",
+        "principles": [
+          "The character system is documented: turnaround (front/side/back), proportions (head counts), and construction - artists reproduce, not reinterpret.",
+          "Emotion range is a defined set: the character has an approved expression sheet - new emotions extend the sheet, not improvisation.",
+          "Placement has do/don't rules: mascot in onboarding/empty/success yes; mascot in error-payment/destructive-confirm no - placement is a documented matrix.",
+          "The restraint rule: mascots at the moments that matter create delight; mascots everywhere create eye-rolling - ration appearances.",
+          "Mascot never blocks the task: the character decorates, guides, or celebrates - it never occupies the space the user needs to act in.",
+          "Consistency across animation and static: the animated mascot uses the same proportions and voice - Lottie rigs built from the same construction.",
+          "Cultural review for global mascots: gestures, colors, and expressions reviewed per market (ux-writing guide 10 cultural discipline).",
+          "The character has an alt-text story: when informative (guiding), it's named; when decorative, hidden - mascot does not escape the aria contract."
+        ],
+        "tokens": [
+          {
+            "role": "character-system",
+            "value": "turnaround+proportions",
+            "notes": "Documented construction"
+          },
+          {
+            "role": "proportion-rule",
+            "value": "head-count-ratio",
+            "notes": "The character's build formula"
+          },
+          {
+            "role": "emotion-sheet",
+            "value": "defined-range",
+            "notes": "Approved expressions only"
+          },
+          {
+            "role": "pose-library",
+            "value": "curated-set",
+            "notes": "Reused poses; no ad-hoc drawing"
+          },
+          {
+            "role": "placement-matrix",
+            "value": "do/dont-per-surface",
+            "notes": "Onboarding yes; payment errors no"
+          },
+          {
+            "role": "restraint-rule",
+            "value": "moments-that-matter",
+            "notes": "Rationed appearances"
+          },
+          {
+            "role": "task-priority",
+            "value": "never-blocks-cta",
+            "notes": "Character decorates; user acts"
+          },
+          {
+            "role": "animation-parity",
+            "value": "same-construction",
+            "notes": "Rigs from the same sheets"
+          },
+          {
+            "role": "cultural-review",
+            "value": "per-market",
+            "notes": "Gestures/colors checked"
+          },
+          {
+            "role": "mascot-aria",
+            "value": "named-or-hidden",
+            "notes": "Same contract as all icons/art"
+          }
+        ],
+        "composition": [
+          "Composes with illustration-direction (guide 06): the mascot is the character system within the broader illustration spec.",
+          "Composes with empty-error-illustrations (guide 07): the mascot is a common empty/error actor - mood rules apply.",
+          "Composes with skill-animation illustration-lottie: animated mascot states are built as Lottie scenes under motion tokens."
+        ],
+        "patterns": [
+          "The character kit: turnaround + expression sheet + pose library + placement matrix - one package that any artist or animator can work from.",
+          "The moment mapping: mascot appearances mapped to journey moments (welcome, first success, recovery) with approved art per moment - the restraint is pre-decided."
+        ],
+        "useCases": [
+          "Consumer products building long-term brand recognition.",
+          "Onboarding-heavy products where guidance benefits from a guide character.",
+          "Audit: mascot overexposure, proportion drift, characters blocking CTAs."
+        ],
+        "combinations": {
+          "good": [
+            "illustration-direction",
+            "empty-error-illustrations",
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "animation-integration",
+            "svg-optimization",
+            "accessible-icons",
+            "icon-library-management",
+            "icon-usability",
+            "favicon-app-icons",
+            "icon-system-audit"
+          ],
+          "caution": [
+            "icon-style-selection"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "claymorphism",
+            "collage-art",
+            "retro"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "illustration-lottie",
+            "ambient-motion"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Mascot overexposure: the character on every surface until users resent it",
+          "Blocking the task: mascot art pushing the primary CTA below the fold",
+          "Proportion drift: the character's build changing per illustrator",
+          "Grief moments with the mascot: cheerful character on payment failures"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Mascots follow the standard art contract: informative guide-moments get text alternatives, decorative appearances are hidden, and animated states respect reduced-motion - the character never becomes an unnamed interactive element.",
+          "fallback": "If the character system cannot be fully documented, restrict the mascot to pre-approved static placements (onboarding/empty) - a small consistent set beats an ambitious inconsistent one."
+        }
+      }
+    },
+    {
+      "id": "svg-optimization",
+      "name": "SVG Optimization",
+      "summary": "Lean vectors: SVGO discipline, viewBox hygiene, currentColor theming, sprite strategies, and what never to hand-edit.",
+      "sections": {
+        "definition": "Every kilobyte of icon and illustration ships to every user; unoptimized SVG bloat is pure waste. This guide covers the optimization pipeline: SVGO with a reviewed config (which transforms are safe), viewBox hygiene (no stray whitespace/precision bloat), currentColor + CSS-variable fills for theming, sprite sheets vs inline vs external use strategies, and the danger list - what hand-editing (or naive optimization) breaks: gradients, clip paths, and ARIA attributes.",
+        "principles": [
+          "SVGO runs with a reviewed config: default settings strip ARIA and title elements - the config preserves accessibility nodes.",
+          "viewBox hygiene: tight viewBox, 1-2 decimal precision, no editor metadata (Inkscape/Figma layers) shipped to production.",
+          "currentColor for single-color icons: theming and dark mode come free; hardcoded fills are banned for mono glyphs.",
+          "CSS variables for multi-color art: illustration fills mapped to variables enable theming without duplicating files.",
+          "The delivery strategy is deliberate: inline SVG for styled/interactive glyphs, sprite for repeated mono icons, file/URL for large illustrations.",
+          "Never hand-edit generated output: masters -> pipeline -> assets; editing the dist file means the fix dies at the next build.",
+          "Gradients and clip paths are fragile: optimization transforms that flatten groups break them - tested exceptions in the config.",
+          "Measure the wins: bundle budgets per page (icons < 50KB total typical) tracked in CI - optimization without measurement decays."
+        ],
+        "tokens": [
+          {
+            "role": "optimizer",
+            "value": "svgo-reviewed-config",
+            "notes": "ARIA/title preserved"
+          },
+          {
+            "role": "viewbox-hygiene",
+            "value": "tight+low-precision",
+            "notes": "No editor metadata in prod"
+          },
+          {
+            "role": "mono-fill",
+            "value": "currentColor",
+            "notes": "Theming free for single-color icons"
+          },
+          {
+            "role": "multicolor-fill",
+            "value": "css-variables",
+            "notes": "Theme-capable illustrations"
+          },
+          {
+            "role": "delivery-strategy",
+            "value": "inline|sprite|file-by-use",
+            "notes": "Deliberate per slot"
+          },
+          {
+            "role": "no-hand-edit",
+            "value": "masters-to-pipeline",
+            "notes": "Dist edits die at next build"
+          },
+          {
+            "role": "fragile-features",
+            "value": "gradients+clip-paths-tested",
+            "notes": "Config exceptions documented"
+          },
+          {
+            "role": "icon-budget",
+            "value": "<50kb-per-page",
+            "notes": "Tracked in CI"
+          },
+          {
+            "role": "sprite-strategy",
+            "value": "symbol+use-for-repeat",
+            "notes": "Repeated mono icons"
+          },
+          {
+            "role": "compression-check",
+            "value": "gzip-in-budget",
+            "notes": "Budgets measured gzipped"
+          }
+        ],
+        "composition": [
+          "Composes with icon-library-management (guide 03): the export pipeline IS this optimization - one automated step.",
+          "Composes with skill-design-tokens: variable-driven fills consume semantic tokens - theming consistency end to end.",
+          "Composes with animation-integration (guide 10): animated SVGs need optimization exceptions - the config knows which files."
+        ],
+        "patterns": [
+          "The build pipeline: masters -> SVGO (reviewed config) -> themed fills -> sprites/components -> CI budget check - fully automated, never manual.",
+          "The delivery decision table: interactive/styled -> inline; repeated mono -> sprite; large art -> optimized file with lazy loading."
+        ],
+        "useCases": [
+          "Design systems shipping icons to bundle-sensitive products.",
+          "Performance-focused audits of icon payload.",
+          "Dark-mode/theming migrations converting hardcoded fills."
+        ],
+        "combinations": {
+          "good": [
+            "icon-library-management",
+            "icon-grid-sizing",
+            "icon-style-selection",
+            "accessible-icons",
+            "animation-integration",
+            "icon-system-audit",
+            "empty-error-illustrations",
+            "illustration-direction",
+            "mascot-character",
+            "icon-usability",
+            "favicon-app-icons"
+          ],
+          "caution": [
+            "animation-integration"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing",
+            "illustration-lottie"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The 400KB icon: unoptimized editor output shipped raw",
+          "ARIA-stripped by SVGO: optimizer config deleting title/aria attributes",
+          "Hand-edited dist: fixes overwritten at the next build",
+          "Hardcoded fills: mono icons immune to theming and dark mode"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Optimization must preserve the a11y nodes: the SVGO config keeps title/aria attributes (accessible-icons guide), and contrast survives fill changes - performance work must never delete the aria contract.",
+          "fallback": "If the config review is pending, disable removeTitle/removeARIA transforms immediately - those two settings cause the most a11y damage."
+        }
+      }
+    },
+    {
+      "id": "animation-integration",
+      "name": "Icon & Illustration Animation",
+      "summary": "Motion on vector assets: when icons animate, Lottie vs SMIL vs CSS, weight costs, and reduced-motion fallbacks.",
+      "sections": {
+        "definition": "Animated icons and illustrations carry delight - and weight, complexity, and a11y obligations. This guide covers the integration rules: when an icon earns animation (state feedback, loading, celebration), the technique choice (CSS for simple transforms, Lottie for character/scene work, SMIL deprecated), weight budgets (animation multiplies file size), and the mandatory reduced-motion fallback (static frame equivalents).",
+        "principles": [
+          "Animation earns its place: state feedback (success check draw-in), loading, and celebration justify motion - idle decoration rarely does.",
+          "Technique by complexity: CSS transforms for simple (rotate/scale/draw), Lottie for character/scene work, SMIL/CSS keyframe hackery avoided - the choice is documented per asset.",
+          "Weight budget doubles for animation: an animated icon should cost < 15KB; Lottie scenes < 100KB - motion must justify its payload.",
+          "Reduced-motion is mandatory: every animated asset has a static fallback frame (or collapses to opacity fade) under prefers-reduced-motion - no exceptions.",
+          "Loop with restraint: looping ambient animation is rationed (one per viewport max) - looping everywhere reads as a game.",
+          "Draw-on/load-in is the default pattern: stroke draw-in and fade-scale entrances are the tasteful 90% - flarb/bounce is opt-in.",
+          "Animation state is communicated: loading spinners, success draw-ins, and error shakes narrate (aria-live or visible text pair) - motion is never the only signal.",
+          "Play controls for long scenes: illustrations animating > 5s offer pause - ambient loops under 5s exempt."
+        ],
+        "tokens": [
+          {
+            "role": "animation-justification",
+            "value": "feedback,loading,celebration",
+            "notes": "The three earning moments"
+          },
+          {
+            "role": "technique-choice",
+            "value": "css-simple,lottie-scene",
+            "notes": "SMIL avoided; choice documented"
+          },
+          {
+            "role": "animated-icon-budget",
+            "value": "<15kb",
+            "notes": "Per animated icon"
+          },
+          {
+            "role": "lottie-budget",
+            "value": "<100kb",
+            "notes": "Per scene; lazy-loaded"
+          },
+          {
+            "role": "reduced-motion",
+            "value": "static-fallback-required",
+            "notes": "No exceptions"
+          },
+          {
+            "role": "loop-policy",
+            "value": "one-per-viewport-max",
+            "notes": "Ambient rationed"
+          },
+          {
+            "role": "default-pattern",
+            "value": "draw-in+fade-scale",
+            "notes": "The tasteful defaults"
+          },
+          {
+            "role": "state-announce",
+            "value": "motion-never-only-signal",
+            "notes": "Text/live-region paired"
+          },
+          {
+            "role": "long-scene-pause",
+            "value": ">5s-offers-pause",
+            "notes": "2.2.2 pause control"
+          },
+          {
+            "role": "trigger-timing",
+            "value": "on-state-change",
+            "notes": "Motion tracks real events"
+          }
+        ],
+        "composition": [
+          "Composes with skill-animation: motion tokens (durations/easings) drive all icon/illustration animation - one timing system.",
+          "Composes with svg-optimization (guide 09): animated assets need config exceptions and weight budgets - caution pairing is by design.",
+          "Composes with empty-error-illustrations + mascot-character: the celebration/loading moments are the earning moments."
+        ],
+        "patterns": [
+          "The draw-in pattern: stroke-dashoffset draw for success/check glyphs - 300-500ms, easing-timing tokens, static fallback.",
+          "The Lottie budget gate: scenes are weight-checked at contribution (lottie-web renderer, sub-100KB, lazy-loaded) before entering the library."
+        ],
+        "useCases": [
+          "Success/celebration moments (save complete, goal reached).",
+          "Loading states with branded personality.",
+          "Audit: flarb-everything motion, unthrottled loops, missing reduced-motion."
+        ],
+        "combinations": {
+          "good": [
+            "icon-system-audit",
+            "svg-optimization",
+            "empty-error-illustrations",
+            "mascot-character",
+            "illustration-direction",
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "icon-library-management",
+            "icon-usability",
+            "accessible-icons",
+            "favicon-app-icons"
+          ],
+          "caution": [
+            "svg-optimization"
+          ],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "claymorphism",
+            "aurora-ui",
+            "glassmorphism"
+          ],
+          "caution": [
+            "minimalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "illustration-lottie",
+            "loading-states"
+          ],
+          "caution": [
+            "ambient-motion"
+          ],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Motion everywhere: every icon bouncing, nothing readable as stable UI",
+          "The 500KB celebration: a Lottie scene punishing the success page",
+          "No static fallback: animation required for meaning, breaking reduced-motion users",
+          "Infinite loops en masse: five ambient animations fighting in one viewport"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "This guide implements WCAG 2.2.2 (pause, stop, hide) and 2.3.3 (animation from interactions) plus reduced-motion: static fallbacks are mandatory, long scenes offer pause, and motion never carries the only meaning - animation state must be text-announced.",
+          "fallback": "If a static fallback cannot be produced per asset, disable the animation entirely - motion is enhancement, never the baseline."
+        }
+      }
+    },
+    {
+      "id": "favicon-app-icons",
+      "name": "Favicons & App Icons",
+      "summary": "The smallest brand surfaces: favicon sets, PWA icons, maskable variants, touch icons, and generation over hand-export.",
+      "sections": {
+        "definition": "Favicons and app icons are the brand's smallest surfaces and its most fragmented: ico/png/svg stacks, apple-touch-icons, maskable PWA icons with safe zones, and theme-color tiles. This guide covers the modern minimal set (SVG favicon + 512/192 PWA + maskable + apple-touch 180), maskable-icon safe zones, generation pipelines (one master, all sizes generated), and the brand-consistency checks - the icon recognizable at 16px and in an OS dock alike.",
+        "principles": [
+          "The modern minimal set: SVG favicon (with ico fallback), 180px apple-touch, 512 + 192 PWA (regular + maskable) - more sizes are legacy, fewer is incomplete.",
+          "One master, generated sizes: a 1024px master exports every size via pipeline - hand-exported per-size files drift.",
+          "Maskable icons respect the safe zone: critical content within the inner 80% circle - the OS crops unpredictably.",
+          "Recognizable at 16px: the favicon is re-drawn/simplified for small sizes if the master detail fails - test in an actual tab strip.",
+          "Consistency with the icon family: the favicon uses the brand mark and product palette - not a different logo treatment.",
+          "Dark mode favicon where supported: prefers-color-scheme-aware SVG favicon - a black glyph on dark tab strips vanishes.",
+          "theme-color matches the surface: the meta theme-color (and light/dark variants) aligns with the browser chrome.",
+          "PWA completeness checked: manifest icons + maskable + shortcuts verified in Lighthouse - broken PWA icons are silent failures."
+        ],
+        "tokens": [
+          {
+            "role": "minimal-set",
+            "value": "svg+ico,180-touch,512+192,maskable",
+            "notes": "Modern favicon/app icon stack"
+          },
+          {
+            "role": "master-source",
+            "value": "1024px-master",
+            "notes": "All sizes generated from one file"
+          },
+          {
+            "role": "maskable-safe-zone",
+            "value": "inner-80%-circle",
+            "notes": "OS crop unpredictability"
+          },
+          {
+            "role": "small-size-test",
+            "value": "16px-tab-strip",
+            "notes": "Recognized in a real tab bar"
+          },
+          {
+            "role": "brand-consistency",
+            "value": "mark+product-palette",
+            "notes": "Same family as product icons"
+          },
+          {
+            "role": "dark-favicon",
+            "value": "prefers-color-scheme-svg",
+            "notes": "Visible on dark tab strips"
+          },
+          {
+            "role": "theme-color",
+            "value": "light+dark-variants",
+            "notes": "Browser chrome alignment"
+          },
+          {
+            "role": "manifest-check",
+            "value": "lighthouse-pwa",
+            "notes": "Icons verified in CI/Lighthouse"
+          },
+          {
+            "role": "generation-pipeline",
+            "value": "automated-exports",
+            "notes": "No hand-exported per-size drift"
+          },
+          {
+            "role": "fallback-ico",
+            "value": "bundled-for-legacy",
+            "notes": "Old browsers still branded"
+          }
+        ],
+        "composition": [
+          "Composes with icon-style-selection + icon-grid-sizing: the brand mark follows the same family rules at tiny sizes.",
+          "Composes with icon-library-management: favicon assets are generated and versioned in the same pipeline.",
+          "Composes with svg-optimization: the favicon set is part of the bundle budget."
+        ],
+        "patterns": [
+          "The favicon generation pipeline: one 1024px master -> automated export (svg, ico, apple-touch, PWA, maskable) -> manifest validated in CI - sizes never hand-made.",
+          "The maskable safe-zone template: master art composed on an 80% safe-zone overlay so one design serves both regular and maskable without two sources."
+        ],
+        "useCases": [
+          "Every product launch (the set ships once, correctly).",
+          "PWAs and installable apps where icon quality drives trust.",
+          "Audit: single-favicon sites, maskable crops cutting the logo, dark-strip invisibility."
+        ],
+        "combinations": {
+          "good": [
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "icon-library-management",
+            "svg-optimization",
+            "accessible-icons",
+            "icon-system-audit",
+            "animation-integration",
+            "empty-error-illustrations",
+            "illustration-direction",
+            "icon-usability",
+            "mascot-character"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "The single-favicon site: one 32px ico serving every context badly",
+          "Maskable crop casualties: logos decapitated by OS rounding",
+          "Dark-strip invisibility: dark glyphs on dark browser chrome",
+          "Hand-exported drift: five sizes exported at five times, subtly different"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Favicons are brand graphics with contrast obligations at 16px (WCAG 1.4.11 spirit): sufficient contrast against both light and dark tab strips, and text-free marks (text at 16px is unreadable) - the mark must survive the smallest context.",
+          "fallback": "If dark-mode favicon support is unavailable, pick a mid-tone mark with a contrasting backing shape that survives both strip colors."
+        }
+      }
+    },
+    {
+      "id": "icon-system-audit",
+      "name": "Icon & Illustration System Audit",
+      "summary": "The system health check: consistency scoring, a11y sweep, weight audit, and the per-surface review pass.",
+      "sections": {
+        "definition": "Icon and illustration systems decay silently: style drift, unnamed icons, weight bloat. This guide is the audit layer: the per-surface review pass (every icon named/hidden/contrasted, every illustration paired), system-level scoring (style adherence, grid discipline, library hygiene), weight audits (payload per page), and findings-to-tickets tracking. It composes with skill-design-review as the visual-asset section of the broader design audit.",
+        "principles": [
+          "Audits are per-surface: walk the surface checking every icon (named? contrasted? right family?) and illustration (paired? weighted? on-spec?) - findings, not vibes.",
+          "The a11y sweep is first: unnamed interactive icons and unhidden decorations are the highest-severity findings.",
+          "Style adherence is scored: stroke weight, corner, fill consistency checked against the spec sheet - drift is measured, not felt.",
+          "Grid discipline verified: sampled icons overlaid on keylines - violations quantified per audit.",
+          "Weight is audited per page: icon+illustration payload measured (gzipped) against budgets - bloat trends tracked.",
+          "Findings become tickets: each audit produces prioritized tickets with owners - audits without follow-up are theater.",
+          "Audit cadence: per-release gates for new assets + quarterly full sweeps - decay is caught on schedule, not by accident.",
+          "Results trend: audit scores over time show the system improving - or identify the drift source."
+        ],
+        "tokens": [
+          {
+            "role": "audit-scope",
+            "value": "per-surface+system",
+            "notes": "Surface pass + system score"
+          },
+          {
+            "role": "a11y-sweep-first",
+            "value": "names+hide+contrast",
+            "notes": "Highest-severity findings first"
+          },
+          {
+            "role": "style-score",
+            "value": "vs-spec-sheet",
+            "notes": "Drift measured against spec"
+          },
+          {
+            "role": "grid-check",
+            "value": "keyline-overlay-sample",
+            "notes": "Violations quantified"
+          },
+          {
+            "role": "weight-audit",
+            "value": "gzipped-per-page",
+            "notes": "vs budgets (icons under 50KB)"
+          },
+          {
+            "role": "findings-to-tickets",
+            "value": "prioritized+owned",
+            "notes": "Follow-up mandatory"
+          },
+          {
+            "role": "audit-cadence",
+            "value": "release-gate+quarterly",
+            "notes": "Scheduled, not accidental"
+          },
+          {
+            "role": "trend-tracking",
+            "value": "scores-over-time",
+            "notes": "Decay made visible"
+          },
+          {
+            "role": "design-review-link",
+            "value": "visual-asset-section",
+            "notes": "Feeds skill-design-review"
+          },
+          {
+            "role": "a11y-criteria-source",
+            "value": "skill-accessibility",
+            "notes": "Criteria layer referenced"
+          }
+        ],
+        "composition": [
+          "Composes with every guide in this repo: the audit scorecard references each guide's contracts as criteria.",
+          "Composes with skill-design-review: this guide is the visual-asset section of the product-wide review.",
+          "Composes with skill-accessibility media-alt-text: the a11y sweep uses those criteria directly."
+        ],
+        "patterns": [
+          "The visual-asset audit scorecard: per-surface checklist (names, contrast, family, grid, weight, pairing) with severity per finding - the audit's artifact.",
+          "The quarterly system sweep: full-library review (usage, duplicates, deprecations) + per-page weight trend - the system health report."
+        ],
+        "useCases": [
+          "Pre-release reviews of new surfaces.",
+          "Post-acquisition/legacy audits before icon unification.",
+          "Ongoing system health for large icon/illustration estates."
+        ],
+        "combinations": {
+          "good": [
+            "icon-style-selection",
+            "icon-grid-sizing",
+            "icon-library-management",
+            "icon-usability",
+            "accessible-icons",
+            "svg-optimization",
+            "animation-integration",
+            "empty-error-illustrations",
+            "illustration-direction",
+            "mascot-character",
+            "favicon-app-icons"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Audit theater: sweeps run, findings never ticketed",
+          "Feel-based reviews: looks-off judgements without spec-sheet measurement",
+          "Weight-blind audits: style checked, payload ignored",
+          "One-time audits: no cadence, decay returns within a quarter"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "The audit enforces the a11y contracts of every guide here: WCAG 1.1.1/1.4.11/2.5.8/4.1.2 findings categorized by severity - the a11y sweep is the audit's first pass, not an afterthought.",
+          "fallback": "If a full audit program cannot start, run the a11y sweep alone (names/hide/contrast) - it catches the highest-severity issues with the least effort."
+        }
+      }
+    }
+  ]
+}

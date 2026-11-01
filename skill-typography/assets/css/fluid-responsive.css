@@ -1,0 +1,27 @@
+/* ============================================================
+ * Fluid & Responsive Typography - starter design tokens (CSS custom properties)
+ * Skill id: fluid-responsive (#06 of 12)
+ *
+ * clamp()-interpolated type that scales with the viewport between scale stops - smooth scaling without breakpoint soup.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-fluid-strategy: headings-only; /* Body stays fixed; headings interpolate */
+  --type-fluid-h1: clamp(2.441rem, 1.5rem + 3.5vw, 3.815rem); /* 39px -> 61px between 320-1440 */
+  --type-fluid-h2: clamp(1.953rem, 1.4rem + 2.5vw, 2.441rem); /* 31px -> 39px */
+  --type-fluid-h3: clamp(1.563rem, 1.3rem + 1.5vw, 1.953rem); /* 25px -> 31px */
+  --type-fluid-body-fixed: 1rem; /* Body exempt from fluidity by policy */
+  --type-fluid-viewport-range: 320px-1440px; /* The documented design range */
+  --type-fluid-line-height: clamp(1.1, 1rem + 0.5vw, 1.25); /* Display leading loosens at small sizes */
+  --type-fluid-min-floor: 12px; /* No interpolated value ever renders below 12px */
+  --type-fluid-anchors: scale-stops-only; /* Clamp endpoints must be modular-scale steps */
+  --type-fluid-test-points: 320,768,1440,2560; /* The four screenshot test widths */
+}
+
+/* Accessibility contract (required) */
+/* Notes: rem-based clamps are the trick that keeps fluid type accessible: values multiply with root font-size, so WCAG 1.4.4 and user preferences hold at every viewport width. */
+/* Fallback: If a user override at 200% zoom collides with fluid bounds, the clamp max yields - cap fluidity lower or raise the max bound; user scaling never loses. */

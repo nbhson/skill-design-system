@@ -1,0 +1,27 @@
+/* ============================================================
+ * Favicons & App Icons - starter design tokens (CSS custom properties)
+ * Skill id: favicon-app-icons (#11 of 12)
+ *
+ * The smallest brand surfaces: favicon sets, PWA icons, maskable variants, touch icons, and generation over hand-export.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-minimal-set: svg+ico,180-touch,512+192,maskable; /* Modern favicon/app icon stack */
+  --icon-master-source: 1024px-master; /* All sizes generated from one file */
+  --icon-maskable-safe-zone: inner-80%-circle; /* OS crop unpredictability */
+  --icon-small-size-test: 16px-tab-strip; /* Recognized in a real tab bar */
+  --icon-brand-consistency: mark+product-palette; /* Same family as product icons */
+  --icon-dark-favicon: prefers-color-scheme-svg; /* Visible on dark tab strips */
+  --icon-theme-color: light+dark-variants; /* Browser chrome alignment */
+  --icon-manifest-check: lighthouse-pwa; /* Icons verified in CI/Lighthouse */
+  --icon-generation-pipeline: automated-exports; /* No hand-exported per-size drift */
+  --icon-fallback-ico: bundled-for-legacy; /* Old browsers still branded */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Favicons are brand graphics with contrast obligations at 16px (WCAG 1.4.11 spirit): sufficient contrast against both light and dark tab strips, and text-free marks (text at 16px is unreadable) - the mark must survive the smallest context. */
+/* Fallback: If dark-mode favicon support is unavailable, pick a mid-tone mark with a contrasting backing shape that survives both strip colors. */

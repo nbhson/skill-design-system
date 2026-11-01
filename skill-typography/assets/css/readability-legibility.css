@@ -1,0 +1,27 @@
+/* ============================================================
+ * Readability & Measure - starter design tokens (CSS custom properties)
+ * Skill id: readability-legibility (#08 of 12)
+ *
+ * Line length (45-75ch), contrast of reading surfaces, paragraph spacing, and the legibility properties that make long text effortless.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-measure-ideal: 66ch; /* Default paragraph max-width */
+  --type-measure-range: 45-75ch; /* The acceptable band; outside it, split columns */
+  --type-body-size-floor: 1rem; /* 16px minimum for paragraphs */
+  --type-ui-label-floor: 0.875rem; /* 14px floor for UI labels/captions */
+  --type-reading-contrast: 7:1; /* AAA target for long-form surfaces */
+  --type-paragraph-spacing: 1em; /* One blank line between paragraphs */
+  --type-alignment-policy: left-ragged; /* Justify only with hyphenation review */
+  --type-line-height-longform: 1.7; /* Relaxed leading for articles/docs */
+  --type-legibility-glyph-test: 1lI-O0-pass; /* Letterform disambiguation check at 14px */
+  --type-zoom-measure: ch-based; /* Measure adapts at zoom (ch scales with font) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide enforces the reading-side WCAG floors: 1.4.3 (contrast), 1.4.4 (zoom), 1.4.8 (visual presentation - measure, leading, justification), 1.4.12 (text spacing overrides). */
+/* Fallback: When a design needs a wider measure, split into columns (CSS columns) rather than stretching lines - the 75ch ceiling is a limit, not a suggestion. */

@@ -1,0 +1,31 @@
+/* ============================================================
+ * Scroll-Driven Animation — starter motion tokens (CSS custom properties)
+ * Skill id: scroll-animation (#07 of 12)
+ *
+ * Motion tied to scroll position: parallax, reveals, progress indicators, and sticky choreography - driven by the user's own input, not the clock.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-reveal-threshold: 0.2; /* IntersectionObserver: trigger at 20% visibility */
+  --motion-reveal-duration: 600ms; /* One-shot reveal play time (clock-based, scroll-triggered) */
+  --motion-parallax-speed: 0.5; /* Background layer moves at half scroll speed */
+  --motion-progress-range: 0deg-360deg; /* Scroll progress indicator sweep range */
+  --motion-scrub-easing: linear; /* Scroll-scrubbed mapping must be linear (time easings fight the user) */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* This is the highest-risk category for vestibular triggers: disable parallax entirely, show final-state content. */
+/* Fallback: All scroll-scrubbed effects show their end state; reveals become instant visibility (or 1 short fade); keep a static progress bar. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

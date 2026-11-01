@@ -1,0 +1,27 @@
+/* ============================================================
+ * Consistency Audit - starter design tokens (CSS custom properties)
+ * Skill id: consistency-audit (#03 of 12)
+ *
+ * Token adherence, component reuse, and pattern discipline: is the product speaking one visual language?
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-raw-value-scan: zero-outside-tokens; /* Mechanical; lint-assisted */
+  --rev-component-reuse-check: one-offs-flagged; /* Duplication is debt */
+  --rev-pattern-parity: same-task-same-pattern; /* Per-surface reinvention banned */
+  --rev-terminology-check: glossary-adherence; /* One concept, one term */
+  --rev-scale-adherence: spacing,radius,shadow; /* Off-scale = mechanical finding */
+  --rev-interaction-consistency: states-identical-cross-surface; /* Buttons/hover/focus uniform */
+  --rev-drift-map: impact-ranked; /* High-traffic drift first */
+  --rev-source-of-truth: docs-required; /* Audit needs criteria to exist */
+  --rev-audit-frequency: per-release+quarterly; /* Decay caught on schedule */
+  --rev-consistency-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Consistency is an a11y multiplier: consistent focus treatment, contrast, and interaction patterns reduce relearning for AT and cognitive-load users (WCAG 3.2.4 consistent identification) - the audit treats inconsistency in a11y-critical patterns as major. */
+/* Fallback: If full scoring is too heavy, run the raw-value sweep + focus/contrast consistency walk - those two passes cover the highest-impact drift. */

@@ -1,0 +1,26 @@
+/* ============================================================
+ * Claymorphism — starter design tokens (CSS custom properties)
+ * Style id: claymorphism
+ *
+ * 3D rounded, soft, squeezable clay-like UI with internal gradients, super-rounded corners, and floating multi-layer shadows.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-primary-background: #e8eef5; /* Light blue-gray - common Apple-ish background */
+  --color-clay-block-1: #7c3aed; /* Purple gradient, 32px border-radius */
+  --color-clay-block-2: #f472b6; /* Pink-coral gradient */
+  --color-clay-block-3: #34d399; /* Mint green gradient */
+  --color-highlight: #ffffff; /* Light zone at the top */
+  --color-near-shadow: #000000; /* Small, sharp shadow */
+  --color-far-shadow: #6366f1; /* Large, blurred shadow, subtle purple tint */
+  --font-heading: "SF Pro Rounded", sans-serif; /* SF Pro Rounded (or Nunito, Poppins) */
+  --font-body: "SF Pro Rounded; Label: SF Pro Rounded 12-14px / 500", sans-serif; /* SF Pro Rounded; Label: SF Pro Rounded 12-14px / 500 */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* recommended body text on primary background: #1A1A2E on #E8EEF5 = 14.6:1 — PASS */
+/* recommended muted text on primary background: #4A5568 on #E8EEF5 = 6.44:1 — PASS */

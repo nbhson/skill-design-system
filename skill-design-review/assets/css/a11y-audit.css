@@ -1,0 +1,27 @@
+/* ============================================================
+ * Accessibility Audit - starter design tokens (CSS custom properties)
+ * Skill id: a11y-audit (#04 of 12)
+ *
+ * The conformance pass: keyboard walks, screen reader runs, contrast checks, and severity-ranked WCAG findings.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-keyboard-walk: full-flow-blocker-gate; /* First pass; traps/invisible focus = blocker */
+  --rev-sr-pass: critical-flows-nvda-voiceover; /* Names/roles/states verified */
+  --rev-contrast-text: 4.5:1-3:1-large; /* WCAG 1.4.3 */
+  --rev-contrast-ui: 3:1-components; /* WCAG 1.4.11 */
+  --rev-zoom-reflow: 400%-320px; /* WCAG 1.4.4/1.4.10 */
+  --rev-reduced-motion-check: media-query-flipped; /* WCAG 2.3.3 */
+  --rev-forms-focus: highest-density-pass; /* Labels/errors/focus */
+  --rev-findings-cite-criteria: wcag-sc+severity; /* Machine-checkable findings */
+  --rev-auto-scan-role: floor-not-audit; /* axe ~30% coverage */
+  --rev-a11y-gate: blockers-block-release; /* Release gate integration */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide IS the a11y enforcement pass: it operationalizes WCAG 2.1/2.2 AA as a surface-level protocol (keyboard, SR, contrast, zoom, motion) with severity-ranked, criteria-cited findings - the release gate's a11y section. */
+/* Fallback: If tooling is limited, the keyboard walk + manual contrast sampling cover the majority of critical findings - no scanner required. */

@@ -1,0 +1,28 @@
+/* ============================================================
+ * Semantic & Alias Naming - starter design tokens (CSS custom properties)
+ * Skill id: semantic-alias-naming (#05 of 12)
+ *
+ * The three-tier naming architecture - primitive, semantic alias, component - that lets themes swap values without code ever changing.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-color-bg-default: var(--dt-color-neutral-0); /* Page background */
+  --dt-color-bg-subtle: var(--dt-color-neutral-100); /* Wells, table stripes, code blocks */
+  --dt-color-bg-inverse: var(--dt-color-neutral-900); /* Tooltips, dark surfaces on light theme */
+  --dt-color-text-primary: var(--dt-color-neutral-900); /* Body and heading text */
+  --dt-color-text-secondary: var(--dt-color-neutral-700); /* Meta, captions, inactive labels */
+  --dt-color-text-on-action: var(--dt-color-neutral-0); /* Text/icons on filled actions */
+  --dt-color-border-default: var(--dt-color-neutral-300); /* Inputs, card outlines, dividers */
+  --dt-color-action-primary: var(--dt-color-brand-500); /* Primary buttons, links, active nav */
+  --dt-color-action-primary-hover: var(--dt-color-brand-600); /* Hover state axis; pressed maps to -600/700 */
+  --dt-color-feedback-danger-text: var(--dt-color-danger-600); /* Error text; passes 4.5:1 where the raw 500 does not */
+  --dt-color-feedback-success-bg: var(--dt-color-success-100); /* Success banner background tint */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The alias tier is where contrast is guaranteed: state aliases (-disabled, -on-action) must declare their ratio pairing (e.g. color-text-on-action on color-action-primary passes 4.5:1) so valid combinations are the only combinations. */
+/* Fallback: If an alias pairing fails contrast, fix the alias mapping (choose different primitive steps) - never override the alias value in component code. */

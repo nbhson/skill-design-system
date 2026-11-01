@@ -1,0 +1,27 @@
+/* ============================================================
+ * Navigation Patterns - starter design tokens (CSS custom properties)
+ * Skill id: navigation-patterns (#06 of 12)
+ *
+ * Top bars, sidebars, breadcrumbs, and pagination: the wayfinding components, current-page semantics, and responsive collapse contracts.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-nav-landmark-set: header-nav-main-footer; /* Page skeleton; one main */
+  --comp-nav-current-mark: aria-current+visual; /* Double signal for current location */
+  --comp-sidebar-width: minmax(240px, 280px); /* Sidebar width contract */
+  --comp-sidebar-depth-cap: 3; /* Deeper IA is restructured */
+  --comp-sidebar-group-toggle: aria-expanded; /* Collapsible groups narrated */
+  --comp-breadcrumb-separator: /-aria-hidden; /* Separators decorative; nav is the list */
+  --comp-skip-link-required: template-bundled; /* Skip link ships with nav template */
+  --comp-nav-target-size: 44px; /* Touch floor for nav items */
+  --comp-pagination-policy: archives-only+url-state; /* Feeds use load-more */
+  --comp-nav-collapse-contract: declared-per-breakpoint; /* Collapse behavior is written, not discovered */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Navigation implements WCAG 1.3.1/2.4.1/2.4.5-2.4.8: landmarks, skip links, current-location semantics, and consistent placement - the nav template is the accessibility skeleton of the product. */
+/* Fallback: If a full sidebar cannot be keyboard-perfect in time, ship the flat top-nav variant - a simple, complete keyboard path beats a rich, broken one. */

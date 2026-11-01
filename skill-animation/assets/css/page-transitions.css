@@ -1,0 +1,31 @@
+/* ============================================================
+ * Page & View Transitions — starter motion tokens (CSS custom properties)
+ * Skill id: page-transitions (#04 of 12)
+ *
+ * Movement between screens and routes: shared elements, directional slides, and the View Transitions API - keeping spatial context across navigation.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-transition-duration: 320ms; /* Standard route transition */
+  --motion-transition-duration-shared: 400ms; /* Shared-element morphs, slightly longer to be readable */
+  --motion-slide-distance: 100%; /* Full-width pushes between sibling routes */
+  --motion-crossfade-duration: 200ms; /* Fallback crossfade; also the root snapshot fade */
+  --motion-ease-navigation: cubic-bezier(0.2, 0, 0, 1); /* Standard curve for route changes */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Disable slides/morphs; keep a short crossfade so navigation still feels connected. */
+/* Fallback: Old/new root snapshots crossfade at crossfade-duration, shared elements fade in place. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

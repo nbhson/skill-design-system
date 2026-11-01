@@ -1,0 +1,27 @@
+/* ============================================================
+ * Class Morphism — starter design tokens (CSS custom properties)
+ * Style id: class-morphism
+ *
+ * Elegant classicism meets morphic depth: golden ratio layouts, warm shadows, glass panels, and refined serif typography.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-primary-background: #f5f0eb; /* Warm off-white - creates quality paper feel */
+  --color-glass-background: #ffffff; /* Transparent panel over background */
+  --color-dominant-color: #1c3a5f; /* Deep navy - composed, luxurious */
+  --color-accent: #c9a96e; /* Champagne gold - gentle highlight */
+  --color-soft-accent: #bfa89e; /* Dusty rose - naturally warm color */
+  --color-shadow: #8b7355; /* Warm shadow, not cold gray */
+  --color-primary-text: #1a1a1a; /* Soft black */
+  --color-secondary-text: #6b5b4f; /* Warm gray-brown */
+  --font-heading: "Playfair Display", sans-serif; /* Playfair Display (or Cormorant Garamond) */
+  --font-body: "Lora", sans-serif; /* Lora (or Source Serif Pro); Label: Jost (or Montserrat) 12-13px / 500, letter-spacing 0.08em */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on primary background: #1A1A1A on #F5F0EB = 15.37:1 — PASS */
+/* secondary text on primary background: #6B5B4F on #F5F0EB = 5.73:1 — PASS */

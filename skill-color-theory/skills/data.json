@@ -1,0 +1,646 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": ["skill-ui-ux", "skill-animation", "skill-design-tokens"]
+  },
+  "skills": [
+    {
+      "id": "color-harmony",
+      "name": "Color Harmony & Schemes",
+      "summary": "The classical scheme machinery - complementary, analogous, triadic, split-complementary - applied as starting constraints, not rules.",
+      "sections": {
+        "definition": "Color harmony is the practice of selecting hues that read as intentional together: complementary pairs create tension and focus, analogous sets create calm and cohesion, triadic balances variety with order. Modern practice treats schemes as generators of starting points - a triadic pick is the first draft, refined by perceptual models (guide 02), contrast floors (guide 10), and brand constraints. The scheme names the relationship; the palette work makes it usable.",
+        "principles": [
+          "Schemes are relationships, not recipes: complementary/analogous/triadic describe hue relationships; quality depends on saturation, lightness, and proportion.",
+          "Proportion beats hue choice: the 60-30-10 distribution (dominant/secondary/accent) makes almost any scheme livable - the accent earns its pop by scarcity.",
+          "Analogous for product UI, complementary for marketing: products read best with hue-adjacent calm; marketing moments earn contrast.",
+          "Complementary pairs need separation: full-strength complements vibrate at equal saturation - shift one toward tint or shade before use.",
+          "Triadic schemes mute two: use one hue strongly and its triadic partners desaturated, or the result reads as a circus.",
+          "Neutral anchoring is mandatory: every scheme needs a neutral ramp (guide 04) carrying most of the surface area.",
+          "Scheme ≠ palette: a scheme is 2-5 hue intents; a palette is ramps + aliases with contrast validation - schemes start palettes, they do not ship as them."
+        ],
+        "tokens": [
+          { "role": "scheme-primary", "value": "hue-210", "notes": "The brand-dominant hue anchor (OKLCH hue angle)" },
+          { "role": "scheme-type", "value": "analogous-plus-accent", "notes": "Documented scheme: analogous core + complementary accent" },
+          { "role": "harmony-analogous-spread", "value": "30deg", "notes": "Hue neighbors for analogous sets" },
+          { "role": "harmony-complement", "value": "180deg", "notes": "Opposite hue; always re-balanced for lightness" },
+          { "role": "harmony-triadic", "value": "120deg", "notes": "Triadic spread; desaturate 2 of 3" },
+          { "role": "harmony-split", "value": "150-210deg", "notes": "Split-complementary band; softer than pure complement" },
+          { "role": "distribution-60-30-10", "value": "60/30/10", "notes": "Dominant/secondary/accent area proportions" },
+          { "role": "accent-usage", "value": "sparingly-under-10%", "notes": "Accents collapse to noise when everywhere" },
+          { "role": "scheme-neutral-pairing", "value": "always-paired", "notes": "No scheme ships without its neutral ramp (guide 04)" },
+          { "role": "scheme-refinement", "value": "perceptual-pass-required", "notes": "Schemes pass through OKLCH + contrast refinement" }
+        ],
+        "composition": [
+          "Composes with oklch-perceptual: schemes are picked in hue terms; OKLCH makes them lightness/chroma-usable across ramps.",
+          "Composes with brand-ramp-construction: the chosen scheme expands into structured ramps with chroma curves.",
+          "Composes with skill-ui-ux: each style has scheme preferences (minimalism: analogous+neutral; maximalism: triadic saturation) - the styleAffinity records it."
+        ],
+        "patterns": [
+          "Scheme-first palette workshop: pick the scheme and proportions on a whiteboard before touching hex values - intent precedes pixels.",
+          "Accent rationing: a single accent hue reused across status, CTA, and focus, rationed by area rules - accents stay meaningful."
+        ],
+        "useCases": [
+          "New brand/product palettes from scratch.",
+          "Marketing campaign palettes derived from (not breaking) the product scheme.",
+          "Audit: accent inflation, vibrating complements, orphan hues with no scheme membership."
+        ],
+        "combinations": { "good": ["oklch-perceptual", "gray-ramp-neutrals", "brand-ramp-construction", "semantic-color-system", "data-viz-palettes", "gradient-theory", "contrast-models", "dark-mode-palette", "cultural-color-meaning", "color-psychology", "cvd-safe-design"], "caution": ["cultural-color-meaning"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "maximalism"], "caution": ["skeuomorphism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "entrance-exit"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Scheme-by-decoration: five unrelated brand hues with no scheme logic reading as a garage sale",
+          "Equal-proportion rainbow: 20% red, 20% blue, 20% green - nothing dominates, everything shouts",
+          "Vibrating complements: full-saturation complementary pairs touching, shimmering at edges",
+          "Accent inflation: the accent hue on buttons, badges, links, and charts until it highlights nothing"
+        ],
+        "accessibility": { "required": true, "notes": "Schemes must clear contrast floors before aesthetics are judged (guide 10): a harmonious palette that fails 4.5:1 is decorative art, not UI - harmony models pick hue relationships, contrast models pick usable steps.", "fallback": "When a scheme hue cannot pass contrast at its assigned role, shift it along the lightness axis within the same hue family - keep the relationship, fix the values." }
+      }
+    },
+    {
+      "id": "oklch-perceptual",
+      "name": "OKLCH & Perceptual Color Spaces",
+      "summary": "Working in perceptually uniform spaces: OKLCH/OKLab for ramp math, interpolation, and adjustments that look how the numbers say they look.",
+      "sections": {
+        "definition": "OKLCH is a perceptually uniform color space: L (lightness), C (chroma), H (hue) move independently in ways human vision agrees with - unlike HSL, where 50% lightness is a completely different brightness per hue. Building palettes in OKLCH means consistent lightness steps produce consistent perceived steps, hue rotation does not shift brightness, and interpolation does not travel through muddy gray. It is the working space of every serious modern palette.",
+        "principles": [
+          "HSL is a lie: equal L values differ wildly in perceived brightness (yellow glows, blue sinks) - ramps in HSL need per-hue hacks that OKLCH makes unnecessary.",
+          "L is perceived lightness, C is colorfulness, H is hue: adjust each independently; consistent L steps across a ramp read as equal steps.",
+          "Chroma is bounded per hue: some hues carry high chroma (yellow), others cannot (blue); ramps cap C per hue instead of forcing uniform saturation.",
+          "Interpolate in OKLab, not sRGB: gradients between hues stay vivid in OKLab; sRGB interpolation muddies through gray.",
+          "One working space for the whole system: scheme, ramps, gradients, and dark-mode math all happen in OKLCH, then convert to sRGB for legacy with documented gamut mapping.",
+          "Wide-gamut awareness: oklch() can express P3 colors sRGB cannot - declare the gamut strategy (guide: 08) before publishing values.",
+          "Lightness is accessibility's leverage point: contrast fixes happen on the L axis, leaving hue identity intact - the cheapest accessible adjustments."
+        ],
+        "tokens": [
+          { "role": "working-space", "value": "oklch", "notes": "All palette math in OKLCH; sRGB is output" },
+          { "role": "l-ramp-steps", "value": "0.97,0.93,0.86,0.77,0.66,0.55,0.45,0.35,0.27,0.20,0.15", "notes": "A canonical 11-step lightness ramp" },
+          { "role": "l-body-text", "value": "0.25", "notes": "Body text lightness on light theme" },
+          { "role": "l-bg-surface", "value": "0.97-0.99", "notes": "Surface lightness band on light theme" },
+          { "role": "c-brand-cap", "value": "0.15-0.25", "notes": "Usable chroma band for brand hues in UI" },
+          { "role": "c-neutral-tint", "value": "0.005-0.015", "notes": "The hue whisper in tinted neutrals" },
+          { "role": "interpolation-space", "value": "oklab", "notes": "Gradient/blending interpolation space" },
+          { "role": "gamut-strategy", "value": "srgb-clamp-with-p3-enhance", "notes": "Baseline sRGB; @media (color-gamut: p3) enhancement" },
+          { "role": "css-syntax", "value": "oklch(L C H)", "notes": "Modern CSS color syntax; fallback via @supports" },
+          { "role": "hsl-deprecation", "value": "legacy-reading-only", "notes": "HSL accepted only when reading old palettes" }
+        ],
+        "composition": [
+          "Composes with color-harmony: scheme relationships (hue angles) are OKLCH hue differences - the same H axis.",
+          "Composes with brand-ramp-construction and gray-ramp-neutrals: ramps are L/C/H curves, not hex lists.",
+          "Composes with skill-design-tokens guide 01: token values may carry oklch() primitives; this guide owns the color math."
+        ],
+        "patterns": [
+          "Ramp generator in OKLCH: one script emits brand ramps from (hue, chroma curve, L steps) - palette changes become parameter changes.",
+          "OKLab interpolation utility: all gradients (CSS, canvas, design tools) interpolate in OKLab - sRGB interpolation is lint-blocked."
+        ],
+        "useCases": [
+          "Building brand ramps that work identically across themes.",
+          "Migrating legacy HSL palettes to perceptually uniform values.",
+          "Designing gradients that stay vivid instead of muddying."
+        ],
+        "combinations": { "good": ["color-harmony", "brand-ramp-construction", "gray-ramp-neutrals", "semantic-color-system", "dark-mode-palette", "gradient-theory", "contrast-models", "data-viz-palettes", "color-psychology", "cultural-color-meaning", "cvd-safe-design"], "caution": ["gray-ramp-neutrals"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "aurora-ui"], "caution": ["retro"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "data-animation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "HSL holdout: mixing L values in HSL while claiming a perceptual system - the numbers disagree with the eyes",
+          "Chroma-max ramps: forcing the same chroma on every hue until some hues are radioactive and others are dead",
+          "sRGB-mud gradients: hue-to-hue interpolation in sRGB traveling through gray",
+          "Wide-gamut leakage: P3 values shipped without a documented sRGB fallback, breaking on older displays"
+        ],
+        "accessibility": { "required": true, "notes": "Perceptual uniformity is an accessibility multiplier: contrast (guide 10) and APCA math operate on lightness - OKLCH's L axis is the one that moves contrast predictably, so accessible adjustments stop being trial-and-error.", "fallback": "Where oklch() is unsupported in a required target, pre-converted sRGB fallbacks ship via @supports - computed, not hand-translated, so the two stay in sync." }
+      }
+    },
+    {
+      "id": "color-psychology",
+      "name": "Color Psychology & Brand Fit",
+      "summary": "What hues signal and when signals misfire: emotion, category conventions, and matching brand personality to palette temperature.",
+      "sections": {
+        "definition": "Color psychology maps the associations hues carry - red's urgency and danger, blue's trust and distance, green's growth and permission - and, more usefully, how context modulates them: red is passion on a dating app, errors in a dashboard, and prosperity in Chinese markets. The craft is matching palette temperature and saturation to brand personality and product category, then verifying the signal survives the actual UI contexts.",
+        "principles": [
+          "Associations are probabilistic, not universal: hues prime feelings; they do not guarantee them - context and category set the final meaning.",
+          "Category conventions are user expectations: blue fintech, green health, red food - breaking convention demands a reason and earns a cost.",
+          "Temperature sets the room: warm palettes energize, cool palettes calm - match the product's session mood (banking calm, gaming hot).",
+          "Saturation communicates maturity: high-chroma palettes read young/playful, muted chroma reads premium/serious.",
+          "Brand personality scores first: map adjectives (trustworthy, playful, bold) to hue/temp/chroma targets before palette work.",
+          "Signal roles are sacred: danger-red, success-green, warning-amber conventions (guide 06) override brand palette - brand never recolors status.",
+          "Verify in context, not swatches: a color's psychological signal is tested inside real screens, next to real copy and real actions."
+        ],
+        "tokens": [
+          { "role": "brand-personality-map", "value": "adjectives-to-hue-temp-chroma", "notes": "Documented mapping before palette design" },
+          { "role": "temperature-fit", "value": "product-session-mood", "notes": "Warm energizes; cool calms; chosen per product" },
+          { "role": "chroma-personality", "value": "high-playful-low-premium", "notes": "The chroma-to-maturity axis" },
+          { "role": "category-convention-check", "value": "required", "notes": "Fintech blue / health green / food red audited consciously" },
+          { "role": "signal-role-protection", "value": "status-hues-locked", "notes": "Danger/success/warning hues never brand-swapped" },
+          { "role": "cta-energy", "value": "warm-or-high-chroma", "notes": "Primary actions earn attention via temperature/chroma" },
+          { "role": "context-test", "value": "in-real-screens", "notes": "Psychology verified in UI, not swatch grids" },
+          { "role": "photography-harmony", "value": "palette-complements-media", "notes": "Brand palette chosen to harmonize with real content imagery" },
+          { "role": "palette-drift-guard", "value": "campaigns-derive", "notes": "Campaigns derive from the brand scheme, never fork it" },
+          { "role": "rebrand-audit", "value": "association-refresh", "notes": "Psychology mapping re-validated at every rebrand" }
+        ],
+        "composition": [
+          "Composes with color-harmony: psychology picks the hue intent; harmony structures its relationships.",
+          "Composes with cultural-color-meaning: psychology gives the (Western-biased) baseline; culture localizes it per market.",
+          "Composes with semantic-color-system: psychology explains why status hues are what they are - and why they are protected."
+        ],
+        "patterns": [
+          "Personality-to-palette brief: adjectives scored against temperature/chroma axes produce the palette brief the harmony workshop consumes.",
+          "First-impression test: five users, five seconds, one screen - the words they say back are the palette's real signal."
+        ],
+        "useCases": [
+          "New brands choosing palette direction from personality, not founder taste.",
+          "Products entering categories with strong color conventions.",
+          "Rebrands: auditing whether the palette still signals the positioning."
+        ],
+        "combinations": { "good": ["color-harmony", "oklch-perceptual", "semantic-color-system", "cultural-color-meaning", "brand-ramp-construction", "gray-ramp-neutrals", "data-viz-palettes", "contrast-models", "dark-mode-palette", "gradient-theory", "cvd-safe-design"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "retro"], "caution": ["brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["micro-interactions", "feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Color-by-zodiac: 'purple is creative' applied as law without category or context testing",
+          "Convention-breaking bravado: orange bank app with no compensating trust signals",
+          "Status hue hijack: brand recoloring error states to match the campaign palette",
+          "Swatch-grid validation: approving psychology from a color grid instead of real screens"
+        ],
+        "accessibility": { "required": true, "notes": "Psychological signals must not rely on hue alone: 'red = danger' reaches color-blind users as the text, icon, and position around the hue (guide 11) - psychology informs, multi-signal design delivers.", "fallback": "When brand personality and category convention conflict, convention wins on status/safety hues and brand expresses through non-status surfaces - personality yields where misreading costs." }
+      }
+    },
+    {
+      "id": "gray-ramp-neutrals",
+      "name": "Gray Ramps & Tinted Neutrals",
+      "summary": "Building the neutral backbone: pure gray vs tinted gray philosophy, elevation steps, and the chroma whisper that ties neutrals to the brand.",
+      "sections": {
+        "definition": "Neutrals carry most of any interface's surface area, so the gray ramp is the most-used palette in the product. The central decision: pure grays (colorless, clinical) vs tinted grays (a whisper of brand hue, cohesive). The ramp is structured in lightness steps large enough to read as elevation (0.05-0.08 L deltas), tuned in OKLCH, and temperature-matched to the brand hue - the neutral ramp is where palettes quietly win or lose.",
+        "principles": [
+          "Tint or pure - decide and document: tinted neutrals (~0.005-0.015 chroma in brand hue) read cohesive; pure grays read neutral-tool. Either is valid; mixing them is not.",
+          "Elevation needs visible steps: adjacent neutral steps differ by 0.04-0.08 lightness - subtler deltas read as rendering dirt, not hierarchy.",
+          "Dark-mode neutrals are not inverted light-mode: dark grays get less chroma (tints read purple at low lightness) and more elevation contrast.",
+          "Text neutrals anchor the ramp: the text-on-surface pair is the highest-contrast, most-used pairing - it is tuned first (guide 10).",
+          "A gray for every role: bg, surface, surface-raised, border, text-secondary, text-primary, overlay - the ramp maps to roles, not to math alone.",
+          "The whisper hue matches the brand temperature: a warm-hued brand (orange) uses warm-tinted grays; a cool brand (blue) cool-tinted - mismatched whispers read dirty.",
+          "Neutrals are validated like brand colors: borders and disabled states have contrast requirements (3:1 UI components) - gray does not mean exempt."
+        ],
+        "tokens": [
+          { "role": "neutral-strategy", "value": "tinted-brand-hue", "notes": "Documented: tinted (0.005-0.015 C) or pure" },
+          { "role": "neutral-hue-source", "value": "brand-hue", "notes": "The whisper chroma rides the brand hue" },
+          { "role": "gray-bg", "value": "oklch(0.985 0.008 210)", "notes": "Page background, light theme" },
+          { "role": "gray-surface", "value": "oklch(1.00 0 0)", "notes": "Card surface (white) against tinted bg" },
+          { "role": "gray-surface-raised", "value": "oklch(1.00 0 0) + shadow", "notes": "Elevation via shadow + border, not just fill" },
+          { "role": "gray-border", "value": "oklch(0.90 0.01 210)", "notes": "Borders pass 3:1 against adjacent surfaces" },
+          { "role": "gray-text-secondary", "value": "oklch(0.45 0.02 210)", "notes": "Secondary text; 4.5:1+ on surfaces" },
+          { "role": "gray-text-primary", "value": "oklch(0.22 0.02 210)", "notes": "Primary text; near-black with whisper" },
+          { "role": "gray-overlay", "value": "oklch(0.15 0.02 210 / 60%)", "notes": "Scrim/overlay with alpha" },
+          { "role": "gray-step-delta", "value": "0.04-0.08-L", "notes": "Minimum lightness delta between adjacent steps" }
+        ],
+        "composition": [
+          "Composes with oklch-perceptual: ramps are L/C/H structures; the whisper chroma rides the brand hue angle.",
+          "Composes with dark-mode-palette: dark themes re-tune the neutral ramp (less chroma, wider elevation deltas) as its own structure.",
+          "Composes with skill-design-tokens guide 01: neutral primitives and their alias bindings (surface, border, text) live in the token system."
+        ],
+        "patterns": [
+          "Whisper-tint generator: the neutral ramp derives from the brand hue + fixed chroma cap - rebranding re-tints all neutrals in one parameter.",
+          "Role-ramp matrix: every neutral role (bg→text) mapped to a ramp step with its contrast requirement - roles, not raw steps, are consumed."
+        ],
+        "useCases": [
+          "Any palette's foundation: the neutral ramp is built before brand ramps.",
+          "Dark themes: neutrals re-tuned for low-lightness chroma behavior.",
+          "Audit: muddy grays (accidental mixed hues), invisible borders, indistinct elevation."
+        ],
+        "combinations": { "good": ["oklch-perceptual", "brand-ramp-construction", "dark-mode-palette", "semantic-color-system", "contrast-models", "color-harmony", "data-viz-palettes", "gradient-theory", "color-psychology", "cultural-color-meaning", "cvd-safe-design"], "caution": ["oklch-perceptual"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Mixed-hue mud: grays sampled from screenshots and tools, each carrying a different accidental hue",
+          "Invisible borders: 1px hairlines at 0.95 L nobody can see (and fail 3:1)",
+          "Elevation-by-guess: card, modal, and drawer surfaces within 0.01 lightness of the background",
+          "Purple-dark-mode: tinted-light-mode grays reused in dark theme, reading violet at low lightness"
+        ],
+        "accessibility": { "required": true, "notes": "Neutrals are where WCAG lives: text/surface pairings need 4.5:1+, borders and control boundaries 3:1 (guide 10) - the neutral ramp is validated pair-by-pair, not assumed safe for being gray.", "fallback": "When a gray step fails its role's contrast floor, move the step on the L axis (darken/lighten) while keeping the hue whisper - the tint survives, the pairing passes." }
+      }
+    },
+    {
+      "id": "brand-ramp-construction",
+      "name": "Brand Ramp Construction",
+      "summary": "One brand hue becomes a 9-11 step ramp: chroma curves, lightness anchors, and the per-step contrast contracts that make it usable.",
+      "sections": {
+        "definition": "A brand color is a single point; a product needs 9-11 steps around it: tints for surfaces and hover states, the core for primary actions, shades for pressed states and text-on-brand. Ramp construction converts the brand point into an OKLCH curve - lightness anchored to canonical stops, chroma peaked at the middle steps and tapered toward the ends - so every step has a documented contrast contract for its intended role.",
+        "principles": [
+          "9-11 steps, anchored to L stops: the brand point is step 500-600; tints fill 50-400, shades fill 700-950 (Tailwind-convention steps).",
+          "Chroma curve, not flat chroma: chroma peaks at mid steps and tapers toward white (pastel ends) and black (dark ends) - flat chroma produces neon tints or dead shades.",
+          "Every step gets a role contract: 50-100 backgrounds, 200-300 hover surfaces, 500-600 primary, 700-900 pressed/text-on-light, 950 text-on-dark.",
+          "Text-on-brand is computed: white or near-black on the 500-600 step - whichever passes 4.5:1 with margin - documented per step.",
+          "Hue drift is controlled: ramp steps keep hue within a few degrees of the brand hue (or drift deliberately toward warmer darks); accidental drift makes ramps read as different colors.",
+          "Interactive states come from ramp steps: hover = one step lighter, pressed = one step darker, disabled = 300 at reduced opacity - states are steps, not new colors.",
+          "The ramp validates against its consumers: primary button, focus ring, badge, and link colors are the acceptance tests - the ramp exists for them."
+        ],
+        "tokens": [
+          { "role": "ramp-step-count", "value": "11", "notes": "50/100/200/300/400/500/600/700/800/900/950" },
+          { "role": "brand-core-step", "value": "500-600", "notes": "Where the brand point anchors" },
+          { "role": "l-anchors", "value": "0.97-0.18", "notes": "Step 50 to step 950 lightness band" },
+          { "role": "chroma-curve", "value": "peak-mid-taper-ends", "notes": "C peaks at 500-600, tapers toward both ends" },
+          { "role": "hue-drift-limit", "value": "within-5deg", "notes": "Steps stay on the brand hue (documented drift allowed)" },
+          { "role": "primary-bg", "value": "clr-brand-600", "notes": "Primary action surface" },
+          { "role": "primary-text-on", "value": "white-or-950-computed", "notes": "Whichever passes 4.5:1+ with margin" },
+          { "role": "hover-step", "value": "core-minus-1", "notes": "Hover = one ramp step lighter" },
+          { "role": "pressed-step", "value": "core-plus-1", "notes": "Pressed = one ramp step darker" },
+          { "role": "disabled-recipe", "value": "step-300-at-60%", "notes": "Disabled look; exempt from contrast, documented" }
+        ],
+        "composition": [
+          "Composes with oklch-perceptual: ramps are generated as OKLCH curves; the generator lives beside the tokens.",
+          "Composes with semantic-color-system: semantic hues (success/warning/danger) are built as ramps with the same machinery.",
+          "Composes with skill-design-tokens guides 01/05: ramp steps become color primitives; alias bindings (primary, hover) live in the token layer."
+        ],
+        "patterns": [
+          "Ramp-from-point generator: input (oklch brand point + chroma curve + L stops) emits the full ramp CSS + JSON - no hand-picked steps.",
+          "Consumer acceptance pass: the ramp is validated by rendering a primary button, link, badge, and focus ring from its steps before adoption."
+        ],
+        "useCases": [
+          "New brands converting a logo color into a working UI palette.",
+          "Multi-brand theming: each brand = (hue, chroma curve) parameters regenerating ramps (design-tokens guide 07).",
+          "Audit: ramps whose hover/pressed states are new colors, steps with no contrast contract."
+        ],
+        "combinations": { "good": ["oklch-perceptual", "color-harmony", "semantic-color-system", "dark-mode-palette", "gray-ramp-neutrals", "contrast-models", "gradient-theory", "data-viz-palettes", "color-psychology", "cultural-color-meaning", "cvd-safe-design"], "caution": ["gradient-theory"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Hand-picked ramps: 11 hex values eyeballed in a design tool, no curve, no contracts",
+          "Neon tints: 100-level steps at full chroma glowing like highlighters",
+          "Hover-by-hue: interactive states as new hues instead of ramp steps",
+          "Computed-never text-on-brand: white text on a 55% lightness core failing 4.5:1 by 0.8"
+        ],
+        "accessibility": { "required": true, "notes": "The ramp's contrast contracts ARE its accessibility: each step's allowed roles (text/bg/border) are pre-validated in both themes - consumers pick steps, and accessibility comes pre-solved (guide 10 owns the math).", "fallback": "When a step fails its intended role, the generator re-tunes L/C for that step and regenerates - manual hex patches are never shipped because they break the curve." }
+      }
+    },
+    {
+      "id": "semantic-color-system",
+      "name": "Semantic Status & Feedback Color",
+      "summary": "Success, warning, danger, info - the conventional status hues, their ramps, multi-signal delivery, and protection from brand drift.",
+      "sections": {
+        "definition": "Semantic colors are the conventional vocabulary of UI feedback: green success, amber warning, red danger, blue info. Their hues are conventions users learned long before your product, so this skill defines them as protected ramps with roles (bg, text, border per status), multi-signal delivery (never hue alone - a11y repo guide 02), and an explicit policy that brand palettes do not recolor them. It answers: which green, how light for backgrounds, how dark for text, and who is allowed to change it.",
+        "principles": [
+          "Conventions are the base: green=success/safe, amber=warning/caution, red=danger/error, blue=info/neutral-notice - deviations need exceptional justification.",
+          "Each status is a ramp, not a color: text-tone (700-800), border (300-400), and background (50-100) steps per status - alerts need all three layers.",
+          "Never hue alone: status always pairs with icon + text (a11y 1.4.1) - the color is reinforcement, the icon+text is the message.",
+          "Status hues are protected from brand: campaigns, theming, and rebrands do not touch semantic ramps - they are vocabulary, not style.",
+          "Warning is the hardest hue: amber must read distinctly from both success-green and danger-red - chroma/hue placement is validated against its neighbors.",
+          "Destructive actions use danger consistently: the delete button, the confirmation dialog, and the error text are the same danger ramp - consistency builds the reflex.",
+          "Intensity maps to urgency: banner (bg 50 + border 300 + text 800) for ambient, filled (600 + white text) for blocking - urgency scales through ramp layers."
+        ],
+        "tokens": [
+          { "role": "success-text", "value": "clr-success-700", "notes": "Success text on light bg" },
+          { "role": "success-bg", "value": "clr-success-50", "notes": "Success banner/tint background" },
+          { "role": "success-border", "value": "clr-success-300", "notes": "Banner border tier" },
+          { "role": "warning-text", "value": "clr-warning-800", "notes": "Warning text; darker than others for hue clarity" },
+          { "role": "warning-bg", "value": "clr-warning-50", "notes": "Warning tint bg" },
+          { "role": "danger-text", "value": "clr-danger-700", "notes": "Danger text on light bg" },
+          { "role": "danger-bg", "value": "clr-danger-50", "notes": "Error tint bg" },
+          { "role": "danger-filled", "value": "clr-danger-600 + white", "notes": "Destructive button contract (computed text)" },
+          { "role": "info-text", "value": "clr-info-700", "notes": "Info text on light bg" },
+          { "role": "status-signal-pairing", "value": "icon+text+color", "notes": "Never color alone (a11y 1.4.1); documented triple" }
+        ],
+        "composition": [
+          "Composes with brand-ramp-construction: status ramps are generated with the same OKLCH machinery as brand ramps.",
+          "Composes with color-psychology: the conventional associations are protected exactly because psychology makes them powerful.",
+          "Composes with forms-errors (skill-accessibility guide 07) and component-recipes: alerts, badges, and form states consume these roles."
+        ],
+        "patterns": [
+          "Status alert recipe: one alert component consuming (text, border, bg, icon) roles per status - banners, toasts, and inline errors share it.",
+          "Destructive-action contract: danger-filled button + confirmation dialog + undo toast use the same danger ramp end-to-end."
+        ],
+        "useCases": [
+          "Any app with forms, notifications, or destructive actions (all of them).",
+          "Multi-brand systems keeping one semantic vocabulary across brands.",
+          "Audit: brand-tinted error states, hue-only warnings, missing banner layers."
+        ],
+        "combinations": { "good": ["brand-ramp-construction", "oklch-perceptual", "gray-ramp-neutrals", "contrast-models", "dark-mode-palette", "color-psychology", "cvd-safe-design", "data-viz-palettes", "color-harmony", "cultural-color-meaning", "gradient-theory"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["feedback-confirmation", "micro-interactions"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Brand-tinted danger: error states recolored to the campaign palette - vocabulary dissolved",
+          "Hue-only warnings: amber banners with no icon or text label",
+          "One-flat-status: a single red for text, border, and background - layers missing",
+          "Green-is-good drift: success green so bright it reads as decoration rather than confirmation"
+        ],
+        "accessibility": { "required": true, "notes": "This guide implements WCAG 1.4.1 (use of color) at the palette level: every status signal ships as color+icon+text, and all status text/bg pairs pass 4.5:1 - CVD users (guide 11) must decode status without the hue.", "fallback": "Where a status hue cannot meet contrast at a layer, shift that layer's L (darker text, lighter bg) within the status ramp - the hue convention holds, the values flex." }
+      }
+    },
+    {
+      "id": "dark-mode-palette",
+      "name": "Dark Mode Palette",
+      "summary": "Dark themes as designed, not inverted: desaturated tints, lightness-scaled elevation, and surface roles that survive low-light viewing.",
+      "sections": {
+        "definition": "A dark theme is a second palette built for low-light conditions, not a light theme with colors flipped. Dark surfaces need less chroma (tints read as neon at low lightness), more lightness separation between elevation levels, and brand colors re-tuned - the 600 step on light becomes a 300-400 step on dark. This skill covers the palette side of dark mode: dark neutral ramps, brand re-mapping, status re-tuning, and the elevation-by-lightness model.",
+        "principles": [
+          "Never #000: pure black maximizes smearing, halation, and makes shadows invisible - the darkest surface is 0.10-0.15 lightness (oklch ~0.13).",
+          "Elevation gets lighter, not darker: dark-mode surfaces raise by lightness (0.13 → 0.17 → 0.21) - the inverse of light mode's shadow model.",
+          "Desaturate tints: brand/status chroma drops 20-40% at dark lightness - full-chroma brand color on dark reads as vibration.",
+          "Brand steps re-map per theme: light-mode 600 (primary) maps to dark-mode 300-400 - the alias layer (design-tokens guide 06) re-binds, values stay ramps.",
+          "Status hues re-tune: dark-mode danger/success shift lighter (400-500 text) to keep 4.5:1 on dark surfaces - same ramp, different steps.",
+          "Shadows are nearly useless on dark: elevation communicates via surface lightness + border, shadow is a whisper.",
+          "Validate dark as its own theme: every pairing re-computed in dark (a11y repo guide 02) - 'it looks fine' in light proves nothing about dark."
+        ],
+        "tokens": [
+          { "role": "dark-bg", "value": "oklch(0.13 0.01 210)", "notes": "Page background; never #000" },
+          { "role": "dark-surface", "value": "oklch(0.17 0.012 210)", "notes": "Card surface; elevation step 1" },
+          { "role": "dark-surface-raised", "value": "oklch(0.21 0.014 210)", "notes": "Modal/popover; elevation step 2" },
+          { "role": "dark-text-primary", "value": "oklch(0.93 0.005 210)", "notes": "Primary text on dark; not pure white (halation)" },
+          { "role": "dark-text-secondary", "value": "oklch(0.70 0.01 210)", "notes": "Secondary text; 4.5:1+ on dark surfaces" },
+          { "role": "dark-brand-primary", "value": "clr-brand-400", "notes": "Light-mode 600 re-mapped down" },
+          { "role": "dark-chroma-reduction", "value": "20-40%", "notes": "Tint chroma cut at dark lightness" },
+          { "role": "dark-border", "value": "oklch(0.28 0.015 210)", "notes": "Borders carry dark-mode elevation" },
+          { "role": "dark-shadow-policy", "value": "border-plus-lightness", "notes": "Shadows secondary; lightness+borders primary" },
+          { "role": "dark-status-shift", "value": "text-steps-400-500", "notes": "Status text steps re-mapped lighter" }
+        ],
+        "composition": [
+          "Composes with gray-ramp-neutrals: the dark neutral ramp is built as its own structure (less chroma, wider deltas).",
+          "Composes with brand-ramp-construction and semantic-color-system: ramps are theme-agnostic; alias re-binding per theme does the dark work.",
+          "Composes with skill-design-tokens guide 06 (dark mode): that guide owns the theming mechanics; this one owns the palette construction."
+        ],
+        "patterns": [
+          "Alias re-binding table: every semantic alias lists its light and dark step (bg: gray-50/gray-950...) - the manifest dark themes are generated from.",
+          "Dark-mode first pass: design the dark palette alongside light from day one - retrofitted dark always ships with tinted-purple grays and vibrating brand colors."
+        ],
+        "useCases": [
+          "Products shipping dark themes (developer tools, media, any modern product).",
+          "OLED-heavy audiences: true blacks vs near-blacks decided deliberately.",
+          "Audit: #000 backgrounds, neon brand buttons, invisible elevation in dark."
+        ],
+        "combinations": { "good": ["gray-ramp-neutrals", "oklch-perceptual", "brand-ramp-construction", "semantic-color-system", "contrast-models", "cvd-safe-design", "data-viz-palettes", "gradient-theory", "color-harmony", "color-psychology", "cultural-color-meaning"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["glassmorphism", "aurora-ui", "minimalism"], "caution": ["skeuomorphism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "ambient-motion"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Invert-filter dark: flipped light palette with vibrating brand colors and purple grays",
+          "Pure-black surfaces: #000 everywhere - smearing, invisible shadows, OLED smear worry",
+          "Un-desaturated brand: light-mode chroma shipped to dark, buttons glowing like indicators",
+          "Light-only validation: dark theme released because light mode's contrast was checked"
+        ],
+        "accessibility": { "required": true, "notes": "Dark themes re-validate every WCAG pairing (a11y repo guide 02): text/surface 4.5:1, UI components 3:1 - and halation (bright-on-dark glare) is a low-vision concern that caps pure-white text and full-chroma fills.", "fallback": "When a brand/status step cannot hit contrast in dark, use a different step from the same ramp (never invent) - the alias re-binding table absorbs the shift." }
+      }
+    },
+    {
+      "id": "data-viz-palettes",
+      "name": "Data Visualization Palettes",
+      "summary": "Categorical, sequential, and diverging palettes built for comprehension: distinguishability, colorblind safety, and 3:1 against surfaces.",
+      "sections": {
+        "definition": "Data visualization needs palettes that encode meaning: categorical palettes give each series an equally-weighted, distinguishable identity; sequential ramps map magnitude to lightness; diverging palettes center a neutral midpoint between two hue extremes. Viz palettes have harder constraints than UI palettes - many colors at once, small marks, no labels - so they are engineered for distinguishability and CVD safety first, aesthetics second.",
+        "principles": [
+          "Categorical = distinguishability: series colors differ in hue AND lightness (not hue alone); 6-8 categories maximum before the palette collapses.",
+          "Sequential = lightness ramp with monotonic chroma: magnitude reads through lightness order; perceptually uniform ramps (viridis-class) prevent banding lies.",
+          "Diverging needs a true neutral midpoint: two hues diverging from a real center (white/neutral) - the midpoint is data's zero, not a random gray.",
+          "Colorblind-safe by construction: test every palette through CVD simulation (guide 11); red-green categorical pairs are pre-disqualified.",
+          "Marks carry 3:1 against their surface: chart series are UI graphical objects (WCAG 1.4.11) - every series color passes against the chart background.",
+          "Do not differentiate by color alone: series get labels, patterns, or direct annotation - color is one channel of the encoding (a11y 1.4.1).",
+          "Chart palette is a token set, not ad hoc: the categorical/sequential/diverging palettes are versioned tokens consumed by all charts - one source, consistent dashboards."
+        ],
+        "tokens": [
+          { "role": "categorical-set", "value": "8-hue-l-and-c-varied", "notes": "Differing in hue + lightness; CVD-verified" },
+          { "role": "categorical-max", "value": "8-series", "notes": "Beyond 8: small multiples, not more colors" },
+          { "role": "sequential-ramp", "value": "viridis-class-uniform", "notes": "Perceptually uniform; single-hue or multi-hue" },
+          { "role": "sequential-steps", "value": "5-7-displayed", "notes": "Displayed steps; ramps store more" },
+          { "role": "diverging-center", "value": "true-neutral-midpoint", "notes": "Data zero = neutral; hues diverge outward" },
+          { "role": "diverging-hues", "value": "opposing-hue-pair", "notes": "e.g. blue↔orange (CVD-safe axis)" },
+          { "role": "viz-contrast-floor", "value": "3:1-vs-surface", "notes": "WCAG 1.4.11 for marks/series" },
+          { "role": "viz-cvd-check", "value": "deuteranopia-verified", "notes": "All palettes pass deuteranopia/protanopia simulation" },
+          { "role": "viz-non-color-channel", "value": "label-or-pattern", "notes": "Direct labels/patterns accompany series color" },
+          { "role": "viz-palette-owner", "value": "token-set-versioned", "notes": "One viz palette set consumed by every chart" }
+        ],
+        "composition": [
+          "Composes with oklch-perceptual: sequential ramps and categorical sets are OKLCH structures with documented L/C separation.",
+          "Composes with cvd-safe-design: simulation testing is the shared gate - viz palettes are its strictest customers.",
+          "Composes with numeric-tabular (skill-typography guide 10): tabular figures + aligned columns complete the data-reading surface."
+        ],
+        "patterns": [
+          "Blue-orange default axis: the diverging pair that survives all CVD types - the default when no domain reason favors another.",
+          "Series palette token set: dashboards consume named series tokens (viz-series-1..8) so every chart re-colors consistently in one change."
+        ],
+        "useCases": [
+          "Analytics dashboards: multi-series charts that stay distinguishable.",
+          "Maps and heatmaps: sequential/diverging ramps that encode honestly.",
+          "Audit: rainbow categorical chaos, lightness-lying sequential ramps, red-green series pairs."
+        ],
+        "combinations": { "good": ["oklch-perceptual", "cvd-safe-design", "contrast-models", "gray-ramp-neutrals", "brand-ramp-construction", "semantic-color-system", "dark-mode-palette", "color-harmony", "color-psychology", "cultural-color-meaning", "gradient-theory"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["data-animation"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Rainbow categorical: 12 hues at full saturation fighting for attention",
+          "Hue-only series: 6 reds distinguished by nothing a human (or CVD human) can see",
+          "Lightness-lying ramps: sequential gradients whose midpoints are darker than their ends",
+          "Dashboard-by-dashboard palettes: every chart picking its own series colors"
+        ],
+        "accessibility": { "required": true, "notes": "Viz palettes implement WCAG 1.4.11 (non-text contrast) and 1.4.1 (color alone) at the chart level: 3:1 marks, CVD-tested sets, and a non-color channel on every series - plus charts ship accessible data tables (a11y repo guide 09).", "fallback": "When categorical sets exceed 8 series, switch to small multiples or a legend-driven highlight model - more colors is never the fix." }
+      }
+    },
+    {
+      "id": "gradient-theory",
+      "name": "Gradient Design",
+      "summary": "Gradients as designed objects: interpolation space, stop placement, hue travel, and the modern mesh/aurora looks without mud or banding.",
+      "sections": {
+        "definition": "Gradients are transitions between colors - and their quality is decided by invisible math: the interpolation space (OKLab stays vivid, sRGB muddies), the stop placement (evenly-spaced stops on long distances band), and the hue path (traveling through the hue wheel or between it). Modern CSS (linear-gradient in oklab, conic gradients, mesh-ish layering) makes the theory directly usable; this skill covers building gradients that look intentional in both themes.",
+        "principles": [
+          "Interpolate in OKLab: CSS `in oklab` keeps hue-to-hue gradients vivid; default sRGB interpolation travels through gray - declare the space or eat the mud.",
+          "Stop placement controls pacing: unequal spacing between stops changes where the eye reads the transition - place stops where the design needs tension, not evenly by default.",
+          "Short hue paths read clean: traveling 30-60 degrees of hue is cohesive; 180+ degree paths need deliberate stops or they vibrate.",
+          "Bandkill via subtle noise or stops: banding on wide soft gradients is fixed by dithering, tiny hue jitter, or added midpoints - not by hoping.",
+          "Two-color gradients are the default: three+ color gradients need a reason (brand storytelling); most UI needs tint→hue or hue→shade.",
+          "Text never sits on active gradients without a scrim: gradient backgrounds need a contrast-safe overlay zone where text lives (guide 10).",
+          "Dark mode re-tunes gradients: gradients built for light read as neon on dark - dark themes get lower-lightness, lower-chroma gradient variants."
+        ],
+        "tokens": [
+          { "role": "gradient-interpolation", "value": "oklab", "notes": "CSS in oklab; sRGB interpolation lint-blocked" },
+          { "role": "gradient-structure-default", "value": "two-color", "notes": "Tint→core or core→shade; 3+ needs justification" },
+          { "role": "gradient-hue-path", "value": "30-60deg-travel", "notes": "Short hue paths; long paths need stops plan" },
+          { "role": "gradient-hero", "value": "clr-brand-500 to clr-brand-700", "notes": "CTA/hero fill default" },
+          { "role": "gradient-text-safe", "value": "scrim-under-text", "notes": "Contrast-safe zone where text overlays gradients" },
+          { "role": "gradient-mesh-recipe", "value": "layered-radials-blur", "notes": "Aurora/mesh look via layered radial gradients" },
+          { "role": "gradient-bandkill", "value": "midpoints-or-noise", "notes": "Anti-banding treatment documented per gradient" },
+          { "role": "gradient-dark-variant", "value": "re-tuned-for-dark", "notes": "Lower L/C variants for dark theme" },
+          { "role": "gradient-conic-use", "value": "progress-wheels-only", "notes": "Conic for progress/charts, not decoration" },
+          { "role": "gradient-usage-budget", "value": "hero-and-brand-only", "notes": "Gradients are accents in product UI, not surfaces" }
+        ],
+        "composition": [
+          "Composes with oklch-perceptual: OKLab interpolation and OKLCH ramp endpoints are shared machinery.",
+          "Composes with brand-ramp-construction: gradients run between ramp steps - off-ramp endpoints are lint-blocked.",
+          "Composes with skill-ui-ux: aurora-ui and glassmorphism lean on gradients heavily - the styleAffinity documents which styles gradients serve."
+        ],
+        "patterns": [
+          "Aurora assembly: 2-3 large blurred radial gradients in brand-adjacent hues over a dark surface - the reusable aurora recipe with dark/light variants.",
+          "Gradient-on-brand contract: every gradient's endpoints are brand ramp steps, its text zone has a validated scrim, and both themes have variants."
+        ],
+        "useCases": [
+          "Hero sections, CTA fills, and brand moments (the legitimate gradient zones).",
+          "Aurora/glassmorphism backgrounds with contrast-safe text zones.",
+          "Audit: muddy hue-to-hue gradients, banded washes, unreadable text on gradients."
+        ],
+        "combinations": { "good": ["oklch-perceptual", "brand-ramp-construction", "dark-mode-palette", "gray-ramp-neutrals", "contrast-models", "color-harmony", "data-viz-palettes", "color-psychology", "semantic-color-system", "cultural-color-meaning", "cvd-safe-design"], "caution": ["brand-ramp-construction"], "avoid": [] },
+        "styleAffinity": { "good": ["aurora-ui", "glassmorphism", "maximalism"], "caution": ["minimalism", "brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["ambient-motion", "easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "sRGB mud: hue-to-hue gradients that travel through gray because nobody declared oklab",
+          "Banded washes: wide soft gradients with visible stair-stepping",
+          "Text-on-gradient gambling: headlines crossing hue transitions with unknown contrast",
+          "Gradient everywhere: buttons, cards, and tables all gradient - accents dissolved into noise"
+        ],
+        "accessibility": { "required": true, "notes": "Gradients create unknown-contrast zones: text over gradients must pass 4.5:1 across the entire text area (guide 10), and gradient-only state signaling fails 1.4.1 - gradients decorate, they never carry meaning alone.", "fallback": "When text must sit on a gradient and no scrim passes contrast, place text on a solid section adjacent to the gradient - contrast certainty beats gradient reach." }
+      }
+    },
+    {
+      "id": "contrast-models",
+      "name": "Contrast Models & Math",
+      "summary": "WCAG luminance ratios vs APCA: what each model measures, when each applies, and the computation discipline behind every validated pairing.",
+      "sections": {
+        "definition": "Contrast models are the math that turns color pairs into pass/fail numbers: the WCAG relative-luminance ratio (4.5:1 / 3:1) is the legal standard; APCA (Advanced Perceptual Contrast Algorithm) is the newer model that better predicts readability across dark surfaces and light text. This skill covers computing both, their blind spots, and the pairing-manifest discipline that makes contrast a designed property instead of a QA surprise.",
+        "principles": [
+          "WCAG ratio is the compliance floor: 4.5:1 body text, 3:1 large text and UI components - computed with the relative-luminance formula, never estimated.",
+          "APCA predicts readability better on dark: WCAG under-rewards light-text-on-dark; APCA's Lc values (75 body, 60 large, 45 UI) model dark surfaces more honestly.",
+          "Contrast belongs to pairs: only text-on-background has a value - palettes are validated as pairing manifests, not as individual swatches.",
+          "Validate every role pair per theme: text/bg, text/surface, icon/surface, border/surface, focus/surface - the manifest enumerates them and computes both models.",
+          "Gamma matters: luminance math uses gamma-encoded sRGB values correctly - hand-rolled formulas that skip gamma produce wrong ratios.",
+          "Contrast is adjustable on the L axis: failing pairs are fixed by lightness moves in OKLCH, keeping hue identity (guide 02's leverage point).",
+          "Both models, one source of truth: the manifest computes WCAG for compliance and APCA for quality - conflicts are resolved in favor of the stricter readable outcome."
+        ],
+        "tokens": [
+          { "role": "wcag-body-min", "value": "4.5:1", "notes": "WCAG 1.4.3 AA body text" },
+          { "role": "wcag-large-min", "value": "3:1", "notes": "Large text (24px/19px bold)" },
+          { "role": "wcag-ui-min", "value": "3:1", "notes": "WCAG 1.4.11 components/graphics" },
+          { "role": "apca-body-lc", "value": "Lc-75", "notes": "APCA body text quality target" },
+          { "role": "apca-large-lc", "value": "Lc-60", "notes": "APCA large text target" },
+          { "role": "apca-ui-lc", "value": "Lc-45", "notes": "APCA UI component target" },
+          { "role": "contrast-pairing-manifest", "value": "all-roles-all-themes", "notes": "The enumerated, computed pairing table" },
+          { "role": "luminance-formula", "value": "wcag-rel-luminance-gamma", "notes": "Gamma-correct relative luminance" },
+          { "role": "fix-axis", "value": "oklch-lightness", "notes": "Contrast fixes move L, keep hue" },
+          { "role": "conflict-policy", "value": "stricter-readable-wins", "notes": "WCAG/APPCA disagreement resolves to readable" }
+        ],
+        "composition": [
+          "Composes with skill-accessibility guide 02 (color-contrast): that guide owns the WCAG practice; this one owns the models and math.",
+          "Composes with every palette guide in this repo: harmony, ramps, semantic, viz, and gradients all pass through the manifest.",
+          "Composes with skill-design-tokens guide 08 (contrast validation): the token layer stores validated pairings; this guide computes them."
+        ],
+        "patterns": [
+          "Pairing manifest as CI: a script enumerates role pairs from data, computes WCAG + APCA, and fails the build on new failures - contrast regression is prevented, not found.",
+          "L-axis fix workflow: failing pair → OKLCH L adjust → regenerate ramp → re-run manifest - the loop is minutes, not meetings."
+        ],
+        "useCases": [
+          "Palette sign-off: computing every pair in both themes before adoption.",
+          "Dark-mode construction: APCA-guided re-tuning where WCAG under-warns.",
+          "Audit: un-manifested pairs, contrast-by-eye, WCAG-passing-but-unreadable dark UI."
+        ],
+        "combinations": { "good": ["oklch-perceptual", "gray-ramp-neutrals", "brand-ramp-construction", "semantic-color-system", "dark-mode-palette", "data-viz-palettes", "gradient-theory", "cvd-safe-design", "color-harmony", "color-psychology", "cultural-color-meaning"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Contrast-by-eye: judging ratios on a calibrated-less screen in a sunlit room",
+          "Gamma-broken math: hand-rolled luminance formulas skipping sRGB gamma",
+          "Dark-mode WCAG complacency: 4.5:1 passes that APCA shows are barely readable",
+          "Swatch validation: computing contrast on palette colors instead of actual pairings"
+        ],
+        "accessibility": { "required": true, "notes": "This guide IS the mathematical layer of WCAG 1.4.3/1.4.11 and the APCA modernization of it: every pairing decision in every other guide traces back to these formulas and the manifest that applies them.", "fallback": "When models disagree irreconcilably on a pair, the pair is rejected - a pairing that one model says is unreadable is not shipped with the other model's blessing." }
+      }
+    },
+    {
+      "id": "cvd-safe-design",
+      "name": "Color Vision Deficiency Safety",
+      "summary": "Designing for the 8% who see color differently: CVD types, simulation testing, safe hue pairs, and palettes that survive deuteranopia.",
+      "sections": {
+        "definition": "Roughly 8% of men and 0.5% of women have color vision deficiency: deuteranopia/protanopia (red-green confusion), tritanopia (blue-yellow), and monochromacy (rare). CVD-safe design builds palettes and signals that remain distinguishable under these conditions: verified hue pairs, lightness separation as the backbone, simulation testing as a gate, and the standing rule that color never carries meaning alone.",
+        "principles": [
+          "Lightness is the backbone: colors differing in L remain distinguishable under every CVD type - lightness separation is the primary differentiation channel.",
+          "The safe hue axes: blue↔orange, blue↔yellow, and purple-ish blue vs teal survive red-green CVD; red↔green pairs are pre-disqualified.",
+          "Simulate, don't imagine: every palette passes through deuteranopia + protanopia + tritanopia simulation (tools: Chrome DevTools, Sim Daltonism) before adoption.",
+          "Red-green pairs are forbidden as differentiators: status/error vs success must separate by more than hue - icon, text, position, lightness.",
+          "Charts and status are the hot zones: multi-series charts, semantic badges, and heatmaps are where CVD users lose meaning fastest.",
+          "Never color-alone, always: CVD safety is WCAG 1.4.1 applied with the most common failure in mind - multi-signal delivery is the floor, not an enhancement.",
+          "Test with the actual palette, not principles: two palettes can both 'avoid red-green' and still collapse under simulation - the gate is simulated, documented results."
+        ],
+        "tokens": [
+          { "role": "cvd-simulation-gate", "value": "deutan-protan-tritan", "notes": "Three simulation passes required for adoption" },
+          { "role": "safe-pair-axis", "value": "blue-orange", "notes": "The default CVD-safe opposing axis" },
+          { "role": "unsafe-pairs", "value": "red-green-primary", "notes": "Disallowed as differentiators" },
+          { "role": "lightness-separation", "value": "0.08+-L-between-series", "notes": "Series distinguishable by L alone" },
+          { "role": "non-color-signal", "value": "icon-text-position", "notes": "Meaning carried on 3 channels minimum" },
+          { "role": "chart-cvd-check", "value": "per-chart-per-release", "notes": "Dashboards re-simulated with real data colors" },
+          { "role": "status-cvd-check", "value": "badge-simulation-pass", "notes": "Status badges distinguishable without hue" },
+          { "role": "cvd-prevalence-target", "value": "8%-men-covered", "notes": "Design floor: all common CVD types pass" },
+          { "role": "pattern-overlay-option", "value": "texture-for-critical-charts", "notes": "Patterns on top of color for critical series" },
+          { "role": "cvd-audit-cadence", "value": "per-palette-change", "notes": "Simulation re-run on every palette edit" }
+        ],
+        "composition": [
+          "Composes with data-viz-palettes: viz palettes are the strictest CVD customers - simulation gates every set.",
+          "Composes with semantic-color-system: status colors are validated for deuteranopia, not just contrast.",
+          "Composes with skill-accessibility guide 02: color-contrast covers the ratios; this guide covers the perceptual confusion dimension."
+        ],
+        "patterns": [
+          "Simulation CI: palette files run through CVD simulation in the pipeline; new palettes ship with simulation screenshots attached to the PR.",
+          "Blue-orange house rule: when no domain constraint dictates otherwise, diverging and opposing pairs default to the blue-orange axis."
+        ],
+        "useCases": [
+          "Dashboards and charts (the highest CVD risk surfaces).",
+          "Status/feedback systems: badges, banners, and form states.",
+          "Audit: CVD simulation walkthrough of every color-meaning surface."
+        ],
+        "combinations": { "good": ["data-viz-palettes", "semantic-color-system", "oklch-perceptual", "contrast-models", "brand-ramp-construction", "dark-mode-palette", "gray-ramp-neutrals", "color-harmony", "gradient-theory", "color-psychology", "cultural-color-meaning"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Red-green charts: series distinguished by exactly the axis CVD users cannot read",
+          "Simulation theater: one glance at a CVD filter, no documented pass criteria",
+          "Hue-only badges: status communicated by color chip alone",
+          "8%-who-cares: deprioritizing the largest single-vision-impairment group in UI"
+        ],
+        "accessibility": { "required": true, "notes": "CVD safety is core accessibility (WCAG 1.4.1's most common real-world failure): every hue-meaning pairing must survive deuteranopia simulation - this guide turns that from aspiration into a gate.", "fallback": "When a required pairing cannot be made CVD-distinguishable, add a non-color channel (pattern, label, position) strong enough to carry the meaning without the hue - then re-simulate." }
+      }
+    },
+    {
+      "id": "cultural-color-meaning",
+      "name": "Cultural Color Meaning",
+      "summary": "Color connotations by market: red's three meanings, white's weddings and funerals, and localization discipline for global palettes.",
+      "sections": {
+        "definition": "The same hue carries different meanings across cultures: red is danger in the US, luck in China, mourning in parts of Africa; white is purity in Western weddings and mourning in parts of East Asia. Global products audit their palettes per market - especially status colors, error states, and campaign visuals - so a palette that celebrates in one market does not mourn in another.",
+        "principles": [
+          "Status colors are the highest-stakes localization: error-red and success-green have regional variations (e.g., red's positive meanings in CN markets) - status systems are validated per market before launch.",
+          "Audit per market, not per hue: launch markets get a documented color review (connotations of the palette's primary hues in that market's contexts).",
+          "UI conventions vs cultural connotation: global product UI (error red, link blue) mostly follows platform convention; marketing/brand visuals carry the cultural load.",
+          "White-space is color: whitespace-heavy minimalism reads differently in markets where white is mourning-adjacent - density decisions consult the review.",
+          "Campaign palettes localize: global campaigns re-check color symbolism per market (gifting, festivals, mourning seasons) - one global campaign visual is a known risk.",
+          "Local teams review, not just dictionaries: in-market reviewers catch connotation that color-symbolism tables miss.",
+          "Do not over-rotate: users are habituated to global UI conventions; the audit catches genuine collisions, not imaginary ones - over-localization fragments the system."
+        ],
+        "tokens": [
+          { "role": "market-audit-required", "value": "per-launch-market", "notes": "Documented color review per market before launch" },
+          { "role": "reviewer-source", "value": "in-market-teams", "notes": "Local review; not symbolism tables alone" },
+          { "role": "status-localization-policy", "value": "platform-convention-default", "notes": "UI status follows platform; brand follows market" },
+          { "role": "campaign-review", "value": "per-market-per-campaign", "notes": "Campaign visuals re-checked per market" },
+          { "role": "high-risk-contexts", "value": "gift-festival-mourning-finance", "notes": "Contexts where connotation bites hardest" },
+          { "role": "collision-log", "value": "documented-exceptions", "notes": "Found collisions + resolutions recorded" },
+          { "role": "over-localization-guard", "value": "collisions-only", "notes": "Audit catches real collisions; system stays unified" },
+          { "role": "market-palette-delta", "value": "brand-only", "notes": "Only brand/campaign layers localize; semantic stays global" },
+          { "role": "review-cadence", "value": "pre-launch-annual", "notes": "Launch review + annual refresh per market" },
+          { "role": "color-festival-calendar", "value": "per-market", "notes": "Festivals/observances mapped for campaign timing" }
+        ],
+        "composition": [
+          "Composes with color-psychology: psychology gives the baseline associations; this guide localizes them per market.",
+          "Composes with color-harmony: caution pair - harmony's hue relationships are chosen globally; cultural review may force per-market accent swaps.",
+          "Composes with semantic-color-system: status conventions are validated per market (the guide's highest-stakes audit surface)."
+        ],
+        "patterns": [
+          "Market color review template: per-market checklist (status hues, brand primaries, campaign visuals, whitespace density) with in-market sign-off.",
+          "Collision log: documented findings (hue, market, connotation, resolution) become the institutional memory future launches consult."
+        ],
+        "useCases": [
+          "Products launching into new markets (APAC, MENA, LATAM).",
+          "Global campaign planning with festival calendars.",
+          "Audit: pre-launch connotation review of status + brand colors."
+        ],
+        "combinations": { "good": ["color-psychology", "semantic-color-system", "oklch-perceptual", "brand-ramp-construction", "gray-ramp-neutrals", "dark-mode-palette", "data-viz-palettes", "contrast-models", "cvd-safe-design", "gradient-theory", "color-harmony"], "caution": ["color-harmony"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "retro"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "One-global-palette-by-default: launching everywhere with zero market review because 'red is universal'",
+          "Symbolism-table over-rotation: re-greening error states in China because a table said red is lucky",
+          "Campaign blind spots: festival visuals shipping in markets where the palette mourns",
+          "Dictionary localization: 'local review' meaning a search, never an in-market human"
+        ],
+        "accessibility": { "required": true, "notes": "Cultural review intersects accessibility: in-market review includes disabled users' context (assistive tech conventions, local a11y norms) - a palette correct for one market's culture may still fail that market's WCAG-equivalent floors (guide 10 governs the numbers everywhere).", "fallback": "When a cultural collision conflicts with a status convention, status convention wins and the cultural adjustment moves to non-status surfaces - vocabulary is never recolored for connotation." }
+      }
+    }
+  ]
+}

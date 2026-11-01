@@ -1,0 +1,27 @@
+/* ============================================================
+ * Responsive Data Tables - starter design tokens (CSS custom properties)
+ * Skill id: data-tables-responsive (#09 of 12)
+ *
+ * Tables that survive narrow screens: priority columns, card fallback, sticky headers, and horizontal scroll done honestly.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-table-priority-cols: 2-4-on-mobile; /* IA decision: which columns survive mobile */
+  --layout-table-scroll-mode: horizontal+sticky-id; /* Default adaptation: honest scroll, pinned identity */
+  --layout-table-sticky-header: position-sticky-top; /* Column headers persist on vertical scroll */
+  --layout-table-row-height: 48px; /* Touch-comfortable rows; 40px compact tier */
+  --layout-table-card-fallback: self-contained-rows-only; /* Card stacking only for record-like rows */
+  --layout-table-actions: menu-not-hover; /* Row actions in a kebab menu on touch */
+  --layout-table-numeric-align: right+tabular; /* Numbers right-aligned, tabular figures */
+  --layout-table-scroll-indicator: edge-fade; /* Visible truncation cue */
+  --layout-table-empty-width: min-100%; /* Tables never compress below readable column width */
+  --layout-table-sort-targets: 44px-header-buttons; /* Sort headers meet the touch floor */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Tables need real <table> semantics (th scope, caption) regardless of visual adaptation (a11y repo aria-fundamentals); scroll containers must stay keyboard-scrollable and actions keyboard-reachable (2.1.1). */
+/* Fallback: If the card fallback is used, keep a 'switch to table view' control - comparability is user-selectable, not design-fated. */

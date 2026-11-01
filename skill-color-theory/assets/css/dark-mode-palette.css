@@ -1,0 +1,27 @@
+/* ============================================================
+ * Dark Mode Palette - starter design tokens (CSS custom properties)
+ * Skill id: dark-mode-palette (#07 of 12)
+ *
+ * Dark themes as designed, not inverted: desaturated tints, lightness-scaled elevation, and surface roles that survive low-light viewing.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-dark-bg: oklch(0.13 0.01 210); /* Page background; never #000 */
+  --clr-dark-surface: oklch(0.17 0.012 210); /* Card surface; elevation step 1 */
+  --clr-dark-surface-raised: oklch(0.21 0.014 210); /* Modal/popover; elevation step 2 */
+  --clr-dark-text-primary: oklch(0.93 0.005 210); /* Primary text on dark; not pure white (halation) */
+  --clr-dark-text-secondary: oklch(0.70 0.01 210); /* Secondary text; 4.5:1+ on dark surfaces */
+  --clr-dark-brand-primary: clr-brand-400; /* Light-mode 600 re-mapped down */
+  --clr-dark-chroma-reduction: 20-40%; /* Tint chroma cut at dark lightness */
+  --clr-dark-border: oklch(0.28 0.015 210); /* Borders carry dark-mode elevation */
+  --clr-dark-shadow-policy: border-plus-lightness; /* Shadows secondary; lightness+borders primary */
+  --clr-dark-status-shift: text-steps-400-500; /* Status text steps re-mapped lighter */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Dark themes re-validate every WCAG pairing (a11y repo guide 02): text/surface 4.5:1, UI components 3:1 - and halation (bright-on-dark glare) is a low-vision concern that caps pure-white text and full-chroma fills. */
+/* Fallback: When a brand/status step cannot hit contrast in dark, use a different step from the same ramp (never invent) - the alias re-binding table absorbs the shift. */

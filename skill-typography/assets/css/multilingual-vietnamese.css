@@ -1,0 +1,27 @@
+/* ============================================================
+ * Multilingual & Vietnamese Typography - starter design tokens (CSS custom properties)
+ * Skill id: multilingual-vietnamese (#07 of 12)
+ *
+ * Diacritic stacking, line-height headroom, fallback stacks, and locale conventions - first-class type for Vietnamese and other marked scripts.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-script-coverage: latin,latin-ext,vietnamese; /* Required subsets per family; adoption gate */
+  --type-line-height-vi-body: 1.5; /* Floor for stacked marks; 1.6 comfortable */
+  --type-line-height-vi-display: 1.3; /* Display leading raised vs Latin 1.1 for mark clearance */
+  --type-fallback-chain-vi: all-fallbacks-covered; /* Every fallback face carries Vietnamese */
+  --type-subset-strategy: per-locale-unicode-range; /* unicode-range subsets; load only what renders */
+  --type-caps-diacritics: keep-full; /* Uppercase keeps all tone marks */
+  --type-tracking-vi: 0-0.04em-caps; /* Body 0; caps +0.04em for taller stacks */
+  --type-font-feature-vi: calt-on,mark-on; /* Mark positioning features never disabled */
+  --type-test-copy-vi: real-sentences; /* Real Vietnamese copy in QA, not pangrams */
+  --type-mixed-script-spacing: locale-aware; /* CJK taller leading; RTL no tracking (see letter-spacing) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Clipped or tofu'd diacritics change meaning in Vietnamese (distinguishable words differ by marks) - legibility here is comprehension, not aesthetics: WCAG 1.4.4 zoom + marks headroom must hold together. */
+/* Fallback: If the primary face clips marks at a size, raise line-height for that step product-wide (see line-height tokens) - never switch faces per locale. */

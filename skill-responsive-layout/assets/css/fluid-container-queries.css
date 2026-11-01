@@ -1,0 +1,27 @@
+/* ============================================================
+ * Fluid Layout & Container Queries - starter design tokens (CSS custom properties)
+ * Skill id: fluid-container-queries (#03 of 12)
+ *
+ * Components that adapt to their container, not the viewport: container queries, cqi units, and fluid spacing/type between bounds.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-cq-strategy: components-over-viewport; /* Widgets adapt to containers; shell uses media queries */
+  --layout-cq-type: inline-size; /* Default containment; height queries are rare */
+  --layout-cq-compact-below: 320px; /* Compact state trigger (container width) */
+  --layout-cq-standard-range: 320-640px; /* Standard state */
+  --layout-cq-expanded-above: 640px; /* Expanded state trigger */
+  --layout-fluid-space: clamp(1rem, 3cqi, 2rem); /* Internal padding scales with container */
+  --layout-fluid-heading-cq: clamp(1.25rem, 4cqi, 1.953rem); /* Widget title scales in container space */
+  --layout-intrinsic-width: min-content/max-content; /* Intrinsic sizing before container math */
+  --layout-cq-fallback: @supports-feature-detect; /* Legacy path: viewport query equivalent */
+  --layout-cq-test-slots: sidebar,main,modal; /* Every container component tested in its 3 slots */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Container adaptation must keep WCAG 1.4.4/1.4.10 floors: compact states never shrink text below 12px or targets below 24px - adapt the layout, not the legibility. */
+/* Fallback: If container queries are unsupported in a required target, the feature-detect fallback renders the standard (viewport-based) variant - compact variants are progressive enhancement. */

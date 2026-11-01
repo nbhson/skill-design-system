@@ -1,0 +1,27 @@
+/* ============================================================
+ * Brand Ramp Construction - starter design tokens (CSS custom properties)
+ * Skill id: brand-ramp-construction (#05 of 12)
+ *
+ * One brand hue becomes a 9-11 step ramp: chroma curves, lightness anchors, and the per-step contrast contracts that make it usable.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-ramp-step-count: 11; /* 50/100/200/300/400/500/600/700/800/900/950 */
+  --clr-brand-core-step: 500-600; /* Where the brand point anchors */
+  --clr-l-anchors: 0.97-0.18; /* Step 50 to step 950 lightness band */
+  --clr-chroma-curve: peak-mid-taper-ends; /* C peaks at 500-600, tapers toward both ends */
+  --clr-hue-drift-limit: within-5deg; /* Steps stay on the brand hue (documented drift allowed) */
+  --clr-primary-bg: clr-brand-600; /* Primary action surface */
+  --clr-primary-text-on: white-or-950-computed; /* Whichever passes 4.5:1+ with margin */
+  --clr-hover-step: core-minus-1; /* Hover = one ramp step lighter */
+  --clr-pressed-step: core-plus-1; /* Pressed = one ramp step darker */
+  --clr-disabled-recipe: step-300-at-60%; /* Disabled look; exempt from contrast, documented */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The ramp's contrast contracts ARE its accessibility: each step's allowed roles (text/bg/border) are pre-validated in both themes - consumers pick steps, and accessibility comes pre-solved (guide 10 owns the math). */
+/* Fallback: When a step fails its intended role, the generator re-tunes L/C for that step and regenerates - manual hex patches are never shipped because they break the curve. */

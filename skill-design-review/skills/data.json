@@ -1,0 +1,658 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": ["skill-ui-ux", "skill-animation", "skill-design-tokens"]
+  },
+  "skills": [
+    {
+      "id": "review-process",
+      "name": "Review Process",
+      "summary": "The design review operating system: critique formats, severity scales, roles, cadence, and decisions that stick.",
+      "sections": {
+        "definition": "Design review fails without process: feedback becomes taste debates, findings die in screenshots, and the same issues return every sprint. This guide is the operating system for all audit guides in this repo: the critique formats (design critique vs QA pass vs release gate), the severity scale (blocker/major/minor/polish), the role separation (presenter, facilitator, scribe), the cadence (per-milestone critiques, per-release gates), and the decision record - reviews produce decisions with owners, or they produce nothing.",
+        "principles": [
+          "Format matches purpose: critique (early, divergent) vs QA pass (pre-release, convergent) vs release gate (binary go/no-go) - mixing formats breaks all three.",
+          "Critique the work against criteria, not taste: every finding cites a standard (a token, a guide, a WCAG criterion) - 'I don't like it' is not feedback.",
+          "Severity is a shared scale: blocker (ships broken), major (fix before release), minor (fix in cadence), polish (backlog) - shared severity enables shared prioritization.",
+          "Roles are separated: presenter shows, facilitator runs the room, scribe records - un facilitated reviews drift into tangents.",
+          "Findings leave the room as tickets: every finding gets owner + severity + due state - screenshots without tickets are decoration.",
+          "Cadence is scheduled: per-milestone critiques and per-release gates on the calendar - review-on-request catches nothing.",
+          "Decisions are recorded: what was decided, by whom, why - the decision record ends relitigation.",
+          "The review closes the loop: prior findings verified fixed at the next gate - the loop is what makes review a system."
+        ],
+        "tokens": [
+          { "role": "review-formats", "value": "critique,qa-pass,release-gate", "notes": "Three formats, three purposes" },
+          { "role": "severity-scale", "value": "blocker,major,minor,polish", "notes": "Shared prioritization vocabulary" },
+          { "role": "criteria-rule", "value": "findings-cite-standards", "notes": "No taste-only feedback" },
+          { "role": "role-separation", "value": "presenter,facilitator,scribe", "notes": "Structured rooms" },
+          { "role": "cadence", "value": "milestone+release-gates", "notes": "Scheduled, not on-request" },
+          { "role": "findings-to-tickets", "value": "owner+severity+state", "notes": "Mandatory follow-through" },
+          { "role": "decision-record", "value": "what+who+why", "notes": "Ends relitigation" },
+          { "role": "loop-closure", "value": "verify-prior-findings", "notes": "Next gate re-checks" },
+          { "role": "timebox", "value": "45-60min", "notes": "Longer reviews degrade" },
+          { "role": "scope-rule", "value": "one-surface-per-session", "notes": "Depth over breadth" }
+        ],
+        "composition": [
+          "Composes with every audit guide in this repo: the process defines how their checklists run; they define what it checks.",
+          "Composes with skill-design-tokens + skill-component-recipes: token and component contracts are the criteria findings cite.",
+          "Composes with skill-accessibility: the release gate includes the a11y criteria as blocking checks."
+        ],
+        "patterns": [
+          "The review packet: surface + context + specific questions sent 24h ahead - reviews start prepared or don't start.",
+          "The gate checklist: the release gate runs every audit guide's scorecard in order with a blocker check - one artifact, binary outcome."
+        ],
+        "useCases": [
+          "Teams establishing their first structured design review.",
+          "Scaling reviews from one designer to a design org.",
+          "Audit: taste debates, unactioned findings, review fatigue."
+        ],
+        "combinations": { "good": ["visual-hierarchy-audit", "consistency-audit", "a11y-audit", "motion-audit", "typography-audit", "spacing-rhythm-audit", "interaction-states-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "class-morphism", "flat-design"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Taste debates: 'I don't like it' without a cited standard",
+          "Screenshot graveyards: findings captured but never ticketed",
+          "Review-on-request: ad-hoc reviews that catch nothing systemic",
+          "Relitigated decisions: the same debate every sprint, no record"
+        ],
+        "accessibility": { "required": true, "notes": "The review process itself is the a11y enforcement mechanism: WCAG criteria enter as blocking checks at the release gate (a11y-audit guide) - a review process without a11y as a gate produces retrofitted accessibility.", "fallback": "If the full process is too heavy, start with the release gate + severity scale alone - the binary gate carries most of the value." }
+      }
+    },
+    {
+      "id": "visual-hierarchy-audit",
+      "name": "Visual Hierarchy Audit",
+      "summary": "Does the page guide the eye: primary action dominance, scanning patterns, and the squint test.",
+      "sections": {
+        "definition": "Visual hierarchy is whether the page tells users what matters first, second, third - through size, weight, color, and position. The audit pass: blur/squint the page (do 3 elements dominate correctly?), trace the scanning path (F/Z patterns, primary action found in under 5 seconds), and check competing emphasis (two primaries, banners fighting banners). This guide owns the hierarchy audit checklist and its scoring.",
+        "principles": [
+          "The squint test is the first check: blurred, the page shows 2-3 dominant elements - if everything is equally loud, hierarchy has failed.",
+          "One primary action per view: the single most-emphasized action is findable in under 5 seconds - competing primaries dissolve hierarchy.",
+          "The scanning path is traced: where does the eye land first, second, third? The path must serve the task (F-pattern reading, Z-pattern landing pages).",
+          "Size/weight/color are used consistently: headers scale, body stays body - hierarchy through random emphasis is noise.",
+          "Whitespace is hierarchy's tool: groups separated by space beat groups separated by boxes - box-everything audits as a failure.",
+          "Position encodes importance: top-left (LTR) and center get emphasis - important actions buried bottom-right audit as findings.",
+          "Density is checked against the task: data-dense views use hierarchy to layer (summary > detail); marketing views use it to sequence.",
+          "Hierarchy is tested on real content: lorem-ipsum audits are invalid - real headlines and real copy shift emphasis."
+        ],
+        "tokens": [
+          { "role": "squint-test", "value": "2-3-dominant-elements", "notes": "First check; blurred view" },
+          { "role": "primary-finding", "value": "under-5-seconds", "notes": "Primary action findability budget" },
+          { "role": "one-primary-rule", "value": "per-view", "notes": "Competing primaries = finding" },
+          { "role": "scan-path-check", "value": "f/z-pattern-traced", "notes": "Eye path serves the task" },
+          { "role": "emphasis-tools", "value": "size,weight,color,position", "notes": "Consistent, not random" },
+          { "role": "whitespace-hierarchy", "value": "space-over-boxes", "notes": "Box-everything = finding" },
+          { "role": "position-emphasis", "value": "task-relevant", "notes": "Important ≠ buried" },
+          { "role": "density-layering", "value": "summary-over-detail", "notes": "Dense views layer information" },
+          { "role": "real-content-rule", "value": "lorem-invalid", "notes": "Audits run on real copy" },
+          { "role": "hierarchy-score", "value": "per-surface", "notes": "Scored in the report template" }
+        ],
+        "composition": [
+          "Composes with skill-typography visual-hierarchy: the type scale is a hierarchy tool - audits check its application.",
+          "Composes with spacing-rhythm-audit (guide 07): whitespace and rhythm are hierarchy's substrate.",
+          "Composes with skill-color-theory: emphasis color and contrast models feed the hierarchy checks."
+        ],
+        "patterns": [
+          "The blur pass: screenshot -> blur 8px -> mark the 3 dominant elements -> compare against intended hierarchy - fast, brutal, effective.",
+          "The 5-second test: new users given the surface asked 'what's the main action?' - wrong answers are hierarchy findings."
+        ],
+        "useCases": [
+          "Landing pages and marketing surfaces where hierarchy drives conversion.",
+          "Dense dashboards where layering prevents overwhelm.",
+          "Audit: competing primaries, box-everything layouts, buried CTAs."
+        ],
+        "combinations": { "good": ["review-process", "spacing-rhythm-audit", "typography-audit", "consistency-audit", "a11y-audit", "interaction-states-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit", "motion-audit", "report-template"], "caution": ["content-microcopy-audit"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "entrance-exit"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Everything-is-important: uniform emphasis making nothing important",
+          "Box-world: every group boxed until boxes are the hierarchy",
+          "Buried primary: the key action below the fold behind secondary content",
+          "Lorem-ipsum hierarchy: emphasis designed on fake copy"
+        ],
+        "accessibility": { "required": true, "notes": "Hierarchy must not rely on color alone (WCAG 1.4.1) and must survive zoom/reflow (1.4.4/1.4.10) - the audit checks hierarchy with color removed and at 400% zoom; heading structure (2.4.6) is the AT parallel of visual hierarchy.", "fallback": "If the visual audit is inconclusive, check the heading outline + primary-action aria - semantic hierarchy that works for AT usually reveals the visual fix." }
+      }
+    },
+    {
+      "id": "consistency-audit",
+      "name": "Consistency Audit",
+      "summary": "Token adherence, component reuse, and pattern discipline: is the product speaking one visual language?",
+      "sections": {
+        "definition": "Consistency is the perceived quality multiplier: users read consistency as reliability. The audit checks token adherence (any raw hex/px values escaping the system?), component reuse (hand-rolled one-offs beside system components?), pattern discipline (same task done the same way across surfaces?), and terminology consistency (one concept, one term). The output is a drift map: where the product diverges from its own system, ranked by user impact.",
+        "principles": [
+          "Raw values are findings: any hex/px/font-family in product CSS outside tokens/component styles is a consistency violation.",
+          "Component reuse is checked, not assumed: custom one-offs beside existing system components are flagged - duplication is debt.",
+          "Same task, same pattern: delete actions, date pickers, and empty states work identically across surfaces - per-surface reinvention is a finding.",
+          "Terminology matches the glossary: one concept, one term (ux-writing copy-audit contract) - drift here is user-visible confusion.",
+          "Spacing/radii/shadows come from scales: off-scale values (17px padding, 7px radius) are mechanical findings.",
+          "Interaction patterns are consistent: primary buttons, hover states, and focus treatment identical everywhere.",
+          "Drift is mapped by impact: inconsistency in high-traffic flows outranks settings-page drift - the drift map is ranked.",
+          "Consistency has a source of truth: the audit needs the token/component/pattern docs to exist - auditing against nothing measures nothing."
+        ],
+        "tokens": [
+          { "role": "raw-value-scan", "value": "zero-outside-tokens", "notes": "Mechanical; lint-assisted" },
+          { "role": "component-reuse-check", "value": "one-offs-flagged", "notes": "Duplication is debt" },
+          { "role": "pattern-parity", "value": "same-task-same-pattern", "notes": "Per-surface reinvention banned" },
+          { "role": "terminology-check", "value": "glossary-adherence", "notes": "One concept, one term" },
+          { "role": "scale-adherence", "value": "spacing,radius,shadow", "notes": "Off-scale = mechanical finding" },
+          { "role": "interaction-consistency", "value": "states-identical-cross-surface", "notes": "Buttons/hover/focus uniform" },
+          { "role": "drift-map", "value": "impact-ranked", "notes": "High-traffic drift first" },
+          { "role": "source-of-truth", "value": "docs-required", "notes": "Audit needs criteria to exist" },
+          { "role": "audit-frequency", "value": "per-release+quarterly", "notes": "Decay caught on schedule" },
+          { "role": "consistency-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with skill-design-tokens + skill-component-recipes: those repos are the source of truth this audit enforces.",
+          "Composes with review-process (guide 01): findings flow through the severity scale and ticket loop.",
+          "Composes with content-microcopy-audit (guide 09): terminology and copy consistency are shared checks."
+        ],
+        "patterns": [
+          "The raw-value sweep: lint/build scan for raw hex/px outside tokens - mechanical findings in minutes, the audit's highest-yield pass.",
+          "The cross-surface task walk: perform one task (delete, search, invite) across 3 surfaces; divergences are pattern-parity findings."
+        ],
+        "useCases": [
+          "Post-acquisition and legacy products unifying divergent UI.",
+          "Design systems measuring adoption.",
+          "Audit: off-scale values, one-off components, terminology drift."
+        ],
+        "combinations": { "good": ["review-process", "visual-hierarchy-audit", "typography-audit", "spacing-rhythm-audit", "interaction-states-audit", "a11y-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit", "motion-audit", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Token theater: tokens defined but raw values shipped anyway",
+          "One-off sprawl: a custom modal beside the system modal",
+          "Task roulette: the same action working differently on three screens",
+          "Terminology drift: 'project' here, 'workspace' there"
+        ],
+        "accessibility": { "required": true, "notes": "Consistency is an a11y multiplier: consistent focus treatment, contrast, and interaction patterns reduce relearning for AT and cognitive-load users (WCAG 3.2.4 consistent identification) - the audit treats inconsistency in a11y-critical patterns as major.", "fallback": "If full scoring is too heavy, run the raw-value sweep + focus/contrast consistency walk - those two passes cover the highest-impact drift." }
+      }
+    },
+    {
+      "id": "a11y-audit",
+      "name": "Accessibility Audit",
+      "summary": "The conformance pass: keyboard walks, screen reader runs, contrast checks, and severity-ranked WCAG findings.",
+      "sections": {
+        "definition": "The a11y audit is the conformance pass over a surface: keyboard-only walk (every action reachable and operable?), screen reader run (names, roles, states announced correctly?), contrast checks (text 4.5:1, UI 3:1), zoom/reflow at 400%, and reduced-motion behavior - findings ranked by WCAG criterion and severity. This guide is the audit translation of skill-accessibility: the criteria live there; the pass protocol and scoring live here.",
+        "principles": [
+          "Keyboard first: a full keyboard-only walk of every flow - unreachable, trap-without-escape, and invisible-focus findings are blockers.",
+          "Screen reader pass on key flows: critical flows (signup, checkout) run with NVDA/VoiceOver - narration failures are major findings.",
+          "Contrast is checked programmatically: text 4.5:1 (3:1 large), UI components 3:1 - sampled by eye, verified by tool.",
+          "Zoom and reflow at 400%: content usable at 320px width / 400% zoom (WCAG 1.4.10) - clipped controls are findings.",
+          "Reduced-motion honored: animations collapse under the media query (2.3.3) - the audit flips the setting and re-checks.",
+          "Forms get the full pass: labels, errors announced, focus moves - the highest-density a11y failure surface.",
+          "Findings cite criteria: every finding maps to a WCAG SC + severity - 'a11y could be better' is not a finding.",
+          "Automated scans are the floor, not the audit: axe catches ~30%; the human passes (keyboard/SR/zoom) find the rest."
+        ],
+        "tokens": [
+          { "role": "keyboard-walk", "value": "full-flow-blocker-gate", "notes": "First pass; traps/invisible focus = blocker" },
+          { "role": "sr-pass", "value": "critical-flows-nvda-voiceover", "notes": "Names/roles/states verified" },
+          { "role": "contrast-text", "value": "4.5:1-3:1-large", "notes": "WCAG 1.4.3" },
+          { "role": "contrast-ui", "value": "3:1-components", "notes": "WCAG 1.4.11" },
+          { "role": "zoom-reflow", "value": "400%-320px", "notes": "WCAG 1.4.4/1.4.10" },
+          { "role": "reduced-motion-check", "value": "media-query-flipped", "notes": "WCAG 2.3.3" },
+          { "role": "forms-focus", "value": "highest-density-pass", "notes": "Labels/errors/focus" },
+          { "role": "findings-cite-criteria", "value": "wcag-sc+severity", "notes": "Machine-checkable findings" },
+          { "role": "auto-scan-role", "value": "floor-not-audit", "notes": "axe ~30% coverage" },
+          { "role": "a11y-gate", "value": "blockers-block-release", "notes": "Release gate integration" }
+        ],
+        "composition": [
+          "Composes with skill-accessibility: that repo owns the criteria guides; this guide runs the pass protocol.",
+          "Composes with review-process (guide 01): a11y blockers gate the release - the binary integration.",
+          "Composes with interaction-states-audit (guide 08): focus visibility and state styling overlap - coordinated passes."
+        ],
+        "patterns": [
+          "The keyboard walk protocol: unplug the mouse, complete the flow, log every failure point - the single highest-yield a11y pass.",
+          "The criteria-mapped scorecard: findings table (surface, WCAG SC, severity, fix, owner) reused across audits for trend tracking."
+        ],
+        "useCases": [
+          "Pre-release gates on any user-facing surface.",
+          "Conformance targets (WCAG 2.1/2.2 AA) for regulated products.",
+          "Audit: traps, unnamed controls, contrast fails, zoom breakage."
+        ],
+        "combinations": { "good": ["review-process", "visual-hierarchy-audit", "consistency-audit", "motion-audit", "typography-audit", "spacing-rhythm-audit", "interaction-states-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion", "easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Scan-only audits: axe green while the keyboard walk fails at step one",
+          "Retrofitted a11y: conformance attempted at launch week",
+          "Criteria-less findings: 'make it more accessible' with no SC cited",
+          "Unchecked zoom: 400% users finding clipped controls"
+        ],
+        "accessibility": { "required": true, "notes": "This guide IS the a11y enforcement pass: it operationalizes WCAG 2.1/2.2 AA as a surface-level protocol (keyboard, SR, contrast, zoom, motion) with severity-ranked, criteria-cited findings - the release gate's a11y section.", "fallback": "If tooling is limited, the keyboard walk + manual contrast sampling cover the majority of critical findings - no scanner required." }
+      }
+    },
+    {
+      "id": "motion-audit",
+      "name": "Motion Audit",
+      "summary": "Is motion serving the interface: purpose check, token adherence, duration/easing review, and reduced-motion verification.",
+      "sections": {
+        "definition": "The motion audit asks one question of every animated surface: does this motion communicate, orient, or reward - or is it decoration fighting the user? The pass checks purpose (each animation classified), token adherence (durations/easings from skill-animation's motion tokens, not one-off values), the duration ladder (UI feedback 100-300ms, transitions 300-500ms, nothing over 1s without reason), looping restraint, and the reduced-motion collapse.",
+        "principles": [
+          "Every animation is classified: feedback, orientation, state-change, reward, or decoration - purposeless decoration is a finding.",
+          "Durations come from the ladder: 100-300ms feedback, 300-500ms transitions, 1s max without documented reason (skill-animation easing-timing).",
+          "Easings come from tokens: one-out easings for entrances, standard curves elsewhere - random cubic-bezier values are findings.",
+          "Loops are rationed: one ambient loop per viewport max, none on data-heavy surfaces - competing loops are a finding.",
+          "Reduced-motion collapses everything: the audit flips the media query and verifies every animation degrades to static - no exceptions.",
+          "Motion never blocks: animations under 500ms don't gate interaction; long sequences are interruptible (2.2.2).",
+          "Interruptibility is tested: mid-animation clicks/taps work - animations that lock the UI are major findings.",
+          "Entrances respect the user's position: scroll-triggered motion doesn't re-trigger on scroll-up jitter, and doesn't hide content from AT."
+        ],
+        "tokens": [
+          { "role": "motion-classification", "value": "feedback,orientation,state,reward,decoration", "notes": "Purposeless = finding" },
+          { "role": "duration-ladder", "value": "feedback-100-300,transition-300-500,max-1s", "notes": "skill-animation contract" },
+          { "role": "easing-adherence", "value": "tokens-only", "notes": "No random bezier values" },
+          { "role": "loop-ration", "value": "one-per-viewport", "notes": "None on data-dense surfaces" },
+          { "role": "reduced-motion", "value": "collapse-verified", "notes": "Audited with media query flipped" },
+          { "role": "non-blocking", "value": "under-500ms-or-interruptible", "notes": "2.2.2 contract" },
+          { "role": "interruptibility-test", "value": "mid-animation-interaction", "notes": "UI lock = major finding" },
+          { "role": "scroll-trigger-check", "value": "no-jitter-retrigger", "notes": "Scroll-up stability" },
+          { "role": "at-parallel", "value": "motion-never-only-signal", "notes": "State also announced" },
+          { "role": "motion-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with skill-animation: that repo defines the motion tokens and disciplines; this audit verifies their application.",
+          "Composes with a11y-audit (guide 04): reduced-motion and interruptibility checks are shared passes.",
+          "Composes with perceived-performance (guide 10): motion shapes perceived speed - the two audits read together."
+        ],
+        "patterns": [
+          "The animation inventory: per surface, every animation listed with type/duration/easing/loop/fallback - the inventory makes purposelessness visible.",
+          "The reduced-motion flip: audit once with the media query on - anything still moving (or vanished without static state) is a finding."
+        ],
+        "useCases": [
+          "Motion-rich products (marketing, consumer apps) auditing restraint.",
+          "Products adopting skill-animation tokens, verifying adherence.",
+          "Audit: flarb everywhere, UI-locking sequences, missing fallbacks."
+        ],
+        "combinations": { "good": ["review-process", "a11y-audit", "perceived-performance", "visual-hierarchy-audit", "interaction-states-audit", "consistency-audit", "typography-audit", "spacing-rhythm-audit", "content-microcopy-audit", "responsive-audit", "report-template"], "caution": ["perceived-performance"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "aurora-ui"], "caution": ["maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "micro-interactions", "reduced-motion"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Flarb-everything: entrance animations on every element fighting for attention",
+          "UI-locking motion: sequences that ignore input until finished",
+          "Loop soup: multiple ambient animations competing in one viewport",
+          "Fallback-less motion: reduced-motion users getting vanished content"
+        ],
+        "accessibility": { "required": true, "notes": "The motion audit enforces WCAG 2.2.2 (pause/stop/hide), 2.3.3 (animation from interactions), and prefers-reduced-motion: every animation must have a static fallback and never be the only state signal - motion-audit and a11y-audit share this checklist section.", "fallback": "If classification is contested, apply the strict rule: motion must communicate something text/position cannot - if it can't articulate the purpose, it's decoration and gets removed." }
+      }
+    },
+    {
+      "id": "typography-audit",
+      "name": "Typography Audit",
+      "summary": "Scale adherence, hierarchy in text, line-length/readability, and the type crimes: justified widows, tracking all-caps, mixed scales.",
+      "sections": {
+        "definition": "The typography audit verifies the text layer against skill-typography's contracts: scale adherence (are sizes from the type scale?), hierarchy legibility (do headings read as headings?), line length and line height (45-75ch, 1.4-1.6 body), and the classic type crimes - tracked-out lowercase, ALL CAPS long strings, widows/orphans in headings, and justified rivers. The pass is fast because the contracts are mechanical.",
+        "principles": [
+          "Sizes come from the scale: any font-size outside the type ramp is a mechanical finding (skill-typography type-scale).",
+          "Heading hierarchy is real: h1-h6 without skips, visual weight matching semantic weight - styled-div headings are findings.",
+          "Line length within 45-75ch: paragraphs beyond the comfort band are flagged - including full-width text in wide layouts.",
+          "Line height matches the role: 1.4-1.6 body, tighter headings - single-value line-height on mixed sizes is a finding.",
+          "The type crimes list: tracked-out lowercase (negative tracking), ALL CAPS long strings, justified text with rivers, widowed headings - each is a named check.",
+          "Fluid type verified at breakpoints: clamp() behavior checked at 320px and 1440px+ - overflow or invisible shrink is a finding.",
+          "Tabular figures where numbers align: tables, timers, and metrics use tabular-nums (skill-typography numeric-tabular).",
+          "Font loading doesn't flash: FOUT/FOIT on the audited surface is a performance-typography finding (webfont-loading)."
+        ],
+        "tokens": [
+          { "role": "scale-adherence", "value": "type-ramp-only", "notes": "Off-ramp sizes = mechanical finding" },
+          { "role": "heading-hierarchy", "value": "real-headings-no-skips", "notes": "Styled-div headings flagged" },
+          { "role": "line-length", "value": "45-75ch", "notes": "Paragraph comfort band" },
+          { "role": "line-height", "value": "body-1.4-1.6", "notes": "Role-matched leading" },
+          { "role": "type-crimes", "value": "tracked-lower,caps-strings,widows,rivers", "notes": "Named checks" },
+          { "role": "fluid-check", "value": "clamp-320-to-1440", "notes": "Breakpoint-verified" },
+          { "role": "tabular-figures", "value": "tables+metrics", "notes": "Aligned numbers contract" },
+          { "role": "font-load-check", "value": "no-fout-foit", "notes": "Loading strategy verified" },
+          { "role": "contrast-in-text", "value": "4.5:1", "notes": "Shared with a11y-audit" },
+          { "role": "typography-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with skill-typography: that repo owns the contracts; this audit scores adherence.",
+          "Composes with visual-hierarchy-audit (guide 03): type scale is hierarchy's main tool - audits coordinate.",
+          "Composes with content-microcopy-audit (guide 09): copy and its typography are reviewed in the same pass."
+        ],
+        "patterns": [
+          "The scale sweep: extract every computed font-size on the surface, diff against the type ramp - off-ramp values listed mechanically.",
+          "The type-crimes checklist: the named list (tracking, caps, widows, rivers, skips) run top to bottom - fast and reproducible."
+        ],
+        "useCases": [
+          "Content-heavy surfaces (docs, marketing, articles).",
+          "Post-migration typography checks (new font, new scale).",
+          "Audit: off-scale sizes, heading skips, river-y justified text."
+        ],
+        "combinations": { "good": ["review-process", "visual-hierarchy-audit", "consistency-audit", "spacing-rhythm-audit", "a11y-audit", "content-microcopy-audit", "interaction-states-audit", "perceived-performance", "responsive-audit", "motion-audit", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "class-morphism", "retro"], "caution": ["brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Off-ramp sizes: 17px and 23px body text from nowhere",
+          "Heading skips: h2 to h5 jumps breaking the outline",
+          "Tracked-out lowercase: negative letter-spacing squeezing body text",
+          "River-y justification: full-justify with no hyphenation control"
+        ],
+        "accessibility": { "required": true, "notes": "The audit covers WCAG 1.4.3 (contrast), 1.4.4 (resize text), 1.4.12 (text spacing override tolerance), and 2.4.6 (headings/labels): text must survive user text-spacing overrides and 200% resize without clipping - checked by toggling the spacing overrides.", "fallback": "If line-length or fluid checks are inconclusive, run the text-spacing override bookmarklet + 200% zoom pass - both are 5-minute checks with high yield." }
+      }
+    },
+    {
+      "id": "spacing-rhythm-audit",
+      "name": "Spacing & Rhythm Audit",
+      "summary": "The 4/8px grid check: off-scale spacing, grouping errors, and vertical rhythm that holds across the surface.",
+      "sections": {
+        "definition": "Spacing is the invisible 60% of perceived quality: off-scale gaps read as 'something's off' without naming why. The audit verifies: all spacing from the 4/8px scale (skill-design-tokens spacing), grouping logic (related items closer than unrelated - proximity principle), consistent component-internal spacing (does the card use the same padding everywhere?), and vertical rhythm (does the page breathe in consistent intervals, or lurch?).",
+        "principles": [
+          "Everything is on-scale: padding/margin/gap values divisible per the 4/8px system - off-scale values are mechanical findings.",
+          "Proximity is the grouping test: related items sit closer than unrelated ones - if users can't tell what belongs to what by spacing alone, grouping has failed.",
+          "Component-internal spacing is consistent: the card's padding is the card's padding everywhere - per-instance drift is a finding.",
+          "Vertical rhythm holds: consistent section spacing intervals down the page - lurching gaps (16, 40, 22, 90) are findings.",
+          "Whitespace beats boxes: if groups need borders to be understood, the spacing is wrong (shared with visual-hierarchy).",
+          "Density tiers are declared: compact/default/comfortable tiers documented - mixed densities on one surface are findings.",
+          "Alignment is absolute: left edges align across components (LTR) - almost-aligned elements audit as major findings.",
+          "Responsive spacing scales: gaps shrink proportionally at breakpoints - fixed spacing that breaks mobile layouts is a finding."
+        ],
+        "tokens": [
+          { "role": "spacing-scale", "value": "4-8px-system", "notes": "All values on-scale" },
+          { "role": "proximity-test", "value": "grouping-by-space", "notes": "Related > unrelated distance" },
+          { "role": "component-consistency", "value": "same-padding-everywhere", "notes": "Per-instance drift flagged" },
+          { "role": "vertical-rhythm", "value": "consistent-intervals", "notes": "No lurching gaps" },
+          { "role": "space-over-boxes", "value": "borders-are-failure", "notes": "Shared with hierarchy audit" },
+          { "role": "density-tiers", "value": "compact,default,comfortable", "notes": "Declared per surface" },
+          { "role": "alignment-check", "value": "edges-align", "notes": "Almost-aligned = finding" },
+          { "role": "responsive-spacing", "value": "proportional-shrink", "notes": "Breakpoint-verified" },
+          { "role": "raw-value-scan", "value": "lint-assisted", "notes": "Mechanical sweep" },
+          { "role": "spacing-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with skill-design-tokens spacing guide: that guide defines the scale; this audit verifies it.",
+          "Composes with visual-hierarchy-audit (guide 03): whitespace is hierarchy's tool - shared check.",
+          "Composes with responsive-audit (guide 11): spacing behavior at breakpoints is the crossover surface."
+        ],
+        "patterns": [
+          "The overlay pass: render the surface with a spacing-scale grid overlay - off-scale values and misalignments become visually obvious in seconds.",
+          "The proximity walk: for each group, ask 'could a user circle what belongs together using spacing alone?' - failures are grouping findings."
+        ],
+        "useCases": [
+          "Any surface - spacing drift is universal.",
+          "Design system adoption measurement (scale adherence rate).",
+          "Audit: off-scale gaps, misaligned edges, box-everything grouping."
+        ],
+        "combinations": { "good": ["review-process", "visual-hierarchy-audit", "consistency-audit", "typography-audit", "a11y-audit", "interaction-states-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit", "motion-audit", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Off-scale sprawl: 17px paddings and 13px gaps from nowhere",
+          "Proximity failure: groups closer to strangers than to their own members",
+          "Lurching rhythm: vertical gaps jumping without system",
+          "Almost-aligned: elements 3px off the column line"
+        ],
+        "accessibility": { "required": true, "notes": "Spacing serves WCAG 1.4.12 (text spacing tolerance: no clipping when users override spacing) and 2.5.8 (target spacing): the audit verifies surfaces survive user spacing overrides and that interactive targets keep effective separation.", "fallback": "If the overlay pass is unavailable, run the raw-value lint sweep - off-scale values are mechanical and machine-findable." }
+      }
+    },
+    {
+      "id": "interaction-states-audit",
+      "name": "Interaction States Audit",
+      "summary": "Every interactive element in every state: hover, focus, active, disabled, loading - designed, visible, and consistent.",
+      "sections": {
+        "definition": "Most surfaces ship with half their interaction states: hover works, focus is invisible, disabled is unexplained. The audit enumerates every interactive element and verifies all states exist and are visible: hover/active feedback, focus rings (2px + offset, 3:1 contrast), loading/disabled contracts, selected states, and error states - plus keyboard-only verification (focus never lost, order sensible).",
+        "principles": [
+          "Every interactive element is enumerated: buttons, links, cards, rows, tabs - each checked against the full state list.",
+          "The state list is complete: hover, focus-visible, active/pressed, disabled, loading, selected, error - missing states are findings.",
+          "Focus is unmissable: visible ring meeting 3:1 contrast (2.4.13), never outline: none without replacement.",
+          "Keyboard parity: every state reachable and visible via keyboard - hover-only affordances are findings (shared with a11y-audit).",
+          "Disabled is explained: the reason visible near the control (component-recipes contract) - bare disabled is a finding.",
+          "Loading replaces without reflow: in-button spinners keep size (component-recipes contract).",
+          "Selected state is doubly signaled: color + check/icon (1.4.1) - color-only selection is a finding.",
+          "Press feedback exists everywhere: active states confirm the tap on touch surfaces - dead-feeling buttons are findings."
+        ],
+        "tokens": [
+          { "role": "state-enumeration", "value": "all-interactives-listed", "notes": "Nothing skipped" },
+          { "role": "state-list", "value": "hover,focus,active,disabled,loading,selected,error", "notes": "The complete set" },
+          { "role": "focus-ring", "value": "2px+offset-3:1", "notes": "WCAG 2.4.13 contract" },
+          { "role": "no-outline-none", "value": "replacement-required", "notes": "Focus removal = blocker" },
+          { "role": "keyboard-parity", "value": "all-states-via-kb", "notes": "Hover-only = finding" },
+          { "role": "disabled-explained", "value": "reason-visible", "notes": "Bare disabled = finding" },
+          { "role": "loading-no-reflow", "value": "size-stable", "notes": "In-place spinners" },
+          { "role": "selection-signal", "value": "color+icon", "notes": "1.4.1 double signal" },
+          { "role": "press-feedback", "value": "active-state-everywhere", "notes": "Touch confirmation" },
+          { "role": "states-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with component-recipes accessibility-wiring: the wiring checklist is this audit's per-component criteria.",
+          "Composes with a11y-audit (guide 04): focus and keyboard passes are shared - coordinated scheduling.",
+          "Composes with skill-animation micro-interactions: state feedback motion uses motion tokens - verified here."
+        ],
+        "patterns": [
+          "The state matrix walk: per interactive element, a row of states checked (hover/focus/active/disabled/loading/selected/error) - incomplete rows are findings.",
+          "The keyboard-only pass: complete the flow without the mouse, logging every invisible or stuck state - the parity proof."
+        ],
+        "useCases": [
+          "Pre-release gates on interactive surfaces.",
+          "Design system component audits (states are the usual gap).",
+          "Audit: outline:none regressions, hover-only menus, bare disabled."
+        ],
+        "combinations": { "good": ["review-process", "a11y-audit", "visual-hierarchy-audit", "consistency-audit", "typography-audit", "spacing-rhythm-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit", "motion-audit", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["micro-interactions", "feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "outline:none regressions: focus invisible to keyboard users",
+          "Hover-only affordances: actions unreachable by touch/keyboard",
+          "Bare disabled: greyed controls with no explanation",
+          "Color-only selection: chosen states signaled by tint alone"
+        ],
+        "accessibility": { "required": true, "notes": "This audit enforces WCAG 2.4.7 (focus visible), 2.4.13 (focus appearance), 1.4.1 (use of color), and 4.1.2 (name/role/value): state visibility and keyboard parity are blockers - the state matrix is the a11y contract in per-component form.", "fallback": "If the full matrix is too heavy, audit focus + disabled + loading first - those three states carry most user and a11y impact." }
+      }
+    },
+    {
+      "id": "content-microcopy-audit",
+      "name": "Content & Microcopy Audit",
+      "summary": "The strings pass: error completeness, label specificity, reading level, and glossary adherence - checked per surface.",
+      "sections": {
+        "definition": "The content audit walks every string on a surface against the ux-writing contracts: errors carry what+why+fix, buttons are verb-first and specific, labels aren't placeholders, links name destinations, terminology matches the glossary, and reading level holds. Because the contracts are mechanical (three-part errors, verb-first labels), much of this pass is scriptable - the human pass judges tone and clarity.",
+        "principles": [
+          "Errors are complete: every error string on the surface carries what+why+fix (ux-writing error-messages) - missing parts are findings.",
+          "Buttons are verb-first and specific: the OK/Submit family on consequential actions is a named finding.",
+          "No placeholder-as-label: fields checked for vanishing instructions (3.3.2) - a mechanical check with high user cost.",
+          "Links name destinations: 'click here' links are mechanical findings (2.4.4).",
+          "Terminology matches the glossary: one concept, one term - drift logged per string (copy-audit contract).",
+          "Reading level holds: long strings sampled against grade-8 target - overloaded sentences are findings.",
+          "Tone matches the state: humor in error paths, gloating success - the tone matrix is the criteria (voice-tone).",
+          "Every string is findable in context: alt text, aria-labels, and tooltips get the same audit as visible copy."
+        ],
+        "tokens": [
+          { "role": "error-completeness", "value": "what+why+fix-required", "notes": "Missing parts = finding" },
+          { "role": "button-specificity", "value": "verb-first-no-generic", "notes": "OK/Submit on consequential = finding" },
+          { "role": "placeholder-check", "value": "no-placeholder-labels", "notes": "Mechanical, high-cost" },
+          { "role": "link-text", "value": "destination-named", "notes": "2.4.4; 'click here' = finding" },
+          { "role": "glossary-adherence", "value": "one-concept-one-term", "notes": "Drift logged" },
+          { "role": "reading-level", "value": "grade-8-sampled", "notes": "Long strings sampled" },
+          { "role": "tone-match", "value": "tone-matrix-criteria", "notes": "voice-tone contract" },
+          { "role": "hidden-strings-audited", "value": "alt+aria+tooltip", "notes": "Same audit as visible copy" },
+          { "role": "front-load-check", "value": "meaning-first-40-chars", "notes": "Truncation-safe strings" },
+          { "role": "content-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with skill-ux-writing: that repo owns the copy contracts; this audit scores adherence per surface.",
+          "Composes with review-process (guide 01): content findings flow through the severity scale and ticket loop.",
+          "Composes with typography-audit (guide 06): copy and its typography reviewed in the same pass."
+        ],
+        "patterns": [
+          "The string walk: every visible + hidden string on the surface listed and checked against the ux-writing token contracts - the audit's data layer.",
+          "The lint + judgment split: mechanical checks (verb-first, click-here, placeholders) scripted; tone/clarity judged by reviewers - same split as copy-audit."
+        ],
+        "useCases": [
+          "Pre-release gates on copy-bearing surfaces.",
+          "Localization readiness audits (strings checked pre-translation).",
+          "Audit: dead-end errors, mystery buttons, placeholder labels."
+        ],
+        "combinations": { "good": ["review-process", "typography-audit", "visual-hierarchy-audit", "consistency-audit", "a11y-audit", "spacing-rhythm-audit", "interaction-states-audit", "perceived-performance", "responsive-audit", "motion-audit", "report-template"], "caution": ["visual-hierarchy-audit"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Dead-end errors shipped: what+why+fix missing on live surfaces",
+          "Mystery buttons: 'OK' on consequential actions",
+          "Unaudited hidden strings: aria-labels and tooltips exempted from review",
+          "Copy-late culture: strings written after layout freezes"
+        ],
+        "accessibility": { "required": true, "notes": "The content audit covers the copy side of WCAG 3.3.1-3.3.3, 2.4.4, 2.4.6, and 1.1.1: complete errors, named links, real labels, and alt text - hidden strings (aria, alt) are first-class audit targets, not exemptions.", "fallback": "If the full string walk is too heavy, audit errors + links + icon names first - those three string classes carry the highest a11y and trust impact." }
+      }
+    },
+    {
+      "id": "perceived-performance",
+      "name": "Perceived Performance Audit",
+      "summary": "Speed as the user feels it: skeleton discipline, optimistic UI, progress honesty, and the response-time bands.",
+      "sections": {
+        "definition": "Users judge speed by feel, not by TTI: a 2s load with skeletons and progress feels faster than a 1.5s blank freeze. The audit checks the perception layer: response-time bands honored (feedback <100ms instant, <1s busy indicator, 1-3s skeleton+progress, >3s cancellable with stages), skeleton discipline (matching layout, never past 3s - component-recipes contract), optimistic UI for reversible actions, and the perceived-speed motion tricks (continuous motion, delayed empties) verified against honesty rules.",
+        "principles": [
+          "Response bands are the contract: <100ms instant, <1s busy spinner, 1-3s skeleton/progress, >3s staged progress + cancel - every async surface mapped to a band.",
+          "Skeletons match layout and cap at 3s: skeleton-to-content shape match and the 3s progress handoff (component-recipes contract).",
+          "Optimistic UI for reversible actions: saves, likes, and sends render immediately with an undo path - the perceived-speed jackpot.",
+          "Progress is honest: fake progress bars that jump to 90% and stall are worse than none - determinate when possible.",
+          "Continuous motion reads faster: progress bars that move smoothly (even slightly fudged) beat stuttering honest ones - motion shapes perception.",
+          "Nothing just sits blank: any wait longer than 100ms has some response - blank freezes are the cardinal finding.",
+          "Delays are designed, not natural: content appears when renderable, not batched behind the slowest call - waterfall audits reveal batching sins.",
+          "Perceived speed is measured: time-to-first-meaningful-content tracked per surface - the metric the audit optimizes."
+        ],
+        "tokens": [
+          { "role": "response-bands", "value": "<100ms,1s,3s,staged", "notes": "Nielsen bands; every async mapped" },
+          { "role": "skeleton-contract", "value": "match-layout+cap-3s", "notes": "Then progress indication" },
+          { "role": "optimistic-ui", "value": "reversible-actions", "notes": "Instant render + undo" },
+          { "role": "progress-honesty", "value": "determinate-when-possible", "notes": "Fake stalls = finding" },
+          { "role": "continuous-motion", "value": "smooth-over-stutter", "notes": "Perception-shaped motion" },
+          { "role": "no-blank-freeze", "value": "response-under-100ms", "notes": "Any wait has feedback" },
+          { "role": "waterfall-check", "value": "no-artificial-batching", "notes": "Content when renderable" },
+          { "role": "ttmc-metric", "value": "time-to-meaningful-content", "notes": "The audited metric" },
+          { "role": "cancellable-long-loads", "value": ">3s-offers-cancel", "notes": "User control contract" },
+          { "role": "perception-score", "value": "per-surface", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with component-recipes empty-loading-error: that recipe implements the states; this audit verifies them.",
+          "Composes with motion-audit (guide 05): skeleton/progress motion and the duration ladder are shared checks.",
+          "Composes with skill-animation loading-states: that discipline defines the loading patterns; the audit verifies application."
+        ],
+        "patterns": [
+          "The band map: every async operation on the surface listed with its expected duration and matching band treatment - unmapped waits are findings.",
+          "The throttle test: audit with CPU/network throttled (4x CPU, slow 3G) - the perception layer is only tested when it's actually needed."
+        ],
+        "useCases": [
+          "Async-heavy dashboards and checkout flows.",
+          "Products with slow backends improving feel without infra cost.",
+          "Audit: blank freezes, skeleton-forever, fake progress stalls."
+        ],
+        "combinations": { "good": ["review-process", "motion-audit", "visual-hierarchy-audit", "consistency-audit", "a11y-audit", "typography-audit", "spacing-rhythm-audit", "interaction-states-audit", "content-microcopy-audit", "responsive-audit", "report-template"], "caution": ["motion-audit"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["loading-states", "easing-timing"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "The blank freeze: no feedback until the full response lands",
+          "Skeleton-forever: skeletons hanging past 3s with no progress",
+          "Stalling progress: bars that jump to 90% and freeze there",
+          "Batched-by-laziness: content waiting for the slowest API call"
+        ],
+        "accessibility": { "required": true, "notes": "Perceived-performance states are announced states: skeletons/progress narrate politely (4.1.3), progress has accessible names, and loading motion respects reduced-motion - perceived speed must not come at the cost of AT users' orientation.", "fallback": "If progressive enhancement is limited, ensure at minimum that waits >1s produce a narrated status - a spoken 'loading' beats a silent freeze." }
+      }
+    },
+    {
+      "id": "responsive-audit",
+      "name": "Responsive Audit",
+      "summary": "Every surface at every size: 320px to ultrawide, touch vs pointer, orientation, and the breakpoint behaviors that were promised.",
+      "sections": {
+        "definition": "The responsive audit runs every surface across the size spectrum: 320px (WCAG reflow floor), 375/390 (primary mobile), 768/1024 (tablet), 1280-1440 (laptop), 1920+ (desktop) - checking the declared breakpoint behaviors actually happen (sidebar collapses as promised?), touch vs pointer interactions switch correctly, orientation changes survive, and content priority holds (what's first at 320px is what matters most).",
+        "principles": [
+          "The size matrix is walked: every surface checked at 320/375/768/1024/1440/1920+ - declared breakpoints verified, not assumed.",
+          "320px is the floor: WCAG 1.4.10 reflow - no horizontal scroll, no clipped controls at the narrowest supported width.",
+          "Declared collapses are verified: sidebar-to-drawer and other breakpoint contracts (responsive-layout guide 08) actually trigger - drift between spec and build is the classic finding.",
+          "Touch vs pointer switches: hover-dependent affordances replaced on touch, target sizes met - the modality audit.",
+          "Orientation survives: landscape mobile and portrait desktop don't break layouts.",
+          "Content priority holds at small sizes: the 320px order reflects what matters - not just the desktop order squeezed.",
+          "Data-dense surfaces get their contract: tables adapt per their documented strategy (responsive-layout guide 09) - untested table adaptations are findings.",
+          "Real devices over emulation: emulators find layout bugs; real devices find touch, contrast (outdoor), and performance bugs."
+        ],
+        "tokens": [
+          { "role": "size-matrix", "value": "320,375,768,1024,1440,1920+", "notes": "The walked spectrum" },
+          { "role": "reflow-floor", "value": "320px-no-hscroll", "notes": "WCAG 1.4.10" },
+          { "role": "collapse-verification", "value": "declared-behaviors-trigger", "notes": "Spec vs build drift = finding" },
+          { "role": "modality-switch", "value": "touch-vs-pointer-checked", "notes": "Hover replaced on touch" },
+          { "role": "touch-targets", "value": "44px-on-touch", "notes": "2.5.8 verified on device" },
+          { "role": "orientation-check", "value": "landscape+portrait", "notes": "Both survive" },
+          { "role": "content-priority", "value": "320px-order-matters", "notes": "Priority not squeezed desktop" },
+          { "role": "dense-surface-contract", "value": "tables-adapt-documented", "notes": "responsive-layout guide 09" },
+          { "role": "device-testing", "value": "real-devices-required", "notes": "Emulation insufficient alone" },
+          { "role": "responsive-score", "value": "per-surface-per-size", "notes": "Feeds report template" }
+        ],
+        "composition": [
+          "Composes with skill-responsive-layout: that repo defines the contracts (breakpoints, collapse behaviors, table strategies); this audit verifies them.",
+          "Composes with review-process (guide 01): responsive findings flow through the severity scale.",
+          "Composes with interaction-states-audit (guide 08): touch/hover modality is the shared check."
+        ],
+        "patterns": [
+          "The size-matrix walk: surface open at each size in the matrix, checking the declared behaviors - a screenshot per size in the report.",
+          "The two-device minimum: audit on one small touch device + one pointer desktop minimum - emulation fills the middle."
+        ],
+        "useCases": [
+          "Pre-release gates for any responsive surface.",
+          "Post-launch audits of surfaces built desktop-first.",
+          "Audit: clipped 320px layouts, hover-only mobile menus, unverified collapses."
+        ],
+        "combinations": { "good": ["review-process", "visual-hierarchy-audit", "consistency-audit", "a11y-audit", "motion-audit", "typography-audit", "spacing-rhythm-audit", "interaction-states-audit", "content-microcopy-audit", "perceived-performance", "report-template"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "The untested collapse: sidebar-to-drawer promised in spec, never built",
+          "320px casualties: clipped controls and horizontal scroll at the floor",
+          "Hover ghosts: desktop hover affordances dead on touch",
+          "Squeezed desktop: small screens getting the desktop order, not a priority"
+        ],
+        "accessibility": { "required": true, "notes": "The responsive audit enforces WCAG 1.4.4 (resize), 1.4.10 (reflow at 320px), and 2.5.8 (touch targets): the size matrix includes the a11y floors - reflow and zoom checks are part of the walk, not a separate audit.", "fallback": "If the full matrix is too heavy, always include 320px + one touch device + one 1440px desktop - the three that catch most findings." }
+      }
+    },
+    {
+      "id": "report-template",
+      "name": "Audit Report Template",
+      "summary": "The artifact that makes findings stick: scorecard structure, severity-tagged findings, evidence, and trend tracking.",
+      "sections": {
+        "definition": "An audit without a standardized report produces screenshots that die in chat threads. This guide defines the report artifact: the scorecard header (surface, date, auditors, scope), the per-axis scores from every audit guide in this repo, the findings table (id, axis, severity, WCAG/criteria reference, evidence screenshot, recommendation, owner, status), the trend section (scores over time), and the distribution - who gets it and what happens next. The template is the reason audits compound instead of evaporating.",
+        "principles": [
+          "One template for all audits: every review uses the same structure - comparability over time is the point.",
+          "The scorecard header scopes it: surface, date, auditors, scope, and build/commit - findings are reproducible or they're anecdotes.",
+          "Per-axis scores from the checklists: hierarchy, consistency, a11y, motion, typography, spacing, states, content, performance, responsive - each scored with its guide's criteria.",
+          "Findings are structured rows: id, axis, severity, criteria reference, evidence, recommendation, owner, status - unstructured findings can't be tracked.",
+          "Evidence is attached: screenshot/recording per finding, captured at audit time - evidence-first prevents relitigation.",
+          "Recommendations are specific: what to change and to what standard - 'improve spacing' is not a recommendation.",
+          "The trend section tracks scores: per-axis scores plotted over audits - copy debt and its reduction become visible.",
+          "Distribution has a protocol: findings go to owners with due dates; the summary goes to leadership - reports have next steps, not just archives."
+        ],
+        "tokens": [
+          { "role": "report-structure", "value": "header+scores+findings+trend", "notes": "One template, all audits" },
+          { "role": "scorecard-header", "value": "surface,date,auditors,scope,commit", "notes": "Reproducibility data" },
+          { "role": "axis-scores", "value": "10-audit-axes-scored", "notes": "From each guide's checklist" },
+          { "role": "findings-table", "value": "id,axis,severity,criteria,evidence,fix,owner,status", "notes": "The tracking unit" },
+          { "role": "evidence-required", "value": "screenshot-per-finding", "notes": "Captured at audit time" },
+          { "role": "recommendation-format", "value": "specific+standard-cited", "notes": "Not 'improve X'" },
+          { "role": "trend-section", "value": "scores-over-time", "notes": "Debt made visible" },
+          { "role": "distribution-protocol", "value": "owners+leadership", "notes": "Next steps attached" },
+          { "role": "severity-reuse", "value": "review-process-scale", "notes": "Shared vocabulary" },
+          { "role": "template-version", "value": "versioned-doc", "notes": "Evolves with the guides" }
+        ],
+        "composition": [
+          "Composes with every audit guide in this repo: their checklists produce this report's axis scores and findings rows.",
+          "Composes with review-process (guide 01): severity scale and ticket flow are inherited contracts.",
+          "Composes with skill-design-review companions (icon-system-audit, copy-audit): their scorecards nest into this template's axes."
+        ],
+        "patterns": [
+          "The findings-table-first report: the structured findings table is the primary artifact; narrative summary second - the table is what gets tracked.",
+          "The trend dashboard: per-axis scores from successive audits plotted - the one-glance view of design debt trajectory."
+        ],
+        "useCases": [
+          "Every audit this repo runs - the template is the shared output.",
+          "Leadership reporting on design quality investment.",
+          "Cross-team comparisons where standardized audits make scores meaningful."
+        ],
+        "combinations": { "good": ["review-process", "visual-hierarchy-audit", "consistency-audit", "a11y-audit", "motion-audit", "typography-audit", "spacing-rhythm-audit", "interaction-states-audit", "content-microcopy-audit", "perceived-performance", "responsive-audit"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "class-morphism", "flat-design"], "caution": [], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Screenshot audits: findings in chat threads, dead by Friday",
+          "Vibes reports: 'overall good, tighten things up' with no findings rows",
+          "Evidence-free findings: claims that get relitigated on sight",
+          "Archive-only reports: produced, filed, never distributed with next steps"
+        ],
+        "accessibility": { "required": true, "notes": "The report template makes a11y findings first-class: the a11y axis is scored like every other axis, WCAG criteria are cited per finding, and blocker-severity a11y findings gate releases - the template is how a11y accountability persists.", "fallback": "If a full template is too heavy, adopt the findings table alone (id/axis/severity/criteria/evidence/owner/status) - it's the unit that makes everything else trackable." }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Icon Usability - starter design tokens (CSS custom properties)
+ * Skill id: icon-usability (#04 of 12)
+ *
+ * Recognition over recall: when icons need labels, the familiar-glyph rule, target sizes, and testing that catches mystery icons.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-familiar-glyph-rule: universal-or-labeled; /* Mystery icons banned */
+  --icon-icon-label-pairing: default-for-ambiguous; /* Nav items labeled by default */
+  --icon-touch-target: 44px-effective; /* WCAG 2.5.8 effective floor */
+  --icon-target-spacing: 8px-min-between; /* Mis-tap prevention */
+  --icon-recognition-test: 5-second-test; /* New icons tested, not assumed */
+  --icon-tooltip-role: supplement-only; /* Name exists without hover */
+  --icon-icon-only-budget: toolbars+nav-only; /* Forms/dialogs use labels */
+  --icon-platform-conventions: standard-glyphs-standard; /* Save/print/share use convention */
+  --icon-visual-vs-target: decoupled; /* Hit area >= visual size */
+  --icon-press-feedback: visible-state; /* Active states confirm the press */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Icon usability implements WCAG 2.5.8 (target size), 2.4.6 (headings and labels), and 1.4.13: 44px effective targets, visible name/label or accessible name, and tooltips that never carry the only meaning - recognition must not require hover precision. */
+/* Fallback: Where labels cannot fit (dense toolbars), ensure aria-labels + tooltips + a documented icon legend - and schedule recognition testing before wide release. */

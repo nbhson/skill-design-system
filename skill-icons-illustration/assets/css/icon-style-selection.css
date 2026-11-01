@@ -1,0 +1,27 @@
+/* ============================================================
+ * Icon Style Selection - starter design tokens (CSS custom properties)
+ * Skill id: icon-style-selection (#01 of 12)
+ *
+ * Choosing the icon language: filled vs outline, stroke weight, corner radius, and the one-style rule across a product.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-style-family: one-per-product; /* No mixing in the same nav level */
+  --icon-filled-outline-rule: filled=active,outline=inactive; /* Weight difference survives 16px */
+  --icon-stroke-weight: 2px-default; /* 1.5px allowed as documented alternate */
+  --icon-corner-treatment: matches-radius-scale; /* Icons inherit product personality */
+  --icon-optical-adjustment: plus-minus-2%; /* Circles/squares optically balanced */
+  --icon-style-spec-sheet: stroke+corner+fill+grid; /* Documented for the 50th icon */
+  --icon-size-range: 16-24px-ui; /* Detail budget tied to target size */
+  --icon-duotone-policy: documented-or-banned; /* Two-tone needs explicit rules */
+  --icon-density-context: detail-scales-with-size; /* Toolbars simple; large slots richer */
+  --icon-style-review-size: 16px-gate; /* Re-review at smallest target */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Icon style must survive WCAG 1.4.11 (non-text contrast: 3:1 for meaningful graphics) at the smallest size - thin 1px strokes at low contrast fail; paired with accessible-names contract (a11y repo media-alt-text guide). */
+/* Fallback: If a chosen style fails contrast at small sizes, thicken strokes or add a filled variant for active states - the style serves recognition, not fashion. */

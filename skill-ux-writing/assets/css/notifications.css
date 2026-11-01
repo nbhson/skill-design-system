@@ -1,0 +1,27 @@
+/* ============================================================
+ * Notification & Toast Copy - starter design tokens (CSS custom properties)
+ * Skill id: notifications (#09 of 12)
+ *
+ * Scannable, non-alarming, self-sufficient: toast and notification strings that work when skimmed and when read by AT.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-toast-structure: object+result; /* 'Invitation sent to Lan' */
+  --uxw-toast-length: 1-line; /* 4-8s read budget; detail goes to center */
+  --uxw-self-sufficiency: out-of-context-readable; /* Center entries stand alone */
+  --uxw-success-policy: quiet-brief; /* No celebration theater */
+  --uxw-error-policy: persist+fix+link; /* Errors carry recovery */
+  --uxw-anti-alarm: no-!-no-caps-no-urgent; /* Alarm earned by critical events only */
+  --uxw-narration: aria-live-polite; /* Written to be heard (4.1.3) */
+  --uxw-action-in-copy: named-undo; /* 'Archived - Undo' not bare icons */
+  --uxw-front-load: meaning-first-40-chars; /* Previews truncate at the wrong end otherwise */
+  --uxw-center-entry: title+body+time; /* The notification center structure */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Notification copy is WCAG 4.1.3 surface: polite narration, durations a reader can meet, and copy written to be heard - strings must survive being the only thing announced, with no reliance on visual position. */
+/* Fallback: If a toast cannot narrate (legacy stack), pair the action with an inline status line on the page - somewhere, the outcome must be text. */

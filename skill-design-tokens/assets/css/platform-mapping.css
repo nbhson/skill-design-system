@@ -1,0 +1,27 @@
+/* ============================================================
+ * Cross-Platform Mapping - starter design tokens (CSS custom properties)
+ * Skill id: platform-mapping (#09 of 12)
+ *
+ * One token source translated to CSS custom properties, iOS, Android, and utility frameworks - with values that survive unit and paradigm differences.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-map-css-prefix: --dt-; /* Web custom-property prefix; collision-safe */
+  --dt-map-ios-prefix: DT; /* Swift enum/asset prefix (DTColor.actionPrimary) */
+  --dt-map-android-prefix: dt_; /* Resource prefix: dt_action_primary */
+  --dt-map-base-unit-css: 1rem = 16px; /* Root-relative; multiplies with user font-size preference */
+  --dt-map-base-unit-native: 1dp = 1pt = 1px@1x; /* Density-independent baseline across mobile platforms */
+  --dt-map-font-scaling: dynamic-type-on; /* iOS Dynamic Type / Android fontScale multiply type tokens */
+  --dt-breakpoint-sm: 640px; /* Phone landscape / small tablet */
+  --dt-breakpoint-md: 768px; /* Tablet portrait */
+  --dt-breakpoint-lg: 1024px; /* Tablet landscape / small laptop */
+  --dt-breakpoint-xl: 1280px; /* Desktop; content max-widths derive from here */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Platform mapping owns WCAG 1.4.4 resize on the web (rem-based tokens honoring user font size) and its native equivalents (Dynamic Type, fontScale): a token set that renders at fixed px on mobile fails accessibility regardless of contrast. */
+/* Fallback: If a platform renderer cannot support font scaling, that platform's type tokens ship with a documented fixed-size exception and a tracking ticket - never silently. */

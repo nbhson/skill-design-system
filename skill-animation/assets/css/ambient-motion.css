@@ -1,0 +1,31 @@
+/* ============================================================
+ * Ambient & Background Motion — starter motion tokens (CSS custom properties)
+ * Skill id: ambient-motion (#10 of 12)
+ *
+ * Slow, looping, atmospheric motion: aurora gradients, particles, blobs, marquee - depth and mood that must never compete with content.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-ambient-loop: 20000ms; /* Default gradient/blob loop duration */
+  --motion-ambient-loop-fast: 12000ms; /* Maximum perceptible speed for ambient movement */
+  --motion-ambient-drift: translate3d(2%, -2%, 0); /* Typical drift range per loop iteration */
+  --motion-ambient-opacity: 0.6; /* Max opacity of ambient layer behind content */
+  --motion-marquee-speed: 40px/s; /* Marquee/ticker linear speed */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Ambient motion is the first category to remove entirely under prefers-reduced-motion; replace with a static gradient frame. */
+/* Fallback: Render the loop's midpoint frame as a static image/gradient; never loop. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

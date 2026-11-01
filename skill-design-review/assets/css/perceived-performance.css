@@ -1,0 +1,27 @@
+/* ============================================================
+ * Perceived Performance Audit - starter design tokens (CSS custom properties)
+ * Skill id: perceived-performance (#10 of 12)
+ *
+ * Speed as the user feels it: skeleton discipline, optimistic UI, progress honesty, and the response-time bands.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-response-bands: <100ms,1s,3s,staged; /* Nielsen bands; every async mapped */
+  --rev-skeleton-contract: match-layout+cap-3s; /* Then progress indication */
+  --rev-optimistic-ui: reversible-actions; /* Instant render + undo */
+  --rev-progress-honesty: determinate-when-possible; /* Fake stalls = finding */
+  --rev-continuous-motion: smooth-over-stutter; /* Perception-shaped motion */
+  --rev-no-blank-freeze: response-under-100ms; /* Any wait has feedback */
+  --rev-waterfall-check: no-artificial-batching; /* Content when renderable */
+  --rev-ttmc-metric: time-to-meaningful-content; /* The audited metric */
+  --rev-cancellable-long-loads: >3s-offers-cancel; /* User control contract */
+  --rev-perception-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Perceived-performance states are announced states: skeletons/progress narrate politely (4.1.3), progress has accessible names, and loading motion respects reduced-motion - perceived speed must not come at the cost of AT users' orientation. */
+/* Fallback: If progressive enhancement is limited, ensure at minimum that waits >1s produce a narrated status - a spoken 'loading' beats a silent freeze. */

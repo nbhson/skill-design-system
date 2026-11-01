@@ -1,0 +1,32 @@
+/* ============================================================
+ * Gesture & Drag Physics — starter motion tokens (CSS custom properties)
+ * Skill id: gesture-drag (#08 of 12)
+ *
+ * Direct manipulation: drag, swipe, pull-to-refresh, fling with momentum and springs - motion that stays glued to the finger and lands with physics.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-dismiss-threshold: 0.4; /* 40% of travel distance triggers dismissal */
+  --motion-fling-velocity: 500px/s; /* Release velocity that forces the action regardless of distance */
+  --motion-spring-snap: stiffness 300, damping 30; /* Return-to-home spring */
+  --motion-spring-settle: stiffness 170, damping 26; /* Settle spring for completed dismissals/reflow */
+  --motion-rubber-band: 0.55; /* Overscroll resistance factor at edges */
+  --motion-drag-tilt: rotate(4deg); /* Max tilt while dragging cards */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Keep 1:1 tracking (it is user-controlled); replace post-release springs with fast direct transitions and remove tilt/parallax embellishments. */
+/* Fallback: Release resolves via the shortest path at duration-fast with no bounce; threshold overlay becomes a static color change. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Responsive Images & Media - starter design tokens (CSS custom properties)
+ * Skill id: responsive-images (#07 of 12)
+ *
+ * srcset/sizes, art direction, modern formats, and lazy loading: images that ship the right bytes for every slot and bandwidth.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-img-resolution-srcset: 480w,800w,1200w,2000w; /* Standard width descriptor ladder */
+  --layout-img-sizes-policy: match-rendered-slot; /* sizes attr mirrors the layout's real slot width */
+  --layout-img-format-stack: avif,webp,jpeg; /* <picture> type negotiation order */
+  --layout-img-art-direction: picture-only-for-crops; /* Different crops per viewport; not mere resizing */
+  --layout-img-loading-fold: eager-above-lazy-below; /* loading=lazy below fold; eager + preload for LCP */
+  --layout-img-lcp: preload+fetchpriority-high; /* Hero/LCP image contract */
+  --layout-img-aspect-reserved: aspect-ratio-set; /* Zero CLS: space reserved pre-load */
+  --layout-img-object-fit: cover-or-contain; /* Slot-filling semantics; never distort */
+  --layout-img-max-width: 100%; /* Fluid base: images never overflow containers */
+  --layout-img-decode-async: decoding-async; /* Off-main-thread decode for large images */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Every informative image carries alt (a11y repo guide 09); decorative images alt='' - and aspect-ratio reservation prevents the layout jumps that disorient zoom and screen-magnifier users. */
+/* Fallback: If art direction cannot be produced per viewport, ship one well-cropped 16:9 master with object-fit - a single good crop beats three bad ones. */

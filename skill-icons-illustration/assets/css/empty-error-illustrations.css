@@ -1,0 +1,27 @@
+/* ============================================================
+ * Empty & Error Illustrations - starter design tokens (CSS custom properties)
+ * Skill id: empty-error-illustrations (#07 of 12)
+ *
+ * The highest-traffic illustration slots: empty states, errors, 404s, and offline - mood-matched, copy-paired, and light-weight.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-slot-trio: illustration+copy+action; /* All three, every slot */
+  --icon-empty-mood: hopeful-first-use,apologetic-no-results; /* Mood per taxonomy state */
+  --icon-error-mood: calm-sympathetic; /* Never mocking the failure */
+  --icon-404-policy: personality-allowed; /* The humor budget slot */
+  --icon-offline-special: designed+retry; /* Specific illustration + action */
+  --icon-weight-budget: svg-under-30kb; /* Failure pages stay fast */
+  --icon-family-consistency: one-style-pass; /* The set drawn together */
+  --icon-dark-mode: variant-or-css-vars; /* No white-box PNGs in dark UI */
+  --icon-alt-pairing: adjacent-copy-carries; /* Illustration decorative; text carries meaning */
+  --icon-reduced-motion: animation-collapses; /* Animated variants honor the media query */
+}
+
+/* Accessibility contract (required) */
+/* Notes: These illustrations are decorative-by-design (the adjacent copy carries meaning - empty alt), must meet contrast for any embedded text, and animated variants collapse under prefers-reduced-motion - state announcements come from the region, not the art. */
+/* Fallback: If animation on empty/error art cannot honor reduced-motion, ship static variants only - mood does not require motion. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Component Microcopy - starter design tokens (CSS custom properties)
+ * Skill id: component-microcopy (#07 of 12)
+ *
+ * The small strings with big jobs: tooltips, hints, placeholders, helper text, toggle labels - and the placeholder-is-not-a-label rule.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-placeholder-role: example-only; /* Never the only label (3.3.2) */
+  --uxw-hint-persistence: always-visible; /* Helper text below the field */
+  --uxw-tooltip-budget: ~100-chars; /* Supplement; control has own name */
+  --uxw-tooltip-contract: dismissible-hoverable-persistent; /* WCAG 1.4.13 behavior triple */
+  --uxw-toggle-label-form: state-or-action-pick-one; /* Consistent per system */
+  --uxw-list-parallelism: shared-grammar; /* Menu/option phrasing in parallel */
+  --uxw-link-label-rule: destination-named; /* No 'click here' (2.4.4) */
+  --uxw-hint-length: 1-line; /* Budget forces precision */
+  --uxw-microcase: sentence-case; /* Inherited from writing-principles */
+  --uxw-string-inventory: component-owned; /* Shipped strings tracked (copy-audit) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Microcopy is WCAG 3.3.2, 2.4.4, and 1.4.13 territory: visible labels or instructions, descriptive link text, and the dismissible/hoverable/persistent tooltip contract - accessible names must exist independent of hover. */
+/* Fallback: Where tooltips cannot meet 1.4.13, convert them to always-visible hint text - persistent text is always the safer default. */

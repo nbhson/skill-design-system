@@ -1,0 +1,27 @@
+/* ============================================================
+ * Named Layout Compositions - starter design tokens (CSS custom properties)
+ * Skill id: layout-compositions (#06 of 12)
+ *
+ * The catalog: sidebar, split, stack, cluster, bento, holy-grail - named, token-driven compositions instead of re-solved layout problems.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-comp-sidebar: minmax(240px, 280px) 1fr; /* Sidebar + fluid main; collapses to drawer under lg */
+  --layout-comp-split: 1fr 1fr + gap space-6; /* Equal split panes; stacks under md */
+  --layout-comp-stack: flex column + gap space-4; /* The default vertical rhythm container */
+  --layout-comp-cluster: flex wrap + gap space-2; /* Chips, tags, filter rows */
+  --layout-comp-bento: auto-fit minmax + dense; /* Mixed-size dashboard grid */
+  --layout-comp-holy-grail: 'header header' 'aside main' 'footer footer'; /* The classic shell, grid-areas named */
+  --layout-comp-center: place-items-center + min-height; /* Empty states, loaders, splash */
+  --layout-comp-sidebar-collapse: drawer-under-1024px; /* The documented responsive contract */
+  --layout-comp-nesting-depth: max-3; /* Composition nesting ceiling */
+  --layout-comp-catalog-owner: design-system; /* The catalog lives in the DS; pages consume it */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Composition collapse behavior is an accessibility surface: sidebar->drawer must preserve focus management and DOM order (a11y repo guides 03/04); collapse must never hide content from AT without disclosure. */
+/* Fallback: If a composition cannot collapse accessibly (e.g. bento on mobile), it stacks in DOM order - visual bento is a wide-screen enhancement only. */

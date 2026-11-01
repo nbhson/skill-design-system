@@ -1,0 +1,27 @@
+/* ============================================================
+ * Gray Ramps & Tinted Neutrals - starter design tokens (CSS custom properties)
+ * Skill id: gray-ramp-neutrals (#04 of 12)
+ *
+ * Building the neutral backbone: pure gray vs tinted gray philosophy, elevation steps, and the chroma whisper that ties neutrals to the brand.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-neutral-strategy: tinted-brand-hue; /* Documented: tinted (0.005-0.015 C) or pure */
+  --clr-neutral-hue-source: brand-hue; /* The whisper chroma rides the brand hue */
+  --clr-gray-bg: oklch(0.985 0.008 210); /* Page background, light theme */
+  --clr-gray-surface: oklch(1.00 0 0); /* Card surface (white) against tinted bg */
+  --clr-gray-surface-raised: oklch(1.00 0 0) + shadow; /* Elevation via shadow + border, not just fill */
+  --clr-gray-border: oklch(0.90 0.01 210); /* Borders pass 3:1 against adjacent surfaces */
+  --clr-gray-text-secondary: oklch(0.45 0.02 210); /* Secondary text; 4.5:1+ on surfaces */
+  --clr-gray-text-primary: oklch(0.22 0.02 210); /* Primary text; near-black with whisper */
+  --clr-gray-overlay: oklch(0.15 0.02 210 / 60%); /* Scrim/overlay with alpha */
+  --clr-gray-step-delta: 0.04-0.08-L; /* Minimum lightness delta between adjacent steps */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Neutrals are where WCAG lives: text/surface pairings need 4.5:1+, borders and control boundaries 3:1 (guide 10) - the neutral ramp is validated pair-by-pair, not assumed safe for being gray. */
+/* Fallback: When a gray step fails its role's contrast floor, move the step on the L axis (darken/lighten) while keeping the hue whisper - the tint survives, the pairing passes. */

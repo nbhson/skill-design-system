@@ -1,0 +1,27 @@
+/* ============================================================
+ * Cards & Lists - starter design tokens (CSS custom properties)
+ * Skill id: cards-lists (#07 of 12)
+ *
+ * Content containers: card anatomy, list-item patterns, media-object rows, and the whole-card-clickable done accessibly.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-card-slots: media,title,meta,body,actions; /* Anatomy slot set */
+  --comp-card-radius: 12px; /* From the radius scale (design-tokens guide 04) */
+  --comp-card-border-resting: 1px solid border-alias; /* Resting state: border, no shadow */
+  --comp-card-hover-elevation: shadow-2 + translateY(-1px); /* Hover lift; motion tokens */
+  --comp-card-primary-link: stretched-pseudo-element; /* Whole-card clickable, no nested links */
+  --comp-card-actions-above: z-above-stretched; /* Secondary actions stay clickable */
+  --comp-list-row-height: 48-72px; /* Row rhythm by density tier */
+  --comp-list-divider-policy: divider-or-spacing; /* Never both */
+  --comp-card-title-semantic: heading-in-outline; /* Titles are real headings in context */
+  --comp-card-grid-owner: layout-system; /* Geometry from responsive-layout, not card CSS */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Cards are a hot spot for 1.3.1/2.4.4/4.1.2: single-link semantics (stretched pattern), real headings, and named actions - the stretched-link recipe exists specifically to make whole-card clicking compatible with AT. */
+/* Fallback: If the stretched pattern is unavailable, make only the title a link with a clearly-sized hit area - a smaller clickable is better than invalid nesting. */

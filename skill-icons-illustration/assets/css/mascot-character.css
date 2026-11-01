@@ -1,0 +1,27 @@
+/* ============================================================
+ * Mascot & Character Design - starter design tokens (CSS custom properties)
+ * Skill id: mascot-character (#08 of 12)
+ *
+ * Brand characters done responsibly: proportion systems, emotion ranges, do/don't placements, and the restraint rule.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-character-system: turnaround+proportions; /* Documented construction */
+  --icon-proportion-rule: head-count-ratio; /* The character's build formula */
+  --icon-emotion-sheet: defined-range; /* Approved expressions only */
+  --icon-pose-library: curated-set; /* Reused poses; no ad-hoc drawing */
+  --icon-placement-matrix: do/dont-per-surface; /* Onboarding yes; payment errors no */
+  --icon-restraint-rule: moments-that-matter; /* Rationed appearances */
+  --icon-task-priority: never-blocks-cta; /* Character decorates; user acts */
+  --icon-animation-parity: same-construction; /* Rigs from the same sheets */
+  --icon-cultural-review: per-market; /* Gestures/colors checked */
+  --icon-mascot-aria: named-or-hidden; /* Same contract as all icons/art */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Mascots follow the standard art contract: informative guide-moments get text alternatives, decorative appearances are hidden, and animated states respect reduced-motion - the character never becomes an unnamed interactive element. */
+/* Fallback: If the character system cannot be fully documented, restrict the mascot to pre-approved static placements (onboarding/empty) - a small consistent set beats an ambitious inconsistent one. */

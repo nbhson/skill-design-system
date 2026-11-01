@@ -1,0 +1,27 @@
+/* ============================================================
+ * Review Process - starter design tokens (CSS custom properties)
+ * Skill id: review-process (#01 of 12)
+ *
+ * The design review operating system: critique formats, severity scales, roles, cadence, and decisions that stick.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-review-formats: critique,qa-pass,release-gate; /* Three formats, three purposes */
+  --rev-severity-scale: blocker,major,minor,polish; /* Shared prioritization vocabulary */
+  --rev-criteria-rule: findings-cite-standards; /* No taste-only feedback */
+  --rev-role-separation: presenter,facilitator,scribe; /* Structured rooms */
+  --rev-cadence: milestone+release-gates; /* Scheduled, not on-request */
+  --rev-findings-to-tickets: owner+severity+state; /* Mandatory follow-through */
+  --rev-decision-record: what+who+why; /* Ends relitigation */
+  --rev-loop-closure: verify-prior-findings; /* Next gate re-checks */
+  --rev-timebox: 45-60min; /* Longer reviews degrade */
+  --rev-scope-rule: one-surface-per-session; /* Depth over breadth */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The review process itself is the a11y enforcement mechanism: WCAG criteria enter as blocking checks at the release gate (a11y-audit guide) - a review process without a11y as a gate produces retrofitted accessibility. */
+/* Fallback: If the full process is too heavy, start with the release gate + severity scale alone - the binary gate carries most of the value. */

@@ -1,0 +1,32 @@
+/* ============================================================
+ * Loading States — starter motion tokens (CSS custom properties)
+ * Skill id: loading-states (#05 of 12)
+ *
+ * Spinners, skeletons, progress, and optimistic UI: motion that manages waiting honestly, communicates progress, and hands off smoothly to real content.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-show-delay: 300ms; /* Wait before revealing any loading indicator */
+  --motion-spinner-loop: 1000ms; /* Linear rotation loop */
+  --motion-shimmer-loop: 1500ms; /* Skeleton shimmer sweep */
+  --motion-shimmer-travel: 200%; /* Gradient sweep distance across the skeleton */
+  --motion-progress-fill: 240ms; /* Eased fill step when progress updates */
+  --motion-handoff-duration: 200ms; /* Skeleton -> content crossfade */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Stop all looping shimmer/spin; use static placeholder with a pulsing opacity step (1-2 Hz, low amplitude) or plain static blocks. */
+/* Fallback: Static gray skeletons + text status; progress bars fill without easing loops. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

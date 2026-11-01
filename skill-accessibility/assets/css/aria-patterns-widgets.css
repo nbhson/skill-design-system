@@ -1,0 +1,27 @@
+/* ============================================================
+ * ARIA Widget Patterns - starter design tokens (CSS custom properties)
+ * Skill id: aria-patterns-widgets (#06 of 12)
+ *
+ * The APG patterns - tabs, menus, combobox, dialog, listbox, grid - implemented exactly as specified: roles, keymaps, and state wiring.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-pattern-source: w3c-apg; /* ARIA Authoring Practices Guide is the canonical reference */
+  --a11y-tabs-keymap: arrows+home+end; /* Roving tabindex; optional delete key per APG */
+  --a11y-menu-keymap: arrows+escape+enter; /* Open/read/close contract; typeahead optional */
+  --a11y-combobox-keymap: arrows+enter+escape; /* aria-expanded + listbox popup + activedescendant */
+  --a11y-dialog-keymap: escape-close; /* Focus trap + labelled title + focus return */
+  --a11y-listbox-vs-menu: value-vs-action; /* Listbox selects values; menu triggers actions */
+  --a11y-grid-policy: interactive-cells-only; /* Static data stays native table */
+  --a11y-accordion-keymap: enter+space; /* aria-expanded on the trigger button */
+  --a11y-tree-keymap: arrows+left-collapse; /* Hierarchical nav per APG tree pattern */
+  --a11y-pattern-tests-required: keyboard+sr; /* Each widget ships with keymap + screen reader tests */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This skill exists to make AT users first-class widget consumers: the APG keymaps are the interface contract they have learned product-wide. */
+/* Fallback: If a widget cannot implement its APG pattern fully, ship the native HTML equivalent (select, details, dialog) instead of a partial pattern. */

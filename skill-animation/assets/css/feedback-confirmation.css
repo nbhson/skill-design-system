@@ -1,0 +1,32 @@
+/* ============================================================
+ * Feedback & Confirmation — starter motion tokens (CSS custom properties)
+ * Skill id: feedback-confirmation (#06 of 12)
+ *
+ * System-to-user communication: toasts, success checkmarks, destructive-action confirms, undo flows - motion that makes outcomes unambiguous.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-toast-enter: 240ms; /* Slide+fade in with ease-decelerate */
+  --motion-toast-exit: 160ms; /* Fade/slide out with ease-accelerate */
+  --motion-toast-duration: 5000ms; /* Default on-screen time; action toasts 8000ms */
+  --motion-checkmark-draw: 300ms; /* SVG stroke-dashoffset draw after success */
+  --motion-shake-amplitude: 6px; /* Error shake; 2-3 oscillations max */
+  --motion-highlight-flash: 600ms; /* Row/field flash on update or error */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Keep all outcome signals (icon, color, text); remove shake and travel, use instant position + short opacity fade. */
+/* Fallback: Toast fades in place; checkmark appears without draw; error indicated by persistent color + text, no shake. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

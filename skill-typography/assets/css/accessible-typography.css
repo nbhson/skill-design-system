@@ -1,0 +1,27 @@
+/* ============================================================
+ * Accessible Typography - starter design tokens (CSS custom properties)
+ * Skill id: accessible-typography (#12 of 12)
+ *
+ * The a11y floors for text: contrast, zoom, spacing overrides, dyslexia-friendly defaults, and semantic structure that AT can navigate.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-a11y-contrast-body: 4.5:1; /* WCAG 1.4.3 floor, always */
+  --type-a11y-contrast-longform: 7:1; /* AAA reading surfaces */
+  --type-a11y-size-unit: rem-only; /* Type tokens never px (1.4.4) */
+  --type-a11y-zoom-tested: 200%; /* All flows pass at 200% text zoom */
+  --type-a11y-spacing-override: 1.5-1.7-0.12-0.16; /* WCAG 1.4.12: layout survives these overrides */
+  --type-a11y-heading-map: h1-h6-semantic; /* Outline = visual hierarchy; lint-checked */
+  --type-a11y-link-signal: underline-plus-color; /* Minimum two distinguishing signals */
+  --type-a11y-line-height-floor: 1.5; /* Paragraph leading floor */
+  --type-a11y-alignment: left-ragged; /* Justified text off by default (1.4.8) */
+  --type-a11y-font-family-policy: user-overridable; /* Respect user stylesheet font swaps */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide IS the accessibility layer of typography: every floor cited (1.4.3, 1.4.4, 1.4.5, 1.4.8, 1.4.12) is a conformance criterion, and heading structure is the screen reader's primary navigation. */
+/* Fallback: When brand type choices conflict with floors, floors win - the brand adjusts (darker shade, larger size), never the criterion. */

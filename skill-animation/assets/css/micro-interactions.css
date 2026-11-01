@@ -1,0 +1,31 @@
+/* ============================================================
+ * Micro-interactions — starter motion tokens (CSS custom properties)
+ * Skill id: micro-interactions (#02 of 12)
+ *
+ * Small, single-purpose feedback animations on interactive elements: hover, press, toggle, like, copy - the details that make UI feel alive.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-press-scale: scale(0.97); /* Buttons depress ~3% on :active */
+  --motion-hover-lift: translateY(-2px); /* Cards/buttons rise subtly on hover */
+  --motion-hover-shadow: 0 4px 12px rgba(0,0,0,0.12); /* Paired with hover-lift for elevation */
+  --motion-transition-fast: 150ms cubic-bezier(0.2, 0, 0, 1); /* Default micro-interaction transition */
+  --motion-spring-tactile: cubic-bezier(0.34, 1.56, 0.64, 1); /* Toggles, likes, small celebratory pops */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Replace scale/translate with opacity and color changes; keep the state change itself. */
+/* Fallback: Swap transform effects for background/border color transitions at duration-instant. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

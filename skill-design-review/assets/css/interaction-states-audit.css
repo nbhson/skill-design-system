@@ -1,0 +1,27 @@
+/* ============================================================
+ * Interaction States Audit - starter design tokens (CSS custom properties)
+ * Skill id: interaction-states-audit (#08 of 12)
+ *
+ * Every interactive element in every state: hover, focus, active, disabled, loading - designed, visible, and consistent.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-state-enumeration: all-interactives-listed; /* Nothing skipped */
+  --rev-state-list: hover,focus,active,disabled,loading,selected,error; /* The complete set */
+  --rev-focus-ring: 2px+offset-3:1; /* WCAG 2.4.13 contract */
+  --rev-no-outline-none: replacement-required; /* Focus removal = blocker */
+  --rev-keyboard-parity: all-states-via-kb; /* Hover-only = finding */
+  --rev-disabled-explained: reason-visible; /* Bare disabled = finding */
+  --rev-loading-no-reflow: size-stable; /* In-place spinners */
+  --rev-selection-signal: color+icon; /* 1.4.1 double signal */
+  --rev-press-feedback: active-state-everywhere; /* Touch confirmation */
+  --rev-states-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This audit enforces WCAG 2.4.7 (focus visible), 2.4.13 (focus appearance), 1.4.1 (use of color), and 4.1.2 (name/role/value): state visibility and keyboard parity are blockers - the state matrix is the a11y contract in per-component form. */
+/* Fallback: If the full matrix is too heavy, audit focus + disabled + loading first - those three states carry most user and a11y impact. */

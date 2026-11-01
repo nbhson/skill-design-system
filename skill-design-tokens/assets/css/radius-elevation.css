@@ -1,0 +1,28 @@
+/* ============================================================
+ * Radius & Elevation Tokens - starter design tokens (CSS custom properties)
+ * Skill id: radius-elevation (#04 of 12)
+ *
+ * Border-radius steps, shadow elevation levels, and z-index layers - the depth system that says what floats above what.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-radius-none: 0px; /* Tables, full-bleed media, aligned grid edges */
+  --dt-radius-sm: 4px; /* Inputs, small buttons, chips */
+  --dt-radius-md: 8px; /* Buttons, dropdowns, cards in dense UI */
+  --dt-radius-lg: 16px; /* Modals, large cards, marketing surfaces */
+  --dt-radius-full: 9999px; /* Pills, avatars, FABs */
+  --dt-elevation-1: 0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.10); /* Resting cards, sticky headers */
+  --dt-elevation-2: 0 2px 4px rgba(16,24,40,0.06), 0 4px 8px rgba(16,24,40,0.10); /* Hover lift, popovers */
+  --dt-elevation-3: 0 4px 6px rgba(16,24,40,0.05), 0 12px 24px rgba(16,24,40,0.14); /* Dropdowns, command menus */
+  --dt-elevation-4: 0 8px 12px rgba(16,24,40,0.06), 0 24px 48px rgba(16,24,40,0.18); /* Modals, drawers */
+  --dt-z-index-dropdown: 1000; /* Menus, selects, popovers */
+  --dt-z-index-modal: 1050; /* Modals, drawers, sheets; toast sits above */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Depth must never carry meaning alone: an element indicated only by shadow is lost to users with shadows disabled or in flat/high-contrast modes - pair elevation with a border or background change (WCAG 1.4.11 non-text contrast for visible boundaries). */
+/* Fallback: In forced-colors or high-contrast modes, map each elevation level to an explicit border; never rely on box-shadow alone to delineate interactive surfaces. */

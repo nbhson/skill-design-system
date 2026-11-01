@@ -1,0 +1,27 @@
+/* ============================================================
+ * Gradient Design - starter design tokens (CSS custom properties)
+ * Skill id: gradient-theory (#09 of 12)
+ *
+ * Gradients as designed objects: interpolation space, stop placement, hue travel, and the modern mesh/aurora looks without mud or banding.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-gradient-interpolation: oklab; /* CSS in oklab; sRGB interpolation lint-blocked */
+  --clr-gradient-structure-default: two-color; /* Tint→core or core→shade; 3+ needs justification */
+  --clr-gradient-hue-path: 30-60deg-travel; /* Short hue paths; long paths need stops plan */
+  --clr-gradient-hero: clr-brand-500 to clr-brand-700; /* CTA/hero fill default */
+  --clr-gradient-text-safe: scrim-under-text; /* Contrast-safe zone where text overlays gradients */
+  --clr-gradient-mesh-recipe: layered-radials-blur; /* Aurora/mesh look via layered radial gradients */
+  --clr-gradient-bandkill: midpoints-or-noise; /* Anti-banding treatment documented per gradient */
+  --clr-gradient-dark-variant: re-tuned-for-dark; /* Lower L/C variants for dark theme */
+  --clr-gradient-conic-use: progress-wheels-only; /* Conic for progress/charts, not decoration */
+  --clr-gradient-usage-budget: hero-and-brand-only; /* Gradients are accents in product UI, not surfaces */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Gradients create unknown-contrast zones: text over gradients must pass 4.5:1 across the entire text area (guide 10), and gradient-only state signaling fails 1.4.1 - gradients decorate, they never carry meaning alone. */
+/* Fallback: When text must sit on a gradient and no scrim passes contrast, place text on a solid section adjacent to the gradient - contrast certainty beats gradient reach. */

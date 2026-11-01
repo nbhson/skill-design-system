@@ -1,0 +1,27 @@
+/* ============================================================
+ * Command Palette & Search - starter design tokens (CSS custom properties)
+ * Skill id: command-palette (#10 of 12)
+ *
+ * Cmd-K overlays: fuzzy search over actions and objects, keyboard-first UX, recent/frecency ranking, and the analytics loop.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-palette-hotkey: cmd-k/ctrl-k; /* Global open; documented app-wide */
+  --comp-palette-item-types: action,nav,object; /* Typed index; grouped rendering */
+  --comp-palette-keymap: arrows+enter+escape; /* Keyboard-first contract */
+  --comp-palette-matching: fuzzy+typeahead; /* Tolerant matching; no strict-prefix */
+  --comp-palette-ranking: frecency+recency; /* Learns per user */
+  --comp-palette-dialog-contract: trap-and-return; /* Dialog recipe underneath */
+  --comp-palette-empty-state: teaching-examples; /* First-run shows try-queries */
+  --comp-palette-announce: result-count-polite; /* Combobox narration */
+  --comp-palette-analytics: query+selection-logged; /* No-result tracking feeds roadmap */
+  --comp-palette-highlight: match-substring-marked; /* Matches visually marked */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The palette is the keyboard-accessibility showcase: it IS a keyboard-only interface, so the dialog + combobox contracts must be airtight - focus management, narration, and Escape behavior are its core features, not polish. */
+/* Fallback: If analytics/fuzzy search cannot ship in v1, launch with a static typed list + arrow/enter keyboard contract - a simple, narrated palette beats a broken search. */

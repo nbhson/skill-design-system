@@ -1,0 +1,27 @@
+/* ============================================================
+ * Color & Contrast - starter design tokens (CSS custom properties)
+ * Skill id: color-contrast (#02 of 12)
+ *
+ * WCAG 1.4.3/1.4.11 as designed-in properties: ratio thresholds, safe pairings, and contrast that survives dark mode and brands.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-contrast-body-min: 4.5:1; /* WCAG 1.4.3 AA body text */
+  --a11y-contrast-large-min: 3:1; /* 24px regular / 18.66px bold text */
+  --a11y-contrast-ui-min: 3:1; /* WCAG 1.4.11 icons, borders, control boundaries */
+  --a11y-contrast-aaa-body: 7:1; /* AAA for long-form reading surfaces */
+  --a11y-contrast-focus-min: 3:1; /* WCAG 2.4.13 focus ring vs adjacent colors */
+  --a11y-focus-ring-color: #1D4ED8; /* 6.3:1 on white, 4.6:1 on neutral-100 - safe default */
+  --a11y-focus-ring-width: 2px; /* WCAG 2.4.13 wants visible thickness; 2px minimum */
+  --a11y-focus-ring-offset: 2px; /* Separation from the component edge; visible against both surfaces */
+  --a11y-state-delta-min: 1.5:1; /* Hover/pressed shift perceivable to low vision */
+  --a11y-non-color-signal: icon-or-text-paired; /* WCAG 1.4.1: never color alone for errors/required/status */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide IS a WCAG enforcement skill: 1.4.3, 1.4.11, 1.4.1, and 2.4.13 are its daily subject matter; ratios use the WCAG relative-luminance formula. */
+/* Fallback: A failing pairing is fixed by changing the background alias, the text alias, or (last resort) adding a validated primitive step - never by shipping below threshold. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Audit Report Template - starter design tokens (CSS custom properties)
+ * Skill id: report-template (#12 of 12)
+ *
+ * The artifact that makes findings stick: scorecard structure, severity-tagged findings, evidence, and trend tracking.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-report-structure: header+scores+findings+trend; /* One template, all audits */
+  --rev-scorecard-header: surface,date,auditors,scope,commit; /* Reproducibility data */
+  --rev-axis-scores: 10-audit-axes-scored; /* From each guide's checklist */
+  --rev-findings-table: id,axis,severity,criteria,evidence,fix,owner,status; /* The tracking unit */
+  --rev-evidence-required: screenshot-per-finding; /* Captured at audit time */
+  --rev-recommendation-format: specific+standard-cited; /* Not 'improve X' */
+  --rev-trend-section: scores-over-time; /* Debt made visible */
+  --rev-distribution-protocol: owners+leadership; /* Next steps attached */
+  --rev-severity-reuse: review-process-scale; /* Shared vocabulary */
+  --rev-template-version: versioned-doc; /* Evolves with the guides */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The report template makes a11y findings first-class: the a11y axis is scored like every other axis, WCAG criteria are cited per finding, and blocker-severity a11y findings gate releases - the template is how a11y accountability persists. */
+/* Fallback: If a full template is too heavy, adopt the findings table alone (id/axis/severity/criteria/evidence/owner/status) - it's the unit that makes everything else trackable. */

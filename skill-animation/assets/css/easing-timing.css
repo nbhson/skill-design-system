@@ -1,0 +1,37 @@
+/* ============================================================
+ * Duration & Easing Fundamentals — starter motion tokens (CSS custom properties)
+ * Skill id: easing-timing (#01 of 12)
+ *
+ * The token foundation of all motion: a duration hierarchy and a small set of easing curves that make movement feel intentional instead of arbitrary.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-duration-instant: 100ms; /* Press/active states, toggles, checkboxes */
+  --motion-duration-fast: 150ms; /* Hover, focus rings, icon swaps, tooltips */
+  --motion-duration-base: 240ms; /* Standard transitions: menus, dropdowns, cards */
+  --motion-duration-slow: 320ms; /* Large surfaces: modals, drawers, bottom sheets */
+  --motion-duration-deliberate: 480ms; /* Hero moments: onboarding, celebration, page-level reveals */
+  --motion-duration-loop: 1200ms; /* Indeterminate loops: spinners, shimmer sweeps */
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* Default curve for enter + move (emphasized decelerate) */
+  --motion-ease-decelerate: cubic-bezier(0, 0, 0, 1); /* Elements entering the viewport or a container */
+  --motion-ease-accelerate: cubic-bezier(0.3, 0, 1, 1); /* Elements leaving the screen */
+  --motion-ease-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1); /* Playful overshoot; small non-text elements only */
+  --motion-ease-linear: linear; /* Loops and scroll-linked value mapping only */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Reduced-motion users still need duration tokens: shorten durations rather than removing states. */
+/* Fallback: Collapse all durations to <=1ms opacity-only fades under prefers-reduced-motion. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

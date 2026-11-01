@@ -1,0 +1,27 @@
+/* ============================================================
+ * Component Tokens - starter design tokens (CSS custom properties)
+ * Skill id: component-tokens (#11 of 12)
+ *
+ * Per-component token slots (component-button-bg, component-input-border) derived from aliases - the layer that gives components flexibility without forking the system.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-component-button-height: 40px; /* Default control height; sm=32px, lg=48px siblings */
+  --dt-component-button-radius: var(--dt-radius-md); /* Derived from system radius, overridable per product */
+  --dt-component-button-bg: var(--dt-color-action-primary); /* Default primary action surface */
+  --dt-component-button-text: var(--dt-color-text-on-action); /* Paired label color; contrast-validated with -bg */
+  --dt-component-input-height: 44px; /* Meets the 44px touch target floor */
+  --dt-component-input-border-focus: var(--dt-contrast-focus-ring-color); /* Focus ring slot; 3:1-validated */
+  --dt-component-card-padding: var(--dt-space-4); /* Density modes re-map space tokens, cards follow */
+  --dt-component-modal-max-width: 640px; /* Reading-width contract for dialogs */
+  --dt-component-table-row-height: 48px; /* Compact mode derives 40px from the same slot system */
+  --dt-component-toast-width: 360px; /* Toast footprint; stacking logic depends on it */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Slot pairings inherit the contrast contract: component-button-text on component-button-bg must pass its threshold in every theme/brand cell, validated through the alias layer it derives from - a slot override that breaks the pairing fails CI. */
+/* Fallback: If a product override creates a failing pairing, the override is rejected in review; the product chooses a different validated slot value instead. */

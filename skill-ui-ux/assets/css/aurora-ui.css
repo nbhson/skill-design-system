@@ -1,0 +1,26 @@
+/* ============================================================
+ * Aurora UI — starter design tokens (CSS custom properties)
+ * Style id: aurora-ui
+ *
+ * Living, animated light layers mimicking the aurora borealis - multi-layer gradients, bokeh, shimmer, and glass panels.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-background-layer-1: #0f0c29; /* Deep purple-black - creates depth */
+  --color-background-layer-2: #302b63; /* Dark purple */
+  --color-light-layer-1: #6366f1; /* Indigo - central light area */
+  --color-light-layer-2: #06b6d4; /* Cyan - cool light area */
+  --color-light-layer-3: #a855f7; /* Purple-pink - warm alternating area */
+  --color-accent: #22d3ee; /* Bright cyan - icons, highlights */
+  --color-text: #ffffff; /* Soft white, light shadow */
+  --font-heading: "SF Pro Display", sans-serif; /* SF Pro Display (or Geist, Inter) */
+  --font-body: "SF Pro Text", sans-serif; /* SF Pro Text (or Inter); Label: SF Pro Text 12-14px / 500, letter-spacing 0.05em */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on darkest background layer: #FFFFFF on #0F0C29 = 19.01:1 — PASS */
+/* body text on mid background layer: #FFFFFF on #302B63 = 12.72:1 — PASS */

@@ -1,0 +1,28 @@
+/* ============================================================
+ * Typography Token System - starter design tokens (CSS custom properties)
+ * Skill id: typography-tokens (#02 of 12)
+ *
+ * Font families, a modular type scale, weights, and line-height tokens that make text hierarchy systematic instead of per-screen improvisation.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-font-family-sans: Inter, system-ui, -apple-system, sans-serif; /* The default text face; system fallbacks keep first paint unstyled-fast */
+  --dt-font-family-mono: ui-monospace, SFMono-Regular, Menlo, monospace; /* Code, numeric alignment, token names */
+  --dt-font-size-2xs: 0.75rem; /* 12px - legal, timestamps; never for primary reading */
+  --dt-font-size-xs: 0.875rem; /* 14px - secondary text, table cells, captions */
+  --dt-font-size-sm: 1rem; /* 16px - body default; the root step of the scale */
+  --dt-font-size-md: 1.125rem; /* 18px - lead paragraphs, emphasized body */
+  --dt-font-size-lg: 1.25rem; /* 20px - h4/card titles */
+  --dt-font-size-xl: 1.5rem; /* 24px - h3, section headers */
+  --dt-font-size-2xl: 1.875rem; /* 30px - h2, page titles */
+  --dt-font-weight-semibold: 600; /* Headings and interactive emphasis; pairs with -0.01em tracking at lg+ */
+  --dt-line-height-body: 1.5; /* Default for text at sm/md; relaxed 1.7 for long-form reading */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Type tokens carry two WCAG duties: real text must respect 200% zoom (rem sizes, WCAG 1.4.4) and line-height tokens must keep diacritics (Vietnamese stacked marks) unclipped at every step. */
+/* Fallback: If a step's tight line-height clips diacritics or wraps badly at 200% zoom, raise that step's line-height token - never shrink the text. */

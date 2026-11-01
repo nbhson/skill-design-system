@@ -1,0 +1,27 @@
+/* ============================================================
+ * Button & Action Labels - starter design tokens (CSS custom properties)
+ * Skill id: button-labels (#03 of 12)
+ *
+ * Verb-first, specific, outcome-visible labels: what the button does, phrased in the user's terms - never 'OK', 'Submit', or 'Yes'.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-label-structure: verb-first+specific; /* The two-part label contract */
+  --uxw-label-length: 2-4-words; /* Longer labels signal flow problems */
+  --uxw-banned-generic: ok-yes-submit-for-consequential; /* Generic labels only for symmetric confirms */
+  --uxw-destructive-count: verb+count; /* 'Delete 3 files' - label as confirmation */
+  --uxw-pair-symmetry: answer-the-title; /* Dialog pairs respond to the question */
+  --uxw-primary-position: right-ltr; /* Primary action placement convention */
+  --uxw-undo-label: undo+object; /* Toast undo path for reversible actions */
+  --uxw-loading-announce: verb+ing-ellipsis; /* 'Saving...' state copy planned */
+  --uxw-disabled-explain: unlock-condition-visible; /* Why disabled, near the button */
+  --uxw-icon-button-name: aria-label-required; /* Icon-only buttons named (a11y contract) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Accessible names are WCAG 2.4.6/4.1.2 territory: labels describe purpose, icon-only buttons carry aria-label, and label text must survive being read in isolation - AT users hear 'button' + label without surrounding context. */
+/* Fallback: If a label cannot be specific within the length budget, add the specificity to the dialog title or helper text instead - the pair (title + label) carries the meaning together. */

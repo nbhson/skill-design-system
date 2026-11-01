@@ -1,0 +1,27 @@
+/* ============================================================
+ * Form Labels & Help Text - starter design tokens (CSS custom properties)
+ * Skill id: forms-labels (#08 of 12)
+ *
+ * The form copy layer: label phrasing, hint placement, required/optional marking, and validation copy timed to forgive.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-label-form: question-or-imperative; /* One style per form, not mixed */
+  --uxw-optional-marking: mark-optional; /* Asterisks require teaching; (optional) does not */
+  --uxw-hint-position: below-label-persistent; /* Never placeholder-only */
+  --uxw-validation-timing: blur-or-submit; /* Forgiving; no keystroke scolding */
+  --uxw-validation-copy: fix-inline-with-example; /* Format shown in the message */
+  --uxw-error-summary: top-of-form+anchors+focus; /* Failed submits are loud */
+  --uxw-error-clear: clears-on-fix; /* Errors retract when corrected */
+  --uxw-autofill-alignment: label-matches-attr; /* WCAG 1.3.5 support */
+  --uxw-group-labelling: fieldset+legend; /* Choice sets have group labels */
+  --uxw-required-policy: explained-once; /* If asterisks used, legend explains */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide implements the copy layer of WCAG 3.3.1-3.3.5 and 1.3.5: visible labels, correct-by-construction hints, suggested fixes, purpose-matched autofill - the a11y repo guide 07 criteria expressed as strings. */
+/* Fallback: If per-field validation copy cannot ship in v1, ship submit-time summary + inline red text at minimum - the summary carries the a11y contract. */

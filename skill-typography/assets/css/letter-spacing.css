@@ -1,0 +1,27 @@
+/* ============================================================
+ * Letter-Spacing & Tracking - starter design tokens (CSS custom properties)
+ * Skill id: letter-spacing (#04 of 12)
+ *
+ * Tracking that tightens with size and loosens for uppercase: the micro-typography that makes headlines breathe and labels read.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-tracking-display: -0.025em; /* Hero/h1 at 48px+; heavy weights */
+  --type-tracking-heading: -0.01em; /* h2-h4 at 24-39px */
+  --type-tracking-body: 0; /* Default; body text never tracked */
+  --type-tracking-label: 0.05em; /* Uppercase overlines, nav labels, table headers */
+  --type-tracking-microcopy: 0.08em; /* Eyebrows, badges, tiny uppercase meta */
+  --type-tracking-button: 0.01em; /* Uppercase buttons get minimal air; lowercase buttons stay 0 */
+  --type-tracking-tight-limit: -0.04em; /* Never tighter; ligature and kerning collisions begin */
+  --type-script-exemption: arabic-indic-thai; /* Connected scripts exempt from all tracking */
+  --type-optical-sizing: face-built-first; /* Prefer optical size axes/Display cuts over manual tracking */
+  --type-tracking-bundle: with-size-weight; /* Tracking ships bundled in text roles, never standalone */
+}
+
+/* Accessibility contract (required) */
+/* Notes: WCAG 1.4.12 protects the user's right to override spacing: tracking tokens must not fight user stylesheets, and body tracking of 0 is the default the override assumes. */
+/* Fallback: If a display face needs extreme tracking for the brand, apply it only above the reading-size threshold - reading text keeps user-controllable default spacing. */

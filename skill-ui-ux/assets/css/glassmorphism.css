@@ -1,0 +1,27 @@
+/* ============================================================
+ * Glassmorphism — starter design tokens (CSS custom properties)
+ * Style id: glassmorphism
+ *
+ * Frosted glass panels: semi-transparent fills, backdrop blur, 1px light borders, and soft shadows layered over vibrant backgrounds.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-background-gradient-1: #667eea; /* Indigo - gradient start */
+  --color-background-gradient-2: #764ba2; /* Purple - gradient end, accent */
+  --color-glass-fill: #ffffff; /* Glass card fill */
+  --color-glass-border: #ffffff; /* 1px border creating the light-catching edge */
+  --color-primary-text: #ffffff; /* White text on glass */
+  --color-secondary-text: #ffffff; /* Meta, caption */
+  --color-ambient-shadow: #1f2687; /* Soft dark purple shadow below the panel */
+  --font-heading: "Inter", sans-serif; /* Inter (or SF Pro Display) */
+  --font-body: "Inter", sans-serif; /* Inter (or SF Pro Text); Label: Inter 12-14px / 500, letter-spacing 0.05em */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on gradient start: #FFFFFF on #667EEA = 3.66:1 — FAIL */
+/* body text on gradient end: #FFFFFF on #764BA2 = 6.37:1 — PASS */
+/* WARNING: at least one pair fails AA — see data.json `contrast.notes` for mitigations. */

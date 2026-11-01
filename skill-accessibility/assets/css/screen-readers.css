@@ -1,0 +1,27 @@
+/* ============================================================
+ * Screen Reader Testing - starter design tokens (CSS custom properties)
+ * Skill id: screen-readers (#08 of 12)
+ *
+ * Testing with NVDA, JAWS, and VoiceOver: the pairing matrix, listening scripts, and what automated checks can never catch.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-reader-matrix: nvda,jaws,voiceover,talkback; /* Supported pairing matrix; each release tests core flows */
+  --a11y-nvda-pairing: firefox-chrome; /* Primary Windows open-source pairing */
+  --a11y-voiceover-pairing: safari-macos-ios; /* Apple platforms; rotor navigation */
+  --a11y-jaws-pairing: chrome; /* Enterprise Windows; strictest HTML expectations */
+  --a11y-talkback-pairing: chrome-android; /* Android touch exploration */
+  --a11y-nav-by-headings: h-key; /* Heading structure is the primary page map */
+  --a11y-nav-by-landmarks: d-key; /* Landmarks skeleton must be complete */
+  --a11y-core-flow-script: per-feature; /* Signup/checkout/search listening scripts in the test plan */
+  --a11y-auto-coverage-ceiling: 40%; /* What axe-class tools can catch; listening covers the rest */
+  --a11y-finding-format: reader+keystroke+quote; /* Bugs cite narration verbatim for reproducibility */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Screen reader testing is the reality check for WCAG 4.1.2/4.1.3 and the whole robustness principle: if it does not work by ear, it does not work. */
+/* Fallback: If a flow fails by ear and the fix needs time, ship the documented workaround (native control, simplified view) in the interim - never block the whole flow. */

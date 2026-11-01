@@ -1,0 +1,27 @@
+/* ============================================================
+ * OKLCH & Perceptual Color Spaces - starter design tokens (CSS custom properties)
+ * Skill id: oklch-perceptual (#02 of 12)
+ *
+ * Working in perceptually uniform spaces: OKLCH/OKLab for ramp math, interpolation, and adjustments that look how the numbers say they look.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-working-space: oklch; /* All palette math in OKLCH; sRGB is output */
+  --clr-l-ramp-steps: 0.97,0.93,0.86,0.77,0.66,0.55,0.45,0.35,0.27,0.20,0.15; /* A canonical 11-step lightness ramp */
+  --clr-l-body-text: 0.25; /* Body text lightness on light theme */
+  --clr-l-bg-surface: 0.97-0.99; /* Surface lightness band on light theme */
+  --clr-c-brand-cap: 0.15-0.25; /* Usable chroma band for brand hues in UI */
+  --clr-c-neutral-tint: 0.005-0.015; /* The hue whisper in tinted neutrals */
+  --clr-interpolation-space: oklab; /* Gradient/blending interpolation space */
+  --clr-gamut-strategy: srgb-clamp-with-p3-enhance; /* Baseline sRGB; @media (color-gamut: p3) enhancement */
+  --clr-css-syntax: oklch(L C H); /* Modern CSS color syntax; fallback via @supports */
+  --clr-hsl-deprecation: legacy-reading-only; /* HSL accepted only when reading old palettes */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Perceptual uniformity is an accessibility multiplier: contrast (guide 10) and APCA math operate on lightness - OKLCH's L axis is the one that moves contrast predictably, so accessible adjustments stop being trial-and-error. */
+/* Fallback: Where oklch() is unsupported in a required target, pre-converted sRGB fallbacks ship via @supports - computed, not hand-translated, so the two stay in sync. */

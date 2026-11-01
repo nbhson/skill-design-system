@@ -1,0 +1,25 @@
+/* ============================================================
+ * Brutalism UI — starter design tokens (CSS custom properties)
+ * Style id: brutalism-ui
+ *
+ * Raw, unpolished anti-design with system fonts, thick black borders, basic colors, and intentional visual disorder.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-primary-background: #fffef0; /* Off-white - 'paper' feel */
+  --color-accent-1: #ffe600; /* Bright yellow - large block backgrounds */
+  --color-accent-2: #ff5c00; /* Orange-red - CTAs */
+  --color-accent-3: #ff00ff; /* Bright magenta - hover states */
+  --color-text: #000000; /* Absolute black */
+  --color-accent: #00ff00; /* Terminal green - for highlights */
+  --font-heading: "Archivo Black", sans-serif; /* Archivo Black (or Impact, Arial Black) */
+  --font-body: "Courier New", sans-serif; /* Courier New (or Space Mono, Roboto Mono); UI Label: Arial (or Helvetica) 14-16px / 700 */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on primary background: #000000 on #FFFEF0 = 20.69:1 — PASS */
+/* body text on yellow accent block: #000000 on #FFE600 = 16.57:1 — PASS */

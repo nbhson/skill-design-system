@@ -1,0 +1,26 @@
+/* ============================================================
+ * Skeuomorphism — starter design tokens (CSS custom properties)
+ * Style id: skeuomorphism
+ *
+ * Real-world material mimicry: leather, wood, metal textures with multi-layer shadows and physical button interactions.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-brown-leather-background: #8b5a2b; /* Leather brown */
+  --color-black-leather: #3d3d3d; /* Black leather (iPod classic) */
+  --color-light-wood: #c4a574; /* Light wood yellow */
+  --color-silver-metal: #c0c0c0; /* Metal gradient */
+  --color-gold-metal: #d4af37; /* Brass/gold */
+  --color-highlight: #ffffff; /* Light on the surface */
+  --color-dark-shadow: #000000; /* Drop shadow */
+  --font-heading: "Georgia", sans-serif; /* Georgia (or Palatino, Rockwell) */
+  --font-body: "Trebuchet MS", sans-serif; /* Trebuchet MS (or Verdana); Digital display: Digital-7 Mono (or LCD mono) 24-48px */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on brown leather background: #FFFFFF on #8B5A2B = 5.84:1 — PASS */
+/* text on black leather: #FFFFFF on #3D3D3D = 10.86:1 — PASS */

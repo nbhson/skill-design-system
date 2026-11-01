@@ -1,0 +1,27 @@
+/* ============================================================
+ * Modals & Dialogs - starter design tokens (CSS custom properties)
+ * Skill id: modals-dialogs (#04 of 12)
+ *
+ * The dialog contract done once: role/label, focus trap-and-return, Escape, scrim, and the when-NOT-to-modal decision table.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-dialog-role: dialog+aria-modal+labelledby; /* The AT contract triple */
+  --comp-dialog-focus-policy: trap-and-return; /* Enter on open, return to trigger */
+  --comp-dialog-escape: escape+scrim-close; /* Blocking dialogs document exceptions */
+  --comp-dialog-scrim: rgba(0,0,0,0.60); /* Consistent scrim across surfaces */
+  --comp-dialog-scroll-lock: locked+compensated; /* No layout shift on open */
+  --comp-dialog-size-sm: 400px; /* Confirmations */
+  --comp-dialog-size-md: 560px; /* Short forms */
+  --comp-dialog-size-lg: 800px; /* Content-heavy tasks */
+  --comp-dialog-mobile: full-sheet-under-640px; /* Declared mobile behavior */
+  --comp-dialog-stack-cap: 2; /* Max nested dialogs; 3+ = redesign */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Dialogs implement the WAI-ARIA dialog pattern: role/name/trap/escape/return are the five non-negotiables (a11y repo guides 03/04) - a dialog missing any one is a build failure in review. */
+/* Fallback: If the trap implementation cannot be completed, use the native <dialog> element with showModal() - it carries the focus contract natively. */

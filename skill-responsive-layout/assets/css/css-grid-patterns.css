@@ -1,0 +1,27 @@
+/* ============================================================
+ * CSS Grid Patterns - starter design tokens (CSS custom properties)
+ * Skill id: css-grid-patterns (#05 of 12)
+ *
+ * Two-dimensional layout: page shells, card grids with auto-fit, named areas, and subgrid - the patterns that replaced framework grids.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-grid-shell-areas: 'header header' 'aside main' 'footer footer'; /* App shell in one template-areas rule */
+  --layout-grid-card-min: 240px; /* Card grid minmax minimum */
+  --layout-grid-card-template: repeat(auto-fill, minmax(240px, 1fr)); /* The responsive card grid one-liner */
+  --layout-grid-gap: space tokens; /* Row/column gap from the 4px scale */
+  --layout-grid-sidebar-template: minmax(240px, 280px) 1fr; /* Sidebar + fluid main */
+  --layout-grid-subgrid: subgrid; /* Nested alignment for card internals */
+  --layout-grid-named-lines: [main-start]; /* Named lines for complex placements */
+  --layout-grid-masonry-fallback: columns-fallback; /* Until masonry ships: columns() or JS masonry */
+  --layout-grid-dense-packing: grid-auto-flow: dense; /* Backfill holes in mixed-size grids (bento) */
+  --layout-grid-vs-flex: two-dim-vs-one-dim; /* The decision rule (flexbox guide) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Grid reordering must keep DOM order aligned with visual reading order (a11y 1.3.2/2.4.3): template-areas reorganization is visual only - the source order stays logical; grid-dense packing must not create confusing tab sequences. */
+/* Fallback: If a grid pattern reorders interactive elements visually, restructure the DOM to match - visual-only reordering of focusable content is a blocker. */

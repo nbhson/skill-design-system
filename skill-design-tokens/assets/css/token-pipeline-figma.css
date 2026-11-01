@@ -1,0 +1,25 @@
+/* ============================================================
+ * Token Pipeline & Figma Sync - starter design tokens (CSS custom properties)
+ * Skill id: token-pipeline-figma (#10 of 12)
+ *
+ * Design-tool-to-code automation: Figma variables as the source, W3C DTCG as the interchange format, CI as the referee.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-pipeline-source-of-truth: figma-variables; /* Declared owner; the JSON repo is the mirrored build artifact */
+  --dt-pipeline-format: w3c-dtcg; /* $value/$type interchange; readable by Style Dictionary and Tokens Studio */
+  --dt-pipeline-naming-pattern: {category}.{group}.{role}; /* color.action.primary -> --dt-color-action-primary */
+  --dt-pipeline-modes: light,dark,brand-a,brand-b; /* Figma modes = theme axes; 1:1 with data-theme/data-brand */
+  --dt-pipeline-export-targets: css,ios,android,docs; /* Renderers; css is the reference output */
+  --dt-pipeline-sync-trigger: pull-request; /* Human-reviewed diffs; no auto-commit to main */
+  --dt-pipeline-validation-gate: pre-codegen; /* Naming + contrast + symmetry checks before render */
+  --dt-pipeline-versioning: semver; /* Token releases tagged; consumers pin and migrate (governance) */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The pipeline makes accessibility continuous: contrast pairings validated pre-codegen mean a designer's new mode cannot merge with failing ratios - the gate is the contract, not the code review. */
+/* Fallback: If the design tool cannot express a validation (e.g. state deltas), the pipeline computes it from exported values and blocks the PR with the failing pairing listed. */

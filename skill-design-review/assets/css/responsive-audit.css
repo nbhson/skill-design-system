@@ -1,0 +1,27 @@
+/* ============================================================
+ * Responsive Audit - starter design tokens (CSS custom properties)
+ * Skill id: responsive-audit (#11 of 12)
+ *
+ * Every surface at every size: 320px to ultrawide, touch vs pointer, orientation, and the breakpoint behaviors that were promised.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-size-matrix: 320,375,768,1024,1440,1920+; /* The walked spectrum */
+  --rev-reflow-floor: 320px-no-hscroll; /* WCAG 1.4.10 */
+  --rev-collapse-verification: declared-behaviors-trigger; /* Spec vs build drift = finding */
+  --rev-modality-switch: touch-vs-pointer-checked; /* Hover replaced on touch */
+  --rev-touch-targets: 44px-on-touch; /* 2.5.8 verified on device */
+  --rev-orientation-check: landscape+portrait; /* Both survive */
+  --rev-content-priority: 320px-order-matters; /* Priority not squeezed desktop */
+  --rev-dense-surface-contract: tables-adapt-documented; /* responsive-layout guide 09 */
+  --rev-device-testing: real-devices-required; /* Emulation insufficient alone */
+  --rev-responsive-score: per-surface-per-size; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The responsive audit enforces WCAG 1.4.4 (resize), 1.4.10 (reflow at 320px), and 2.5.8 (touch targets): the size matrix includes the a11y floors - reflow and zoom checks are part of the walk, not a separate audit. */
+/* Fallback: If the full matrix is too heavy, always include 320px + one touch device + one 1440px desktop - the three that catch most findings. */

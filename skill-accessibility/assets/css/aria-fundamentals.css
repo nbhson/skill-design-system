@@ -1,0 +1,27 @@
+/* ============================================================
+ * ARIA Fundamentals - starter design tokens (CSS custom properties)
+ * Skill id: aria-fundamentals (#05 of 12)
+ *
+ * The first rule of ARIA and the core vocabulary: roles, states, properties, live regions, and when native HTML wins.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-native-first-policy: html-before-aria; /* First rule of ARIA; custom roles need justification in review */
+  --a11y-accessible-name-policy: required; /* Every interactive element; lint-blocks unnamed controls */
+  --a11y-name-source-order: labelledby > label > aria-label > content; /* Prefer visible text as the name source */
+  --a11y-state-tracking: must-match-dom; /* aria-expanded/checked/pressed mirror real state */
+  --a11y-live-region-verbosity: polite-default; /* aria-live=polite; assertive only for errors/timeouts */
+  --a11y-decorative-policy: aria-hidden-true; /* Decorative icons/images excluded from the AT tree */
+  --a11y-idref-validation: ci-lint; /* aria-labelledby/describedby targets must exist */
+  --a11y-hidden-focus-rule: aria-hidden-plus-inert; /* Hidden content must also be unfocusable */
+  --a11y-role-validation: axe-ci; /* Required parent/child role structure checked in CI */
+  --a11y-landmark-set: header-nav-main-aside-footer; /* Page skeleton roles; one main per page */
+}
+
+/* Accessibility contract (required) */
+/* Notes: ARIA misused is worse than ARIA absent: wrong roles misorient screen reader users more than no roles at all - that is why the native-first policy is a lint gate, not a suggestion. */
+/* Fallback: When unsure which ARIA fits, downgrade to native HTML; an unstyled native control is accessible, an over-ARIA'd div usually is not. */

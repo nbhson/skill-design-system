@@ -1,0 +1,27 @@
+/* ============================================================
+ * Motion Audit - starter design tokens (CSS custom properties)
+ * Skill id: motion-audit (#05 of 12)
+ *
+ * Is motion serving the interface: purpose check, token adherence, duration/easing review, and reduced-motion verification.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-motion-classification: feedback,orientation,state,reward,decoration; /* Purposeless = finding */
+  --rev-duration-ladder: feedback-100-300,transition-300-500,max-1s; /* skill-animation contract */
+  --rev-easing-adherence: tokens-only; /* No random bezier values */
+  --rev-loop-ration: one-per-viewport; /* None on data-dense surfaces */
+  --rev-reduced-motion: collapse-verified; /* Audited with media query flipped */
+  --rev-non-blocking: under-500ms-or-interruptible; /* 2.2.2 contract */
+  --rev-interruptibility-test: mid-animation-interaction; /* UI lock = major finding */
+  --rev-scroll-trigger-check: no-jitter-retrigger; /* Scroll-up stability */
+  --rev-at-parallel: motion-never-only-signal; /* State also announced */
+  --rev-motion-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The motion audit enforces WCAG 2.2.2 (pause/stop/hide), 2.3.3 (animation from interactions), and prefers-reduced-motion: every animation must have a static fallback and never be the only state signal - motion-audit and a11y-audit share this checklist section. */
+/* Fallback: If classification is contested, apply the strict rule: motion must communicate something text/position cannot - if it can't articulate the purpose, it's decoration and gets removed. */

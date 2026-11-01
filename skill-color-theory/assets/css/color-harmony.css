@@ -1,0 +1,27 @@
+/* ============================================================
+ * Color Harmony & Schemes - starter design tokens (CSS custom properties)
+ * Skill id: color-harmony (#01 of 12)
+ *
+ * The classical scheme machinery - complementary, analogous, triadic, split-complementary - applied as starting constraints, not rules.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-scheme-primary: hue-210; /* The brand-dominant hue anchor (OKLCH hue angle) */
+  --clr-scheme-type: analogous-plus-accent; /* Documented scheme: analogous core + complementary accent */
+  --clr-harmony-analogous-spread: 30deg; /* Hue neighbors for analogous sets */
+  --clr-harmony-complement: 180deg; /* Opposite hue; always re-balanced for lightness */
+  --clr-harmony-triadic: 120deg; /* Triadic spread; desaturate 2 of 3 */
+  --clr-harmony-split: 150-210deg; /* Split-complementary band; softer than pure complement */
+  --clr-distribution-60-30-10: 60/30/10; /* Dominant/secondary/accent area proportions */
+  --clr-accent-usage: sparingly-under-10%; /* Accents collapse to noise when everywhere */
+  --clr-scheme-neutral-pairing: always-paired; /* No scheme ships without its neutral ramp (guide 04) */
+  --clr-scheme-refinement: perceptual-pass-required; /* Schemes pass through OKLCH + contrast refinement */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Schemes must clear contrast floors before aesthetics are judged (guide 10): a harmonious palette that fails 4.5:1 is decorative art, not UI - harmony models pick hue relationships, contrast models pick usable steps. */
+/* Fallback: When a scheme hue cannot pass contrast at its assigned role, shift it along the lightness axis within the same hue family - keep the relationship, fix the values. */

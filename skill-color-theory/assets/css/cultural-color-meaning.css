@@ -1,0 +1,27 @@
+/* ============================================================
+ * Cultural Color Meaning - starter design tokens (CSS custom properties)
+ * Skill id: cultural-color-meaning (#12 of 12)
+ *
+ * Color connotations by market: red's three meanings, white's weddings and funerals, and localization discipline for global palettes.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --clr-market-audit-required: per-launch-market; /* Documented color review per market before launch */
+  --clr-reviewer-source: in-market-teams; /* Local review; not symbolism tables alone */
+  --clr-status-localization-policy: platform-convention-default; /* UI status follows platform; brand follows market */
+  --clr-campaign-review: per-market-per-campaign; /* Campaign visuals re-checked per market */
+  --clr-high-risk-contexts: gift-festival-mourning-finance; /* Contexts where connotation bites hardest */
+  --clr-collision-log: documented-exceptions; /* Found collisions + resolutions recorded */
+  --clr-over-localization-guard: collisions-only; /* Audit catches real collisions; system stays unified */
+  --clr-market-palette-delta: brand-only; /* Only brand/campaign layers localize; semantic stays global */
+  --clr-review-cadence: pre-launch-annual; /* Launch review + annual refresh per market */
+  --clr-color-festival-calendar: per-market; /* Festivals/observances mapped for campaign timing */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Cultural review intersects accessibility: in-market review includes disabled users' context (assistive tech conventions, local a11y norms) - a palette correct for one market's culture may still fail that market's WCAG-equivalent floors (guide 10 governs the numbers everywhere). */
+/* Fallback: When a cultural collision conflicts with a status convention, status convention wins and the cultural adjustment moves to non-status surfaces - vocabulary is never recolored for connotation. */

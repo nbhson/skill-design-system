@@ -1,0 +1,27 @@
+/* ============================================================
+ * Focus Management - starter design tokens (CSS custom properties)
+ * Skill id: focus-management (#04 of 12)
+ *
+ * Where focus goes when UI changes: visible focus styling, modal traps, focus return, and announcements that keep orientation.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-focus-visible-style: outline 2px + offset 2px; /* Default visible focus treatment; token-driven color */
+  --a11y-focus-contrast-min: 3:1; /* WCAG 2.4.13 against adjacent colors */
+  --a11y-modal-open-target: first-control-or-title; /* Dialog focus lands on panel or first interactive */
+  --a11y-modal-close-target: trigger-element; /* Return to the exact button that opened it */
+  --a11y-route-change-target: h1-or-main; /* SPA routes move focus to page heading (tabindex=-1) */
+  --a11y-in-place-update-target: live-region; /* Background updates announce; focus does not move */
+  --a11y-autofocus-policy: modals-only; /* Never autofocus page loads; always inside dialogs/overlays */
+  --a11y-scroll-on-focus: deliberate-only; /* scrollIntoView only for intentional focus moves */
+  --a11y-focus-order-review: per-component; /* Open/close/submit flows tested for landing + return */
+  --a11y-hidden-focus-policy: inert-offscreen; /* Offscreen content uses inert, not just visibility, so focus cannot land there */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Focus management serves WCAG 2.4.3, 2.4.7, 2.4.13, and 3.2.1: it is the difference between reachable and usable, and screen reader orientation depends on announced landing points. */
+/* Fallback: If a landing point cannot be meaningful (transient UI), announce via aria-live instead of moving focus - never move focus to nothing. */

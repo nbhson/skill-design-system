@@ -1,0 +1,583 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepo": "skill-ui-ux"
+  },
+  "skills": [
+    {
+      "id": "easing-timing",
+      "name": "Duration & Easing Fundamentals",
+      "summary": "The token foundation of all motion: a duration hierarchy and a small set of easing curves that make movement feel intentional instead of arbitrary.",
+      "sections": {
+        "definition": "Duration and easing are the vocabulary of motion design. Duration controls how long a transition takes; easing controls how velocity changes across that duration. Together they encode physics and intent: fast-and-sharp reads as responsive, slow-and-soft reads as deliberate. Every other animation skill in this set inherits its timing from these tokens.",
+        "principles": [
+          "Durations scale with distance and importance: small state changes are fast (100-150ms), large surface changes are slower (300-480ms).",
+          "Use as few duration steps as possible: a 5-step hierarchy (instant/fast/base/slow/deliberate) covers virtually all UI.",
+          "Enter with deceleration, exit with acceleration: elements coming in lose speed as they arrive; elements leaving pick up speed as they go.",
+          "Never use linear easing for element transitions: linear reads mechanical and is reserved for indeterminate loops and scroll-linked mapping.",
+          "One easing family per product: pick a standard curve and use it for 80%+ of transitions; reserve emphasized curves for signature moments.",
+          "Overshoot (back/spring) only on small, non-text elements: text and large surfaces distort badly under overshoot.",
+          "Timing is perceived, not absolute: 300ms over 20px feels slow, the same 300ms across the full screen feels brisk - judge by perceived speed."
+        ],
+        "tokens": [
+          { "role": "duration-instant", "value": "100ms", "notes": "Press/active states, toggles, checkboxes" },
+          { "role": "duration-fast", "value": "150ms", "notes": "Hover, focus rings, icon swaps, tooltips" },
+          { "role": "duration-base", "value": "240ms", "notes": "Standard transitions: menus, dropdowns, cards" },
+          { "role": "duration-slow", "value": "320ms", "notes": "Large surfaces: modals, drawers, bottom sheets" },
+          { "role": "duration-deliberate", "value": "480ms", "notes": "Hero moments: onboarding, celebration, page-level reveals" },
+          { "role": "duration-loop", "value": "1200ms", "notes": "Indeterminate loops: spinners, shimmer sweeps" },
+          { "role": "ease-standard", "value": "cubic-bezier(0.2, 0, 0, 1)", "notes": "Default curve for enter + move (emphasized decelerate)" },
+          { "role": "ease-decelerate", "value": "cubic-bezier(0, 0, 0, 1)", "notes": "Elements entering the viewport or a container" },
+          { "role": "ease-accelerate", "value": "cubic-bezier(0.3, 0, 1, 1)", "notes": "Elements leaving the screen" },
+          { "role": "ease-emphasized", "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "notes": "Playful overshoot; small non-text elements only" },
+          { "role": "ease-linear", "value": "linear", "notes": "Loops and scroll-linked value mapping only" }
+        ],
+        "choreography": [
+          "Stagger sibling entrances 30-50ms apart so the eye reads a wave, not a crowd.",
+          "Exit before enter when swapping content in the same slot: old content leaves in ~40-60% of the enter duration.",
+          "Nested elements animate inside their parent's window: children start after the parent container has begun moving."
+        ],
+        "patterns": [
+          "Token-first: define --duration-* and --ease-* as CSS custom properties and reference them everywhere; no magic numbers in components.",
+          "Pair enter/exit asymmetrically: enter uses ease-decelerate at duration-slow, exit uses ease-accelerate at ~70% of that duration."
+        ],
+        "useCases": [
+          "Design systems and component libraries defining their motion spec.",
+          "Any product establishing a consistent feel across teams and platforms.",
+          "Auditing an existing UI for motion debt: inconsistent durations and curves."
+        ],
+        "combinations": { "good": ["micro-interactions", "entrance-exit", "reduced-motion", "page-transitions", "loading-states", "feedback-confirmation"], "caution": ["gesture-drag", "ambient-motion", "scroll-animation", "data-animation", "illustration-lottie"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": ["retro", "brutalism-ui"], "avoid": [] },
+        "antiPatterns": [
+          "Random durations: every component picking its own 180/210/350ms values makes the product feel assembled from parts",
+          "Linear everywhere: applying linear easing to menus and cards reads as robotic and low-effort",
+          "Overshoot on everything: a back easing on text blocks and large panels looks broken, not playful",
+          "Slow entrances: keeping users waiting with 600ms+ entrances for content they asked for; respect the 100-500ms envelope"
+        ],
+        "reducedMotion": { "required": true, "notes": "Reduced-motion users still need duration tokens: shorten durations rather than removing states.", "fallback": "Collapse all durations to <=1ms opacity-only fades under prefers-reduced-motion." }
+      }
+    },
+    {
+      "id": "micro-interactions",
+      "name": "Micro-interactions",
+      "summary": "Small, single-purpose feedback animations on interactive elements: hover, press, toggle, like, copy - the details that make UI feel alive.",
+      "sections": {
+        "definition": "A micro-interaction is a contained animation that communicates the result of a single user action on a single element: a button depressing, a heart bursting, a toggle sliding, a checkmark drawing itself. It answers the user's question 'did that register?' within 100-300ms. Its grammar is scale, translate, color, and small loops - never layout-shifting movement.",
+        "principles": [
+          "Feedback within 100ms: the state change must begin almost instantly or the action feels dropped.",
+          "Animate a property the eye tracks on that element: scale, background, icon state - not the surrounding layout.",
+          "One effect per event: a press can depress OR pulse, not both; stacked effects read as noise.",
+          "Respect a trigger hierarchy: hover is subtle (lift, tint), press is stronger (scale down), success is declarative (checkmark, color swap).",
+          "Make it reversible: hover-in and hover-out use mirrored timing; toggles animate both directions equally.",
+          "Never block the action: the animation decorates the result, it does not delay it."
+        ],
+        "tokens": [
+          { "role": "press-scale", "value": "scale(0.97)", "notes": "Buttons depress ~3% on :active" },
+          { "role": "hover-lift", "value": "translateY(-2px)", "notes": "Cards/buttons rise subtly on hover" },
+          { "role": "hover-shadow", "value": "0 4px 12px rgba(0,0,0,0.12)", "notes": "Paired with hover-lift for elevation" },
+          { "role": "transition-fast", "value": "150ms cubic-bezier(0.2, 0, 0, 1)", "notes": "Default micro-interaction transition" },
+          { "role": "spring-tactile", "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "notes": "Toggles, likes, small celebratory pops" }
+        ],
+        "choreography": [
+          "Icon swap after state settles: background color lands first (~100ms), then the icon crossfades/draws.",
+          "Burst effects radiate from the touch/click point, not the element center, when the trigger is positional.",
+          "Press-then-release on touch: animate down on touchstart, complete on touchend so quick taps still feel responsive."
+        ],
+        "patterns": [
+          "Scale-depress button: :active { transform: scale(0.97) } at 100ms - the cheapest universal 'it pressed' signal.",
+          "Icon morph: crossfade or SVG path-draw (stroke-dashoffset) between default and success states.",
+          "Haptic pairing: on supported platforms pair press/success with light/medium haptics."
+        ],
+        "useCases": [
+          "Buttons, toggles, checkboxes, radio, sliders, tabs - all interactive controls.",
+          "Like/favorite/save/bookmark actions in social and content products.",
+          "Copy-to-clipboard, download-complete, add-to-cart confirmations."
+        ],
+        "combinations": { "good": ["easing-timing", "feedback-confirmation", "entrance-exit"], "caution": ["data-animation", "gesture-drag", "reduced-motion", "page-transitions", "loading-states", "scroll-animation", "illustration-lottie"], "avoid": ["ambient-motion"] },
+        "styleAffinity": { "good": ["neumorphism", "claymorphism", "glassmorphism"], "caution": ["minimalism", "flat-design"], "avoid": [] },
+        "antiPatterns": [
+          "Animating layout: using top/left/width for micro-feedback causes reflow jank; transform and opacity only",
+          "Effect stacking: hover lift + shadow + tint + icon change at once exceeds the threshold of subtlety",
+          "Blocking delays: an 800ms success animation before the next screen; feedback must never gate progress",
+          "Invisible hover on touch: hover-only affordances on touch devices with no pressed-state equivalent"
+        ],
+        "reducedMotion": { "required": true, "notes": "Replace scale/translate with opacity and color changes; keep the state change itself.", "fallback": "Swap transform effects for background/border color transitions at duration-instant." }
+      }
+    },
+    {
+      "id": "entrance-exit",
+      "name": "Entrance & Exit Choreography",
+      "summary": "How elements appear and disappear: reveals, staggers, and coordinated sequences that establish hierarchy instead of dumping everything on screen at once.",
+      "sections": {
+        "definition": "Entrance and exit animations govern the appearance and disappearance of content: page loads, list reveals, modal in/out, list item removal. Done well, they teach hierarchy (what to look at first) and continuity (where content went). The core techniques are fade+displace entrances, staggered siblings, and asymmetric timing - exits are always faster than entrances.",
+        "principles": [
+          "Animate from the direction of origin: modals rise from their trigger, drawers slide from their edge, dropdowns descend from their button.",
+          "Stagger creates order: siblings enter 30-50ms apart, capped at ~300ms total or the sequence feels sluggish.",
+          "Exits are faster than entrances: 60-70% of the enter duration, with acceleration easing.",
+          "Enter with opacity + small displacement: 8-24px translate plus fade is the universal, safe reveal.",
+          "Never animate content the user explicitly requested slower than 500ms: task-critical content enters near-instantly.",
+          "Removed items collapse (height/scale) while neighbors reflow, so the list does not visually teleport."
+        ],
+        "tokens": [
+          { "role": "enter-distance", "value": "16px", "notes": "Default translateY/X offset for fade-in reveals" },
+          { "role": "enter-duration", "value": "240ms", "notes": "Per-item entrance with ease-decelerate" },
+          { "role": "exit-duration", "value": "160ms", "notes": "Per-item exit with ease-accelerate" },
+          { "role": "stagger-step", "value": "40ms", "notes": "Delay between sibling items" },
+          { "role": "stagger-cap", "value": "300ms", "notes": "Maximum total stagger window" },
+          { "role": "collapse-duration", "value": "200ms", "notes": "Height/scale collapse for removal" }
+        ],
+        "choreography": [
+          "Container first, children second: the modal/backdrop fades in, then its content staggers in.",
+          "Reading-order stagger: top-to-bottom, or F-pattern for grids; never random order.",
+          "Directional continuity: in a wizard, new content enters from the direction of the next button, returning content from the opposite side."
+        ],
+        "patterns": [
+          "Fade-up list: li { opacity:0; translateY(16px) -> 0 } with animation-delay: calc(var(--i) * 40ms).",
+          "FLIP removal: measure item height, collapse with scale+opacity, let the list reflow underneath.",
+          "Shared-element grow: a card expands into a detail panel by animating position and size, not by crossfading two screens."
+        ],
+        "useCases": [
+          "Feed/list first paint, search results, dashboards after data resolves.",
+          "Modals, drawers, popovers, command palettes - overlay entrances.",
+          "Undo/delete flows: item flies out, neighbors close the gap, toast appears."
+        ],
+        "combinations": { "good": ["easing-timing", "page-transitions", "micro-interactions", "loading-states", "feedback-confirmation", "data-animation"], "caution": ["scroll-animation", "illustration-lottie", "reduced-motion", "gesture-drag", "ambient-motion"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "aurora-ui", "glassmorphism"], "caution": ["brutalism-ui", "retro"], "avoid": [] },
+        "antiPatterns": [
+          "Simultaneous dump: all elements fading in at the same instant with no stagger reads as a slow page load, not choreography",
+          "Overlong sequences: 15 items x 40ms + 240ms each keeps content hostage for seconds; cap the window",
+          "Exit-less replacement: old content vanishing instantly while new content animates in breaks continuity",
+          "Animating from nowhere: entrances using opacity 0 -> 1 with no spatial cue miss the chance to teach origin"
+        ],
+        "reducedMotion": { "required": true, "notes": "Keep the reveal but remove displacement and stagger; single short opacity fade for the whole group.", "fallback": "All items opacity-only at duration-fast, no stagger." }
+      }
+    },
+    {
+      "id": "page-transitions",
+      "name": "Page & View Transitions",
+      "summary": "Movement between screens and routes: shared elements, directional slides, and the View Transitions API - keeping spatial context across navigation.",
+      "sections": {
+        "definition": "Page transitions connect two screens into one spatial story. Instead of a hard cut, the outgoing and incoming views coordinate: a shared card expands into its detail page, a tab panel slides horizontally, a route crossfades through a snapshot. The user should always know where they are relative to where they were. Modern browsers support this natively via the View Transitions API; frameworks provide equivalents (Framer Motion AnimatePresence, Next.js templates).",
+        "principles": [
+          "Direction is meaning: forward navigation moves left/forward, back navigation reverses it; vertical hierarchies drill down.",
+          "Shared elements anchor the transition: one element that visibly persists (image, card header) outweighs ten decorative fades.",
+          "Hierarchy of layers: background exits first, content crossfades, navigation chrome persists unchanged.",
+          "Keep total transition under 400ms: navigation is a means, not an event.",
+          "Interruptible and reversible: navigating mid-transition must work - transitions queue or reverse, never lock the UI.",
+          "Snapshot-based fallback: where the View Transitions API is unsupported, fall back to a plain crossfade, not a broken layout."
+        ],
+        "tokens": [
+          { "role": "transition-duration", "value": "320ms", "notes": "Standard route transition" },
+          { "role": "transition-duration-shared", "value": "400ms", "notes": "Shared-element morphs, slightly longer to be readable" },
+          { "role": "slide-distance", "value": "100%", "notes": "Full-width pushes between sibling routes" },
+          { "role": "crossfade-duration", "value": "200ms", "notes": "Fallback crossfade; also the root snapshot fade" },
+          { "role": "ease-navigation", "value": "cubic-bezier(0.2, 0, 0, 1)", "notes": "Standard curve for route changes" }
+        ],
+        "choreography": [
+          "Push pattern: old view translates out -25% with slight dim, new view slides in from 100% (iOS-style).",
+          "Drill-down: detail page scales from 92% to 100% with opacity; back reverses exactly.",
+          "Shared-element morph: capture the trigger card's bounds, animate it to the detail hero position while surrounding content fades."
+        ],
+        "patterns": [
+          "View Transitions API: document.startViewTransition(() => updateTheDOM()) with ::view-transition-old/new animations.",
+          "view-transition-name per shared element: assign unique names to elements that should morph between pages.",
+          "Route-level suspense handoff: resolve data before starting the transition so the entering view is complete."
+        ],
+        "useCases": [
+          "E-commerce: product grid -> product detail with shared product image.",
+          "Mobile-first SPAs and PWAs where spatial navigation matches native expectations.",
+          "Tabbed interfaces, wizards/steppers, settings drill-downs."
+        ],
+        "combinations": { "good": ["easing-timing", "entrance-exit", "gesture-drag"], "caution": ["loading-states", "micro-interactions", "scroll-animation", "reduced-motion", "feedback-confirmation", "data-animation", "illustration-lottie"], "avoid": ["ambient-motion"] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["brutalism-ui", "collage-art"], "avoid": [] },
+        "antiPatterns": [
+          "Transition on every navigation: hard cuts are correct for lateral jumps (tabs at depth); motion for motion's sake disorients",
+          "Breaking the back gesture: locking scroll or ignoring edge-swipe during a transition breaks platform muscle memory",
+          "Long shared-element morphs: stretching a small thumbnail across the screen for 700ms+ reads as sluggish, not cinematic",
+          "Flash of unstyled entering view: starting the transition before data/layout resolves, so the new page pops after arriving"
+        ],
+        "reducedMotion": { "required": true, "notes": "Disable slides/morphs; keep a short crossfade so navigation still feels connected.", "fallback": "Old/new root snapshots crossfade at crossfade-duration, shared elements fade in place." }
+      }
+    },
+    {
+      "id": "loading-states",
+      "name": "Loading States",
+      "summary": "Spinners, skeletons, progress, and optimistic UI: motion that manages waiting honestly, communicates progress, and hands off smoothly to real content.",
+      "sections": {
+        "definition": "Loading animation is the interface between delay and trust. Its job is to set expectations: an indeterminate spinner says 'unknown length', a skeleton says 'this exact layout is coming', a progress bar says 'measurable progress', optimistic UI says 'assumed success, correctable'. The craft is choosing the right honesty level for each wait duration and handing off from placeholder to content without a jarring swap.",
+        "principles": [
+          "Match the pattern to the wait: <300ms show nothing; 300ms-1s spinner or pulse; >1s skeleton or progress bar.",
+          "Skeletons must mirror the real layout: a skeleton that differs from the loaded content causes a jarring reflow.",
+          "Delay before showing: render the spinner only after ~300ms to avoid flashing on fast loads.",
+          "Loops imply progress that does not exist: indeterminate loops must be visibly 'indeterminate' (sweep, not count-up).",
+          "Optimistic UI needs an escape hatch: every optimistic state must be visually correctable on failure (undo, revert, error tint).",
+          "Never block the whole UI: keep navigation and unrelated controls interactive while a region loads."
+        ],
+        "tokens": [
+          { "role": "show-delay", "value": "300ms", "notes": "Wait before revealing any loading indicator" },
+          { "role": "spinner-loop", "value": "1000ms", "notes": "Linear rotation loop" },
+          { "role": "shimmer-loop", "value": "1500ms", "notes": "Skeleton shimmer sweep" },
+          { "role": "shimmer-travel", "value": "200%", "notes": "Gradient sweep distance across the skeleton" },
+          { "role": "progress-fill", "value": "240ms", "notes": "Eased fill step when progress updates" },
+          { "role": "handoff-duration", "value": "200ms", "notes": "Skeleton -> content crossfade" }
+        ],
+        "choreography": [
+          "Placeholder in, content in: skeleton fades in fast, content crossfades over the skeleton in the same slot.",
+          "Per-region loading: each async region owns its own indicator; never a single global spinner for mixed content.",
+          "Progress then complete: an indeterminate bar becomes determinate when progress is known, then flashes to 100% briefly before handoff."
+        ],
+        "patterns": [
+          "Skeleton shimmer: repeating-linear-gradient background-position animation on gray placeholder blocks.",
+          "Optimistic create: render the item instantly with an 'ephemeral' style, replace with server state or revert with an error toast.",
+          "Streaming text: token-by-token arrival with a cursor pulse for AI/chat responses."
+        ],
+        "useCases": [
+          "Feeds, dashboards, search results, media grids - any async list/grid.",
+          "File uploads, payments, long form submissions with real progress.",
+          "AI/chat streaming, messaging 'typing' indicators, pull-to-refresh."
+        ],
+        "combinations": { "good": ["easing-timing", "data-animation", "feedback-confirmation", "entrance-exit", "gesture-drag", "illustration-lottie"], "caution": ["page-transitions", "micro-interactions", "reduced-motion", "scroll-animation"], "avoid": ["ambient-motion"] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "aurora-ui"], "caution": ["neumorphism", "brutalism-ui"], "avoid": [] },
+        "antiPatterns": [
+          "Spinner-only culture: a lone spinner for every wait gives no layout, no progress, and no expectation",
+          "Skeleton lie: placeholder blocks shaped nothing like the arriving content, causing layout shift on load",
+          "Instant-in spinner: flashing a spinner for a 150ms request makes fast things feel slow",
+          "Fake progress: a bar that sits at 90% for a minute erodes trust faster than no bar at all"
+        ],
+        "reducedMotion": { "required": true, "notes": "Stop all looping shimmer/spin; use static placeholder with a pulsing opacity step (1-2 Hz, low amplitude) or plain static blocks.", "fallback": "Static gray skeletons + text status; progress bars fill without easing loops." }
+      }
+    },
+    {
+      "id": "feedback-confirmation",
+      "name": "Feedback & Confirmation",
+      "summary": "System-to-user communication: toasts, success checkmarks, destructive-action confirms, undo flows - motion that makes outcomes unambiguous.",
+      "sections": {
+        "definition": "Feedback animations are how the system answers back: a toast sliding in, a checkmark drawing itself after a save, a row flashing red before deletion, an undo pill offering reversal. They are declarative and outcome-focused - the opposite of decorative motion. Their job is to remove ambiguity about what just happened, especially for actions that are slow, destructive, or happened off-screen.",
+        "principles": [
+          "Outcome first, decoration second: the state change (color, icon, text) carries meaning; the motion only draws attention to it.",
+          "Confirm in place when possible: an inline checkmark beats a toast; a toast beats a modal.",
+          "Destructive actions get friction: a shake on invalid input, a brief red flash, or a confirm step - never instant irreversible motion.",
+          "Undo is the real confirmation: for destructive or bulk actions, animate the removal but keep recovery one tap away.",
+          "Toasts are ephemeral and dismissible: 4-8s on screen, swipe/click to dismiss, hover pauses the timer.",
+          "Errors demand stillness: error states animate attention-getting (shake, flash) once, then hold steady for reading."
+        ],
+        "tokens": [
+          { "role": "toast-enter", "value": "240ms", "notes": "Slide+fade in with ease-decelerate" },
+          { "role": "toast-exit", "value": "160ms", "notes": "Fade/slide out with ease-accelerate" },
+          { "role": "toast-duration", "value": "5000ms", "notes": "Default on-screen time; action toasts 8000ms" },
+          { "role": "checkmark-draw", "value": "300ms", "notes": "SVG stroke-dashoffset draw after success" },
+          { "role": "shake-amplitude", "value": "6px", "notes": "Error shake; 2-3 oscillations max" },
+          { "role": "highlight-flash", "value": "600ms", "notes": "Row/field flash on update or error" }
+        ],
+        "choreography": [
+          "Save flow: button label swaps to spinner (150ms) -> checkmark draws (300ms) -> button returns to idle (200ms later).",
+          "Toast stacking: new toasts push existing ones up with the collapse duration; exits do not shift unread toasts abruptly.",
+          "Delete flow: item collapses -> neighbors reflow -> undo toast enters from bottom in the same beat."
+        ],
+        "patterns": [
+          "SVG checkmark draw: set stroke-dasharray = path length, animate stroke-dashoffset to 0.",
+          "Invalid shake: translateX keyframes +-6px over 300ms on the input wrapper, paired with a red border tint.",
+          "Undo toast: destructive UI updates instantly, toast offers 'Undo' for 5-8s before the real backend delete."
+        ],
+        "useCases": [
+          "Save/send/publish confirmations in editors and forms.",
+          "Cart actions, wishlist, subscriptions - commerce feedback.",
+          "Form validation errors, permission denials, failed network actions."
+        ],
+        "combinations": { "good": ["easing-timing", "micro-interactions", "illustration-lottie", "entrance-exit", "loading-states", "gesture-drag"], "caution": ["page-transitions", "reduced-motion", "scroll-animation", "data-animation"], "avoid": ["ambient-motion"] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "neumorphism"], "caution": ["maximalism", "brutalism-ui"], "avoid": [] },
+        "antiPatterns": [
+          "Celebrating everything: confetti and fanfare on every save dilutes the moments that deserve celebration",
+          "Toast overload: firing five toasts for one action; consolidate into one message with a summary",
+          "Uncatchable feedback: an error flash so brief users cannot tell what failed; error states must persist",
+          "Modal spam: confirming trivial actions with modal dialogs; reserve modals for truly destructive/irreversible choices"
+        ],
+        "reducedMotion": { "required": true, "notes": "Keep all outcome signals (icon, color, text); remove shake and travel, use instant position + short opacity fade.", "fallback": "Toast fades in place; checkmark appears without draw; error indicated by persistent color + text, no shake." }
+      }
+    },
+    {
+      "id": "scroll-animation",
+      "name": "Scroll-Driven Animation",
+      "summary": "Motion tied to scroll position: parallax, reveals, progress indicators, and sticky choreography - driven by the user's own input, not the clock.",
+      "sections": {
+        "definition": "Scroll-driven animation maps scroll progress to visual state. The timeline is the scrollbar, not the clock: scrub, reveal, parallax, and progress all derive from scroll position. This makes it inherently user-controlled - the user drags the timeline. CSS scroll-driven animations (animation-timeline: scroll()/view()) now cover most cases without JavaScript; IntersectionObserver handles enter/exit reveals.",
+        "principles": [
+          "Scroll-linked means scrubbed: values must move both directions with the scroll, never one-shot play on threshold.",
+          "Reveal once, then stay: entrance reveals triggered on visibility play a single time; they do not re-trigger on every scroll wiggle.",
+          "Parallax is a spice: 1 background layer at 0.5-0.8x speed is enough; multi-layer parallax beyond 2 layers degrades into noise.",
+          "Keep text readable: never apply parallax or blur to body copy; restrict to imagery, headers, and decorative layers.",
+          "Respect the user's scroll velocity: animations competing with fast scrolling must be compositor-only (transform/opacity).",
+          "Provide a non-scroll path: critical content and CTAs must be fully accessible with animations off."
+        ],
+        "tokens": [
+          { "role": "reveal-threshold", "value": "0.2", "notes": "IntersectionObserver: trigger at 20% visibility" },
+          { "role": "reveal-duration", "value": "600ms", "notes": "One-shot reveal play time (clock-based, scroll-triggered)" },
+          { "role": "parallax-speed", "value": "0.5", "notes": "Background layer moves at half scroll speed" },
+          { "role": "progress-range", "value": "0deg-360deg", "notes": "Scroll progress indicator sweep range" },
+          { "role": "scrub-easing", "value": "linear", "notes": "Scroll-scrubbed mapping must be linear (time easings fight the user)" }
+        ],
+        "choreography": [
+          "Sticky-step stories: a sticky container pins while inner scenes swap at scroll progress milestones.",
+          "Header collapse: scroll down collapses the header (height+shadow), scroll up expands it - state changes are stepped, not jittery.",
+          "Reveal queue: elements within the same viewport row reveal together; elements a screen apart reveal independently."
+        ],
+        "patterns": [
+          "CSS scroll-driven: @keyframes with animation-timeline: view(); animation-range: entry 0% entry 60%.",
+          "IO reveal: IntersectionObserver adds .revealed once; transition handles the clock-based play.",
+          "Scroll progress bar: fixed top bar with scaleX driven by animation-timeline: scroll(root)."
+        ],
+        "useCases": [
+          "Marketing/landing pages: product storytelling, feature reveals, scrollytelling.",
+          "Editorial/magazine layouts with pinned imagery and text sequences.",
+          "Reading progress indicators, infinite feed headers, map zoom pans."
+        ],
+        "combinations": { "good": ["data-animation", "illustration-lottie"], "caution": ["easing-timing", "entrance-exit", "page-transitions", "micro-interactions", "reduced-motion", "loading-states", "feedback-confirmation", "gesture-drag", "ambient-motion"], "avoid": [] },
+        "styleAffinity": { "good": ["aurora-ui", "collage-art", "maximalism"], "caution": ["minimalism", "neumorphism"], "avoid": [] },
+        "antiPatterns": [
+          "Jank from layout reads: reading scrollY and writing styles in the same frame; use compositor-only properties or native timelines",
+          "Re-triggering reveals: elements that fade out and replay every time they re-enter the viewport",
+          "Parallax on text: body copy drifting at a different speed than its container is a readability failure",
+          "Scroll hijacking: overriding native scroll behavior (snap-forcing, speed remapping) breaks the primary input metaphor"
+        ],
+        "reducedMotion": { "required": true, "notes": "This is the highest-risk category for vestibular triggers: disable parallax entirely, show final-state content.", "fallback": "All scroll-scrubbed effects show their end state; reveals become instant visibility (or 1 short fade); keep a static progress bar." }
+      }
+    },
+    {
+      "id": "gesture-drag",
+      "name": "Gesture & Drag Physics",
+      "summary": "Direct manipulation: drag, swipe, pull-to-refresh, fling with momentum and springs - motion that stays glued to the finger and lands with physics.",
+      "sections": {
+        "definition": "Gesture animation is motion under direct manipulation: the element tracks the pointer 1:1 while active (no easing - the finger is the easing), then resolves on release with physics - momentum fling, spring snap-back, or velocity-based dismissal. The distinction from every other category: during the gesture, animation is not time-based at all; it is input-based. All time-based motion happens after release.",
+        "principles": [
+          "1:1 tracking during drag: the element follows the pointer exactly; no lag, no easing, no rubber-band delay beyond intentional edge overscroll.",
+          "Velocity decides the outcome: dismissal at ~30-50% distance OR sufficient fling velocity, whichever comes first.",
+          "Resolve with springs, not durations: release motion uses spring physics (stiffness/damping) so it adapts to the release velocity.",
+          "Always give a home: every draggable returns to a snap point or completes a dismissal - never rest mid-travel.",
+          "Show the outcome during the gesture: alpha/overlay hints as thresholds cross (row turns red, card tilts) so release is confirmation, not surprise.",
+          "Interrupt everything: a new touch during resolve must grab the current position and continue from there."
+        ],
+        "tokens": [
+          { "role": "dismiss-threshold", "value": "0.4", "notes": "40% of travel distance triggers dismissal" },
+          { "role": "fling-velocity", "value": "500px/s", "notes": "Release velocity that forces the action regardless of distance" },
+          { "role": "spring-snap", "value": "stiffness 300, damping 30", "notes": "Return-to-home spring" },
+          { "role": "spring-settle", "value": "stiffness 170, damping 26", "notes": "Settle spring for completed dismissals/reflow" },
+          { "role": "rubber-band", "value": "0.55", "notes": "Overscroll resistance factor at edges" },
+          { "role": "drag-tilt", "value": "rotate(4deg)", "notes": "Max tilt while dragging cards" }
+        ],
+        "choreography": [
+          "Pull-to-refresh: drag stretches a spinner arc; past threshold it snaps to armed state; release triggers refresh + settle.",
+          "Swipe-to-dismiss: card follows finger, background intent layer fades in with progress, release springs out or snaps back.",
+          "Reorder drag: dragged item lifts (scale+shadow), neighbors open the gap with the settle spring, drop settles with a soft bounce."
+        ],
+        "patterns": [
+          "Pointer capture + transform: track pointermove deltas into translate3d; commit on pointerup with velocity sampling.",
+          "Velocity sampling: keep the last ~100ms of pointer positions to compute release velocity robustly.",
+          "Spring resolution: Framer Motion / React Spring animate from current position+velocity to the target snap point."
+        ],
+        "useCases": [
+          "Mobile lists: swipe actions (archive, delete), reordering, dismissible cards and notifications.",
+          "Maps, sliders, scrubbers, carousels - any continuous-value control.",
+          "Pull-to-refresh, bottom sheets with drag-to-expand/collapse, gallery paging."
+        ],
+        "combinations": { "good": ["page-transitions", "data-animation", "feedback-confirmation", "loading-states"], "caution": ["easing-timing", "micro-interactions", "entrance-exit", "scroll-animation", "reduced-motion", "illustration-lottie"], "avoid": ["ambient-motion"] },
+        "styleAffinity": { "good": ["glassmorphism", "neumorphism", "claymorphism"], "caution": ["class-morphism", "retro"], "avoid": [] },
+        "antiPatterns": [
+          "Eased tracking: applying time-based easing while the finger is down creates lag that reads as a broken touch screen",
+          "Keyboard-only dismissal: swipe actions with no visible buttons duplicate; gesture must augment, not replace, affordances",
+          "No velocity memory: slow-dragging past 39% fails while a fast flick at 10% succeeds - without velocity both feel arbitrary",
+          "Mid-air rest: elements stopping between snap points after release because durations replaced springs"
+        ],
+        "reducedMotion": { "required": true, "notes": "Keep 1:1 tracking (it is user-controlled); replace post-release springs with fast direct transitions and remove tilt/parallax embellishments.", "fallback": "Release resolves via the shortest path at duration-fast with no bounce; threshold overlay becomes a static color change." }
+      }
+    },
+    {
+      "id": "data-animation",
+      "name": "Data & Chart Animation",
+      "summary": "Animating numbers, charts, and live data: count-ups, bar/draw-in reveals, morphs between states, and updates that make change perceptible without lying.",
+      "sections": {
+        "definition": "Data animation makes quantitative change perceptible: a KPI counting up, bars growing to height, a line chart drawing left-to-right, a donut sweeping, a live value ticking. The contract is honesty - motion must never exaggerate, hide, or fabricate change. Charts animate on entrance (once), on update (interpolate between real values), and on drill (hierarchy transitions), while tables and dense data mostly should not animate at all.",
+        "principles": [
+          "Animate the encoding, not the pixels: bars animate height, lines animate path length, points animate position - values stay truthful throughout.",
+          "One entrance, then stability: charts play their entrance once; subsequent updates animate only what changed.",
+          "Interpolate between real values: morphing connects two true states; it never passes through fabricated intermediate data.",
+          "Count-up respects magnitude: long counts use eased progress but must end exactly at the real value; rounding drift is unacceptable.",
+          "Dense data stays still: tables, grids, and dashboards with 20+ live cells skip entrance animation entirely.",
+          "Live updates are subtle: a value change is a brief highlight flash or a small tick, not a replay of the entrance."
+        ],
+        "tokens": [
+          { "role": "chart-enter", "value": "800ms", "notes": "Full chart entrance; staggered series +100ms each" },
+          { "role": "countup-duration", "value": "1200ms", "notes": "KPI count-up with ease-out" },
+          { "role": "update-duration", "value": "400ms", "notes": "Interpolation between states on data change" },
+          { "role": "draw-duration", "value": "1000ms", "notes": "Line/path drawing via stroke-dashoffset" },
+          { "role": "tick-flash", "value": "600ms", "notes": "Background flash on a cell/value change" }
+        ],
+        "choreography": [
+          "Axis first, series second: axes/gridlines settle, then series draw/grow in reading order.",
+          "Series stagger: multi-series charts start bars/lines 80-120ms apart so each is parseable.",
+          "Drill-down zoom: parent bar/segment morphs into the child view's frame while siblings fade."
+        ],
+        "patterns": [
+          "Count-up: requestAnimationFrame from 0 to value with ease-out; format per frame; end exact.",
+          "Line draw-in: stroke-dasharray = total length, animate stroke-dashoffset length -> 0.",
+          "D3-style interpolation: interpolate previous datum -> next datum and re-render the path each frame."
+        ],
+        "useCases": [
+          "Analytics dashboards, KPI cards, financial summaries.",
+          "Reports and pitch decks: hero numbers and chart storytelling.",
+          "Live feeds: prices, scores, queues, system metrics."
+        ],
+        "combinations": { "good": ["loading-states", "scroll-animation", "gesture-drag", "entrance-exit"], "caution": ["easing-timing", "micro-interactions", "feedback-confirmation", "page-transitions", "reduced-motion", "illustration-lottie"], "avoid": ["ambient-motion"] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "aurora-ui"], "caution": ["maximalism", "skeuomorphism"], "avoid": [] },
+        "antiPatterns": [
+          "Fake data in motion: easing a number through invented intermediate values on a live metric misrepresents the data",
+          "Re-animating on every render: charts replaying their full entrance whenever a prop changes",
+          "Animating everything dense: 50-cell tables with entrance staggers delay comprehension by seconds",
+          "Chart junk in motion: 3D pie spins and bouncing bars that add milliseconds but no information"
+        ],
+        "reducedMotion": { "required": true, "notes": "Show final values and full charts immediately; keep a single tick-flash for updates so change remains perceptible.", "fallback": "No count-up, no draw-in; update changes flash background once at tick-flash duration." }
+      }
+    },
+    {
+      "id": "ambient-motion",
+      "name": "Ambient & Background Motion",
+      "summary": "Slow, looping, atmospheric motion: aurora gradients, particles, blobs, marquee - depth and mood that must never compete with content.",
+      "sections": {
+        "definition": "Ambient motion is decorative, loop-based movement behind or around content: drifting gradient meshes, floating particles, slow blob morphs, subtle marquee, breathing glows. Its purpose is mood and perceived quality, not information. The defining constraint is subordination: ambient loops live in the perceptual background - slow, low-contrast, pausable - and must be the first thing disabled when attention is scarce.",
+        "principles": [
+          "Slow by definition: one loop is 8-30s; anything faster starts competing with content.",
+          "Low luminance delta: ambient layers shift subtly (5-10% brightness/alpha movement); they should be missed if ignored.",
+          "Behind content, never around the task: restrict to heroes, empty sections, login screens, and 404s - not forms or data tables.",
+          "Pause when off-screen and when hidden: IntersectionObserver + document.visibilityState govern the loop.",
+          "One ambient layer per view: a single hero background motion, not stacked particles + blobs + marquee.",
+          "GPU-cheap or nothing: blur/transform/opacity on compositor layers; ambient must not cost frames on mid-tier devices."
+        ],
+        "tokens": [
+          { "role": "ambient-loop", "value": "20000ms", "notes": "Default gradient/blob loop duration" },
+          { "role": "ambient-loop-fast", "value": "12000ms", "notes": "Maximum perceptible speed for ambient movement" },
+          { "role": "ambient-drift", "value": "translate3d(2%, -2%, 0)", "notes": "Typical drift range per loop iteration" },
+          { "role": "ambient-opacity", "value": "0.6", "notes": "Max opacity of ambient layer behind content" },
+          { "role": "marquee-speed", "value": "40px/s", "notes": "Marquee/ticker linear speed" }
+        ],
+        "choreography": [
+          "Hero-only budget: ambient motion occupies the hero; after scroll, it is out of sight and paused.",
+          "Crossfade idle states: when the UI goes idle (no interaction for 30s+), ambient may gradually become more present - never the reverse.",
+          "Celebrate on top: celebration effects (confetti, bursts) are momentary overlays, not ambient loops."
+        ],
+        "patterns": [
+          "Aurora gradient: two/three large blurred radial-gradient blobs on translate3d/rotate loops at 15-25s.",
+          "Canvas particles: 30-80 particles, cap DPR, pause on visibility, honor reduced motion.",
+          "CSS marquee: duplicated track translateX(-50%) loop, pause on hover."
+        ],
+        "useCases": [
+          "AI/Web3/streaming hero sections (Aurora-style landing pages).",
+          "Empty states, 404s, auth screens - low-stakes moments that benefit from atmosphere.",
+          "Brand moments: event pages, campaign microsites, music/entertainment products."
+        ],
+        "combinations": { "good": ["illustration-lottie"], "caution": ["easing-timing", "entrance-exit", "scroll-animation", "reduced-motion"], "avoid": ["micro-interactions", "feedback-confirmation", "page-transitions", "loading-states", "gesture-drag", "data-animation"] },
+        "styleAffinity": { "good": ["aurora-ui", "glassmorphism", "maximalism"], "caution": ["minimalism", "flat-design"], "avoid": [] },
+        "antiPatterns": [
+          "Ambient over data: looping backgrounds behind forms, tables, or reading surfaces sabotage the primary task",
+          "Fast ambient: 2-4s loops that flicker in peripheral vision; ambient caught by peripheral vision is ambient too loud",
+          "Battery arson: full-screen blur+filter animations running at 60fps on mobile for decoration",
+          "Stacked layers: particles over blobs over marquee - two or more ambient layers is noise, not atmosphere"
+        ],
+        "reducedMotion": { "required": true, "notes": "Ambient motion is the first category to remove entirely under prefers-reduced-motion; replace with a static gradient frame.", "fallback": "Render the loop's midpoint frame as a static image/gradient; never loop." }
+      }
+    },
+    {
+      "id": "illustration-lottie",
+      "name": "Illustration & Lottie",
+      "summary": "Baked motion: character animation, mascots, empty states, and celebration via Lottie/Rive - designer-authored motion embedded as data.",
+      "sections": {
+        "definition": "Illustration animation brings designer-authored, frame-perfect motion into the product as data: Lottie JSON (After Effects via Bodymovin) or Rive state machines. Unlike code-driven motion, the timeline is authored in a design tool - ideal for character performance, mascots, onboarding stories, empty states, and celebration. The engineering work is governance: file size budgets, playback control, state machine wiring, and accessibility of otherwise opaque animation blobs.",
+        "principles": [
+          "Buy motion with bytes knowingly: Lottie budgets - icons <30KB, loaders <80KB, hero moments <300KB; Rive often beats both.",
+          "Engine controls playback: play/pause/speed/segment must be drivable from code; never embed a timeline you cannot stop.",
+          "Design for interruption: celebrations can be cut at any point without visual brokenness.",
+          "Loop with intent: loaders loop seamlessly; narrative animations end on a held final frame.",
+          "State machines over timelines for interactive characters: Rive state machines handle input-driven transitions natively.",
+          "Animation is never the message: pair every illustration with real text - the animation alone carries no meaning."
+        ],
+        "tokens": [
+          { "role": "icon-budget", "value": "30KB", "notes": "Max Lottie size for icon-scale animation" },
+          { "role": "loader-budget", "value": "80KB", "notes": "Max size for loading/processing animation" },
+          { "role": "hero-budget", "value": "300KB", "notes": "Max size for hero/onboarding animation" },
+          { "role": "playback-speed", "value": "1.0", "notes": "Default rate; celebrations accept 0.8-1.2" },
+          { "role": "celebration-duration", "value": "2000ms", "notes": "Confetti/success moments; cut after completion" }
+        ],
+        "choreography": [
+          "Empty-state flow: illustration plays entrance once -> settles into gentle loop -> CTA fades in beneath.",
+          "Success handoff: Lottie celebration plays 1-2s while the real content is already interactive behind it.",
+          "Onboarding sequences: per-slide loops with swipe-driven segment control (play segment i on view)."
+        ],
+        "patterns": [
+          "lottie-web player with autoplay=false, controlled segments via playSegments([start, end]).",
+          "Rive state machine: bind inputs (hover/tap/progress) to state transitions instead of multiple files.",
+          "Lazy mount: instantiate the player only when the container intersects the viewport."
+        ],
+        "useCases": [
+          "Empty states, error pages, onboarding tours - narrative moments.",
+          "Brand mascots and character-driven products (duolingo-style).",
+          "Premium loaders and processing indicators that express brand craft."
+        ],
+        "combinations": { "good": ["feedback-confirmation", "ambient-motion", "scroll-animation", "loading-states"], "caution": ["easing-timing", "entrance-exit", "page-transitions", "gesture-drag", "data-animation", "reduced-motion", "micro-interactions"], "avoid": [] },
+        "styleAffinity": { "good": ["claymorphism", "maximalism", "retro"], "caution": ["minimalism", "brutalism-ui"], "avoid": [] },
+        "antiPatterns": [
+          "Megabyte heroes: shipping multi-MB Lottie files for above-the-fold decoration",
+          "Unstoppable autoplay: ambient character loops that cannot be paused and run forever in view",
+          "Animation as copy: relying on the illustration alone to explain state (which error? what next?) with no text",
+          "Design-tool drift: exporting revisions without a size/duration budget gate, regressing performance silently"
+        ],
+        "reducedMotion": { "required": true, "notes": "Replace narrative/celebration animation with its static final frame; loaders swap to a simple opacity pulse.", "fallback": "Show a static exported frame (SVG/PNG) of the illustration; no playback." }
+      }
+    },
+    {
+      "id": "reduced-motion",
+      "name": "Reduced Motion & Accessibility",
+      "summary": "The accessibility layer of motion: prefers-reduced-motion strategy, vestibular safety, focus management, and per-category fallbacks that keep meaning while removing movement.",
+      "sections": {
+        "definition": "Reduced motion is not the removal of animation - it is the substitution of safe motion. prefers-reduced-motion signals vestibular sensitivity (nausea, dizziness triggered by large/spinning/parallax movement). The professional pattern is a three-tier strategy: remove (ambient/parallax/spin), replace (travel -> opacity/color), retain (opacity fades and color changes communicate state safely). Every animation skill in this set declares its fallback through this layer.",
+        "principles": [
+          "Three tiers, applied in order: REMOVE spinning/parallax/large travel; REPLACE travel with opacity+color; RETAIN short small fades as feedback.",
+          "Never remove meaning: state changes must stay perceivable - swap the medium (movement -> color/icon/text), not the message.",
+          "Respect the media query globally: one global rule + per-component overrides beats scattered per-component queries.",
+          "Movement threshold heuristics: translations >24px, rotations, scale >1.15, and all infinite loops are 'large motion'.",
+          "Kinetic payoffs stay instant: after removing an entrance animation, elements are simply present - no delayed appearance.",
+          "Test with the setting on: reduced motion is a first-class mode, QA it like dark mode, not a bug caveat."
+        ],
+        "tokens": [
+          { "role": "rm-duration", "value": "1ms", "notes": "Replacement duration for removed large motion" },
+          { "role": "rm-fade", "value": "150ms", "notes": "Max allowed opacity fade in reduced mode" },
+          { "role": "rm-travel", "value": "0px", "notes": "All translation distances collapse to 0" },
+          { "role": "rm-loop-policy", "value": "paused", "notes": "All infinite loops pause or play once" }
+        ],
+        "choreography": [
+          "Global override pattern: @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important } } then re-enable specific safe fades.",
+          "JS awareness: matchMedia('(prefers-reduced-motion: reduce)') gates springs, parallax, and particle systems at init time.",
+          "Live regions pair with toast motion: screen-reader users get announcements regardless of visual motion."
+        ],
+        "patterns": [
+          "Fade-replacement: translateY(16px) entrance becomes opacity-only at rm-fade.",
+          "Static ambient frame: render the loop's midpoint as a static gradient/image.",
+          "Physics bypass: springs and drags resolve with direct duration-fast transitions under the flag."
+        ],
+        "useCases": [
+          "Every product shipping motion: the fallback layer is mandatory, not optional.",
+          "Health, government, education, enterprise - accessibility-critical contexts.",
+          "Design system motion specs defining per-component reduced behavior."
+        ],
+        "combinations": { "good": ["easing-timing"], "caution": ["ambient-motion", "illustration-lottie", "scroll-animation", "gesture-drag", "data-animation", "micro-interactions", "entrance-exit", "page-transitions", "feedback-confirmation", "loading-states"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["aurora-ui", "maximalism", "retro"], "avoid": [] },
+        "antiPatterns": [
+          "Kill-switch only: disabling all animation including state feedback leaves users without any change signal",
+          "Query amnesia: CSS honors the media query but JS-driven springs/particles ignore it",
+          "Reduced = invisible: hiding elements instead of animating them, so content 'jumps in' with no continuity at all",
+          "Set-and-forget: no QA pass with the OS setting enabled, so regressions ship silently"
+        ],
+        "reducedMotion": { "required": true, "notes": "This skill IS the reduced-motion strategy; its tokens define the fallback contract for all other skills.", "fallback": "Enforced globally: loops paused, travel 0, fades <=150ms, state changes via color/icon/text." }
+      }
+    }
+  ]
+}

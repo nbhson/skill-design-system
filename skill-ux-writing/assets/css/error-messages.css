@@ -1,0 +1,27 @@
+/* ============================================================
+ * Error Messages - starter design tokens (CSS custom properties)
+ * Skill id: error-messages (#04 of 12)
+ *
+ * The three-part contract: what went wrong, why (in user terms), and the fix - blame-free, specific, and never a stack trace.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-error-structure: what+why+fix; /* The three-part message contract */
+  --uxw-error-blame: system-responsibility; /* Blame-free phrasing always */
+  --uxw-error-fix-specificity: example-included; /* Show the correct format inline */
+  --uxw-error-code-policy: details-expander-only; /* Codes for support, not primary text */
+  --uxw-error-persistence: until-fixed-or-dismissed; /* No auto-dismiss for errors */
+  --uxw-error-position: inline-or-anchored-summary; /* At the point of failure */
+  --uxw-error-taxonomy: network,permission,not-found,validation; /* Approved copy pattern per class */
+  --uxw-error-recovery: retry-or-alternative; /* Every error has a path forward */
+  --uxw-error-flag: aria-invalid+describedby; /* Programmatic association (a11y) */
+  --uxw-error-focus: summary-on-submit; /* Failed submit focuses the error list */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Errors implement WCAG 3.3.1/3.3.3 and 4.1.3: text identification of errors, suggestions for correction, and polite narration - error copy must be programmatically associated (aria-describedby) or narrated, never color-only (a11y repo guide 07). */
+/* Fallback: If programmatic association cannot ship per field, an error summary on submit with focus + anchor links satisfies the contract - completeness of message before per-field elegance. */

@@ -1,0 +1,28 @@
+/* ============================================================
+ * Color Token Scales - starter design tokens (CSS custom properties)
+ * Skill id: color-tokens (#01 of 12)
+ *
+ * Primitive color scales built as perceptually-even ramps (neutral, brand, feedback), the raw material every semantic color decision draws from.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-color-neutral-0: #FFFFFF; /* Pure surface; text never lands directly on it without alias review */
+  --dt-color-neutral-100: #F5F5F5; /* Subtle fill: hover washes, code blocks, table stripes */
+  --dt-color-neutral-300: #D4D4D4; /* Disabled borders, dividers; fails all text contrast - decoration only */
+  --dt-color-neutral-500: #737373; /* Placeholder text on white passes 4.5:1; icons at 3:1 */
+  --dt-color-neutral-700: #404040; /* Secondary body text on white: 10.3:1 */
+  --dt-color-neutral-900: #171717; /* Primary body text on white: 16.9:1 */
+  --dt-color-brand-500: #2563EB; /* Brand anchor; white text on it passes 4.6:1 */
+  --dt-color-brand-600: #1D4ED8; /* Brand hover/pressed; links on white pass 6.3:1 */
+  --dt-color-success-500: #22C55E; /* Success accents/icons on white at 2.2:1 - pair with success-700 for text */
+  --dt-color-warning-500: #F59E0B; /* Warning accents; never as text on white (2.1:1) */
+  --dt-color-danger-500: #EF4444; /* Error accents; error text uses danger-600/700 for 4.5:1 */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Primitives are not exempt from contrast documentation: each step must declare its ratio on white/black so alias authors never guess. */
+/* Fallback: If a needed step fails contrast, do not bend the scale - pick the adjacent passing step or add a validated step via governance. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Spacing & Rhythm Audit - starter design tokens (CSS custom properties)
+ * Skill id: spacing-rhythm-audit (#07 of 12)
+ *
+ * The 4/8px grid check: off-scale spacing, grouping errors, and vertical rhythm that holds across the surface.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --rev-spacing-scale: 4-8px-system; /* All values on-scale */
+  --rev-proximity-test: grouping-by-space; /* Related > unrelated distance */
+  --rev-component-consistency: same-padding-everywhere; /* Per-instance drift flagged */
+  --rev-vertical-rhythm: consistent-intervals; /* No lurching gaps */
+  --rev-space-over-boxes: borders-are-failure; /* Shared with hierarchy audit */
+  --rev-density-tiers: compact,default,comfortable; /* Declared per surface */
+  --rev-alignment-check: edges-align; /* Almost-aligned = finding */
+  --rev-responsive-spacing: proportional-shrink; /* Breakpoint-verified */
+  --rev-raw-value-scan: lint-assisted; /* Mechanical sweep */
+  --rev-spacing-score: per-surface; /* Feeds report template */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Spacing serves WCAG 1.4.12 (text spacing tolerance: no clipping when users override spacing) and 2.5.8 (target spacing): the audit verifies surfaces survive user spacing overrides and that interactive targets keep effective separation. */
+/* Fallback: If the overlay pass is unavailable, run the raw-value lint sweep - off-scale values are mechanical and machine-findable. */

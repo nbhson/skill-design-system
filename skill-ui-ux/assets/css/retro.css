@@ -1,0 +1,34 @@
+/* ============================================================
+ * Retro — starter design tokens (CSS custom properties)
+ * Style id: retro
+ *
+ * Era-inspired aesthetics from the 1950s through 1990s - distinct palettes, typography, and graphic motifs for each decade.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-synthwave-dark-background: #0d0221; /* 80s synthwave dark background */
+  --color-synthwave-neon-purple: #ff00ff; /* 80s neon purple */
+  --color-synthwave-neon-pink: #ff6ec7; /* 80s neon pink */
+  --color-synthwave-neon-cyan: #00ffff; /* 80s neon cyan */
+  --color-synthwave-hot-yellow: #ffe900; /* 80s neon yellow */
+  --color-y2k-white-background: #f0f0f0; /* 90s Y2K light background */
+  --color-y2k-teal: #008080; /* 90s Windows teal */
+  --color-y2k-deep-purple: #663399; /* 90s deep purple */
+  --color-y2k-silver-desktop: #c0c0c0; /* 90s silver desktop */
+  --color-y2k-navy: #000080; /* 90s classic navy */
+  --color-50s-cherry-red: #ff2d2d; /* Diner style cherry red */
+  --color-50s-mint-green: #98ff98; /* Diner style mint */
+  --color-50s-cream-yellow: #f7e7ce; /* Diner style cream */
+  --color-50s-bubblegum-pink: #ffb6c1; /* Diner style pink */
+  --color-50s-milk-white: #fffdd0; /* Diner style milk white */
+  --font-heading: "1950s: Lobster / Pacifico; 1970s: Righteous / Satisfy; 1980s: Press Start 2P / Orbitron; 1990s: Eurostile / Arial Black", sans-serif; /* 1950s: Lobster / Pacifico; 1970s: Righteous / Satisfy; 1980s: Press Start 2P / Orbitron; 1990s: Eurostile / Arial Black */
+  --font-body: "1950s: Open Sans / Lato; 1970s: Roboto Slab / Merriweather; 1980s: VT323 / Share Tech Mono; 1990s: Verdana / Trebuchet MS", sans-serif; /* 1950s: Open Sans / Lato; 1970s: Roboto Slab / Merriweather; 1980s: VT323 / Share Tech Mono; 1990s: Verdana / Trebuchet MS */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* synthwave body text on dark background: #FFFFFF on #0D0221 = 20.04:1 — PASS */
+/* Y2K text on deep purple: #FFFFFF on #663399 = 8.41:1 — PASS */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Typographic Hierarchy - starter design tokens (CSS custom properties)
+ * Skill id: visual-hierarchy (#05 of 12)
+ *
+ * Directing the eye with size, weight, color, and position - the four hierarchy levers applied through text roles instead of per-screen decoration.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-hierarchy-levels: 4; /* title / heading / body / meta per screen */
+  --type-text-title: 2xl semibold, heading leading; /* Page title; the single focal rank */
+  --type-text-heading: lg semibold; /* Section headers */
+  --type-text-body: sm regular, body leading; /* Default reading text */
+  --type-text-meta: xs regular, secondary color; /* Timestamps, captions, helper text */
+  --type-emphasis-policy: weight-first; /* Bold before color before size for inline emphasis */
+  --type-focal-rule: one-per-view; /* Exactly one strongest treatment per screen */
+  --type-secondary-color-alias: color-text-secondary; /* De-ranking text uses the validated secondary alias */
+  --type-scale-jump-rule: min-2-steps; /* Title vs body differs by >= 2 scale steps to register */
+  --type-role-consistency: cross-screen; /* Same role = same rank everywhere; lint-checked */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Hierarchy must survive without color (1.4.1) and pass contrast at every rank (1.4.3): heading structure (h1-h6) also IS the screen reader's map (see a11y repo nav-by-headings). */
+/* Fallback: If visual hierarchy and semantic heading structure conflict, semantic wins - restyle the visuals to match the outline. */

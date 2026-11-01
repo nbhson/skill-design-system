@@ -1,0 +1,27 @@
+/* ============================================================
+ * Tabs & Accordions - starter design tokens (CSS custom properties)
+ * Skill id: tabs-accordions (#08 of 12)
+ *
+ * Disclosure widgets per APG: tabs for peer views, accordions for progressive detail - roles, keyboard maps, and the choice rule.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-tabs-role-set: tablist/tab/tabpanel; /* APG structure */
+  --comp-tabs-keymap: arrows+home+end; /* Roving tabindex per APG */
+  --comp-tabs-selection: manual-activation; /* Space/Enter activates; arrows move */
+  --comp-tabs-url-state: tab-param; /* Bookmarkable peer views */
+  --comp-accordion-trigger: button+aria-expanded; /* Native details preferred when styleable */
+  --comp-accordion-region-label: trigger-labelled; /* Region named by its trigger */
+  --comp-accordion-open-policy: single-open-default; /* Multi-open documented per use */
+  --comp-tabs-panel-label: labelledby-tab; /* Panel narrates its tab */
+  --comp-disclosure-nesting-cap: 1-level; /* No tabs-in-tabs-in-accordions */
+  --comp-tabs-vs-links: peers-vs-navigation; /* Site navigation is links, not tabs */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Disclosure widgets are APG territory (a11y repo guide 06): roles, roving tabindex, expanded/selected states, and labelled panels - a tab widget that narrates nothing is decoration, not a widget. */
+/* Fallback: Where the full tab contract cannot ship, use native radio-style selection or plain sections with anchor links - semantic structure beats partial widgets. */

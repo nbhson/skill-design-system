@@ -1,0 +1,31 @@
+/* ============================================================
+ * Data & Chart Animation — starter motion tokens (CSS custom properties)
+ * Skill id: data-animation (#09 of 12)
+ *
+ * Animating numbers, charts, and live data: count-ups, bar/draw-in reveals, morphs between states, and updates that make change perceptible without lying.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-chart-enter: 800ms; /* Full chart entrance; staggered series +100ms each */
+  --motion-countup-duration: 1200ms; /* KPI count-up with ease-out */
+  --motion-update-duration: 400ms; /* Interpolation between states on data change */
+  --motion-draw-duration: 1000ms; /* Line/path drawing via stroke-dashoffset */
+  --motion-tick-flash: 600ms; /* Background flash on a cell/value change */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Show final values and full charts immediately; keep a single tick-flash for updates so change remains perceptible. */
+/* Fallback: No count-up, no draw-in; update changes flash background once at tick-flash duration. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,26 @@
+/* ============================================================
+ * Neumorphism — starter design tokens (CSS custom properties)
+ * Style id: neumorphism
+ *
+ * Soft, tactile UI where elements appear 'pushed out' or 'pressed in' using symmetrical soft shadows on a unified background.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-primary-background-light: #e4e9f2; /* Warm gray-white - most common background */
+  --color-primary-background-dark: #2d3748; /* Dark gray - for dark mode */
+  --color-element-light: #ecf0f3; /* 5-8% lighter than background */
+  --color-light-shadow: #ffffff; /* Top-left corner */
+  --color-dark-shadow: #a3b1c6; /* Bottom-right corner */
+  --color-accent-color: #6c63ff; /* Soft purple - used for icons/active states only */
+  --color-primary-text: #4a5568; /* Medium-dark gray, not too dark */
+  --font-heading: "Poppins", sans-serif; /* Poppins (or Nunito, Quicksand) */
+  --font-body: "Poppins; UI Label: Poppins 13-14px / 500", sans-serif; /* Poppins; UI Label: Poppins 13-14px / 500 */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on element background: #4A5568 on #ECF0F3 = 6.57:1 — PASS */
+/* body text on primary background: #4A5568 on #E4E9F2 = 6.18:1 — PASS */

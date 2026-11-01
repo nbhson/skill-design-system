@@ -1,0 +1,644 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": ["skill-ui-ux", "skill-animation"]
+  },
+  "skills": [
+    {
+      "id": "color-tokens",
+      "name": "Color Token Scales",
+      "summary": "Primitive color scales built as perceptually-even ramps (neutral, brand, feedback), the raw material every semantic color decision draws from.",
+      "sections": {
+        "definition": "Color tokens are the primitive layer of a color system: complete, perceptually-even scales (50-950) per hue family, named by step number instead of by intent. Step numbers keep decisions honest - 'blue-500' says nothing about where it may be used, which is exactly what keeps the primitive layer reusable across themes, brands, and platforms. Every semantic decision (text, background, action) is expressed later, in the alias tier, by pointing at these steps; nothing in product code consumes a raw scale directly.",
+        "principles": [
+          "Build scales by perceptual evenness (OKLCH lightness), not by eye: the jump between step 300 and 400 should feel the same as 500 to 600.",
+          "Name steps by number, never by intent: 'gray-500' not 'gray-border' - intent lives in the alias tier.",
+          "One neutral ramp per system: derive warm/cool variants from it instead of introducing parallel neutral scales.",
+          "Fix anchors first: pick the brand anchor (usually 500), then extend up and down so contrast against white/black is predictable at every step.",
+          "11 steps (50-950) is enough: fewer steps force off-scale values; more steps create decision fatigue.",
+          "Feedback hues (success/warning/danger/info) get the same full-scale treatment as brand - not two lonely hexes.",
+          "Every step must state its contrast relationship: which steps pass 4.5:1 on white, which pass 3:1 - annotate the scale once so consumers never guess."
+        ],
+        "tokens": [
+          { "role": "color-neutral-0", "value": "#FFFFFF", "notes": "Pure surface; text never lands directly on it without alias review" },
+          { "role": "color-neutral-100", "value": "#F5F5F5", "notes": "Subtle fill: hover washes, code blocks, table stripes" },
+          { "role": "color-neutral-300", "value": "#D4D4D4", "notes": "Disabled borders, dividers; fails all text contrast - decoration only" },
+          { "role": "color-neutral-500", "value": "#737373", "notes": "Placeholder text on white passes 4.5:1; icons at 3:1" },
+          { "role": "color-neutral-700", "value": "#404040", "notes": "Secondary body text on white: 10.3:1" },
+          { "role": "color-neutral-900", "value": "#171717", "notes": "Primary body text on white: 16.9:1" },
+          { "role": "color-brand-500", "value": "#2563EB", "notes": "Brand anchor; white text on it passes 4.6:1" },
+          { "role": "color-brand-600", "value": "#1D4ED8", "notes": "Brand hover/pressed; links on white pass 6.3:1" },
+          { "role": "color-success-500", "value": "#22C55E", "notes": "Success accents/icons on white at 2.2:1 - pair with success-700 for text" },
+          { "role": "color-warning-500", "value": "#F59E0B", "notes": "Warning accents; never as text on white (2.1:1)" },
+          { "role": "color-danger-500", "value": "#EF4444", "notes": "Error accents; error text uses danger-600/700 for 4.5:1" }
+        ],
+        "composition": [
+          "Primitive scales sit at tier 0; alias tier (semantic-alias-naming) and component tier consume them - never the reverse.",
+          "Scales ship as flat custom properties; themes re-point aliases, never re-define scales, so every theme shares one ramp.",
+          "New hue families enter only by review: they must define the full 11-step ramp, not a single hex."
+        ],
+        "patterns": [
+          "Annotate-once contrast map: a generated table of every step's ratio on white/black ships beside the scale (contrast-validation skill).",
+          "Scale-first palette build: derive an entire product palette by re-pointing brand anchors - feedback hues stay constant across brands."
+        ],
+        "useCases": [
+          "Design systems defining their primitive color layer for the first time.",
+          "Multi-theme products needing one ramp that survives light/dark and multi-brand remapping.",
+          "Auditing an existing palette: off-scale hexes, orphan colors, undocumented contrast."
+        ],
+        "combinations": { "good": ["typography-tokens", "spacing-sizing", "radius-elevation", "semantic-alias-naming", "dark-mode", "multi-brand-theming", "contrast-validation", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": ["platform-mapping"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": ["collage-art", "brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "data-animation"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Intent-named primitives: 'color-border' in the primitive tier blocks every future use that is not a border",
+          "Off-scale hexes: components shipping #3B82F6 when the scale says brand-500 forks the system silently",
+          "Single-hex feedback colors: one green with no lighter/darker steps cannot support bg, border, and text roles accessibly",
+          "Eye-built ramps: scales stepped by eyeball feel uneven and break predictable contrast at known steps"
+        ],
+        "accessibility": { "required": true, "notes": "Primitives are not exempt from contrast documentation: each step must declare its ratio on white/black so alias authors never guess.", "fallback": "If a needed step fails contrast, do not bend the scale - pick the adjacent passing step or add a validated step via governance." }
+      }
+    },
+    {
+      "id": "typography-tokens",
+      "name": "Typography Token System",
+      "summary": "Font families, a modular type scale, weights, and line-height tokens that make text hierarchy systematic instead of per-screen improvisation.",
+      "sections": {
+        "definition": "Typography tokens encode every text decision the product is allowed to make: which families load, which sizes exist, which weights pair with them, and how tall each line runs. A modular scale (root 16px, ratio ~1.25) plus a closed weight set means hierarchy comes from stepping along the scale, not from inventing 17px here and 22px there. Because text is the majority of most interfaces, typography tokens are usually the highest-traffic token layer in the whole system.",
+        "principles": [
+          "One modular scale, root 16px, ratio 1.2-1.25: covers body through display in ~9 steps without off-scale sizes.",
+          "Close the weight set: 400/500/600/700 covers 95% of UI; loading 9 weights is a performance tax paid on every page.",
+          "Line-height is inversely proportional to size: tight (1.1-1.2) for display, relaxed (1.5-1.7) for body.",
+          "Two families maximum: one text face, one optional display or mono face; every extra family costs loading, consistency, and review time.",
+          "Letter-spacing tightens as size grows: display faces need -0.02em to -0.04em, body stays 0, uppercase labels earn +0.04em.",
+          "Sizes are rem, never px: user font-size preferences must scale the whole hierarchy (WCAG 1.4.4 resize).",
+          "Token names describe role, not appearance: text-body, text-heading, text-caption - so a font swap never breaks the vocabulary."
+        ],
+        "tokens": [
+          { "role": "font-family-sans", "value": "Inter, system-ui, -apple-system, sans-serif", "notes": "The default text face; system fallbacks keep first paint unstyled-fast" },
+          { "role": "font-family-mono", "value": "ui-monospace, SFMono-Regular, Menlo, monospace", "notes": "Code, numeric alignment, token names" },
+          { "role": "font-size-2xs", "value": "0.75rem", "notes": "12px - legal, timestamps; never for primary reading" },
+          { "role": "font-size-xs", "value": "0.875rem", "notes": "14px - secondary text, table cells, captions" },
+          { "role": "font-size-sm", "value": "1rem", "notes": "16px - body default; the root step of the scale" },
+          { "role": "font-size-md", "value": "1.125rem", "notes": "18px - lead paragraphs, emphasized body" },
+          { "role": "font-size-lg", "value": "1.25rem", "notes": "20px - h4/card titles" },
+          { "role": "font-size-xl", "value": "1.5rem", "notes": "24px - h3, section headers" },
+          { "role": "font-size-2xl", "value": "1.875rem", "notes": "30px - h2, page titles" },
+          { "role": "font-weight-semibold", "value": "600", "notes": "Headings and interactive emphasis; pairs with -0.01em tracking at lg+" },
+          { "role": "line-height-body", "value": "1.5", "notes": "Default for text at sm/md; relaxed 1.7 for long-form reading" }
+        ],
+        "composition": [
+          "Typography tokens compose with spacing tokens: paragraph rhythm uses space tokens, never margin guesses, so text blocks snap to the same grid as components.",
+          "Font-size steps pair with fixed line-height tokens; the pair (size, line-height) is reviewed together, never independently.",
+          "Dark mode re-points color aliases only - type tokens are theme-invariant, which is what keeps text metrics stable across themes."
+        ],
+        "patterns": [
+          "Role-based text classes: .text-body / .text-heading / .text-caption bundle size + weight + line-height + letter-spacing so consumers pick one class, not four values.",
+          "Fluid display: heading steps interpolate with clamp() between two scale stops so titles scale with viewport without extra breakpoints."
+        ],
+        "useCases": [
+          "Design systems standardizing a type ramp across web products.",
+          "Vietnamese and other diacritic-heavy locales: verifying line-height and fallback stacks render stacked marks without clipping.",
+          "Performance budgets: auditing weight loading and font-display strategy against the closed token set."
+        ],
+        "combinations": { "good": ["color-tokens", "spacing-sizing", "semantic-alias-naming", "dark-mode", "contrast-validation", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": ["radius-elevation", "multi-brand-theming", "platform-mapping"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "class-morphism"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": ["ambient-motion"], "avoid": [] },
+        "antiPatterns": [
+          "Off-scale sizes: 17px or 22px one-offs erode the scale until every screen invents its own hierarchy",
+          "Open weight loading: shipping 400-900 in one family file multiplies payload for weights nobody uses",
+          "Px font sizes: locking text to pixels breaks user font-size preferences and WCAG 1.4.4 resize",
+          "Appearance-named tokens: text-small-bold-uppercase encodes today's look and dies at the first redesign"
+        ],
+        "accessibility": { "required": true, "notes": "Type tokens carry two WCAG duties: real text must respect 200% zoom (rem sizes, WCAG 1.4.4) and line-height tokens must keep diacritics (Vietnamese stacked marks) unclipped at every step.", "fallback": "If a step's tight line-height clips diacritics or wraps badly at 200% zoom, raise that step's line-height token - never shrink the text." }
+      }
+    },
+    {
+      "id": "spacing-sizing",
+      "name": "Spacing & Sizing Tokens",
+      "summary": "A 4px-base spacing scale, icon sizing, and touch-target minimums that give every layout decision a legal value.",
+      "sections": {
+        "definition": "Spacing tokens are the rhythm section of a design system: one 4px-base scale (4/8/12/16/24/32/48/64) from which all padding, gap, and margin values are drawn, plus sizing tokens for icons and interactive targets. Because space is invisible when right and glaring when wrong, the scale's job is to make 'close enough' impossible - any layout question has exactly one legal answer at each density level.",
+        "principles": [
+          "4px base, doubling emphasis: 4/8/16/32 for structural rhythm, 12/24/48 as half-steps for dense and hero contexts.",
+          "Fewer steps, more discipline: 8 spacing values cover everything; every added value dilutes the grid's meaning.",
+          "Spacing communicates hierarchy: related items sit closer (space-2 to space-3) than unrelated ones (space-6 to space-8) - proximity is the token's semantics.",
+          "Icons get fixed slots (16/24/32px) that align to the spacing grid, so glyphs never optically drift.",
+          "Touch targets are a floor, not a style: 44x44px minimum (WCAG 2.5.8) regardless of visual size.",
+          "Container padding derives from the same scale as gaps: a card's padding is a spacing token, not a component-local decision.",
+          "Never ship negative spacing or odd values: if a layout seems to need 13px, the composition is wrong, not the scale."
+        ],
+        "tokens": [
+          { "role": "space-1", "value": "4px", "notes": "Icon-to-label gap, chip inner padding" },
+          { "role": "space-2", "value": "8px", "notes": "Related-element gap, list item inner padding" },
+          { "role": "space-3", "value": "12px", "notes": "Form field spacing, dense card padding" },
+          { "role": "space-4", "value": "16px", "notes": "Default component padding, grid gutter" },
+          { "role": "space-6", "value": "24px", "notes": "Card padding, section inner spacing" },
+          { "role": "space-8", "value": "32px", "notes": "Between content groups" },
+          { "role": "space-12", "value": "48px", "notes": "Between sections" },
+          { "role": "space-16", "value": "64px", "notes": "Page-level section separation" },
+          { "role": "size-icon-sm", "value": "16px", "notes": "Inline icons beside 14px text" },
+          { "role": "size-icon-md", "value": "24px", "notes": "Standalone icon buttons, nav icons" },
+          { "role": "size-touch-target", "value": "44px", "notes": "WCAG 2.5.8 minimum interactive target; pad small visuals to this" }
+        ],
+        "composition": [
+          "Spacing tokens pair with typography tokens: line-height boxes + space tokens form the vertical rhythm; text blocks snap to the same 4px grid as everything else.",
+          "Component tokens consume spacing values (component-card-padding = space-4), so a density mode can re-map one tier and tighten the whole UI.",
+          "Touch-target sizing composes with contrast-validation: hit areas stay 44px even when the visible glyph is smaller - opacity and size are independent axes."
+        ],
+        "patterns": [
+          "Density modes as token overrides: compact re-maps space-4 to space-3 at the alias tier; no component rewrites its own padding.",
+          "Stack-and-gap layouts: vertical rhythm expressed only as flex/grid gap of a scale value - margins reserved for typographic exceptions."
+        ],
+        "useCases": [
+          "Design systems establishing a shared layout grid across web and native.",
+          "Density modes (compact tables, comfortable marketing pages) from one token set.",
+          "Auditing spacing debt: magic numbers, misaligned gutters, sub-44px touch targets."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "radius-elevation", "semantic-alias-naming", "contrast-validation", "platform-mapping", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": ["dark-mode", "multi-brand-theming"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["maximalism", "collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["entrance-exit", "easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Magic spacing: 13px, 18px, 27px one-offs that quietly abandon the grid",
+          "Spacing as decoration: inflating gaps to 'add air' instead of fixing hierarchy - proximity must stay meaningful",
+          "Sub-44px touch targets: visually small icons shipped without invisible padding to the 44px floor",
+          "Parallel scales: a separate 'dense' scale instead of one scale re-mapped at the alias tier"
+        ],
+        "accessibility": { "required": true, "notes": "The scale owns WCAG 2.5.8 target size: any interactive element smaller than 44px must be padded to the floor with size-touch-target. Spacing must also preserve WCAG 1.4.12 text spacing tolerance - layouts may not break when users override spacing.", "fallback": "If a dense layout cannot afford 44px targets, redesign the layout; target size is never traded away for density." }
+      }
+    },
+    {
+      "id": "radius-elevation",
+      "name": "Radius & Elevation Tokens",
+      "summary": "Border-radius steps, shadow elevation levels, and z-index layers - the depth system that says what floats above what.",
+      "sections": {
+        "definition": "Radius and elevation tokens encode depth: border-radius communicates surface softness and container identity, shadow tokens encode height above the page (card < dropdown < modal < toast), and z-index tokens assign legal stacking layers. Together they answer the question layouts constantly ask - what is floating above what, and how rounded is it - with four shadows and five radii instead of forty ad-hoc box-shadows.",
+        "principles": [
+          "Five radii cover all UI: none, sm (4px), md (8px), lg (16px), full - control-like surfaces get sm/md, containers lg, pills full.",
+          "Elevation is a scale of altitude, not beauty: each level means a specific interactivity class (resting card, hover lift, dropdown, modal, toast).",
+          "Shadows are soft, directional, and layered: two stacked shadows (ambient + key) per level read more real than one heavy blur.",
+          "Radius is consistent across an altitude: everything at elevation-2 shares the same radius family - mixed radii at one level look assembled.",
+          "Z-index is a closed enum, not an integer lottery: named layers (dropdown 1000, modal 1050, toast 1100) prevent the 9999 arms race.",
+          "Dark mode changes shadow physics: dark surfaces need stronger, more opaque shadows plus subtle borders - light-theme shadows vanish on dark backgrounds.",
+          "Elevation never substitutes for contrast: a shadow does not make text readable (contrast-validation owns that)."
+        ],
+        "tokens": [
+          { "role": "radius-none", "value": "0px", "notes": "Tables, full-bleed media, aligned grid edges" },
+          { "role": "radius-sm", "value": "4px", "notes": "Inputs, small buttons, chips" },
+          { "role": "radius-md", "value": "8px", "notes": "Buttons, dropdowns, cards in dense UI" },
+          { "role": "radius-lg", "value": "16px", "notes": "Modals, large cards, marketing surfaces" },
+          { "role": "radius-full", "value": "9999px", "notes": "Pills, avatars, FABs" },
+          { "role": "elevation-1", "value": "0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.10)", "notes": "Resting cards, sticky headers" },
+          { "role": "elevation-2", "value": "0 2px 4px rgba(16,24,40,0.06), 0 4px 8px rgba(16,24,40,0.10)", "notes": "Hover lift, popovers" },
+          { "role": "elevation-3", "value": "0 4px 6px rgba(16,24,40,0.05), 0 12px 24px rgba(16,24,40,0.14)", "notes": "Dropdowns, command menus" },
+          { "role": "elevation-4", "value": "0 8px 12px rgba(16,24,40,0.06), 0 24px 48px rgba(16,24,40,0.18)", "notes": "Modals, drawers" },
+          { "role": "z-index-dropdown", "value": "1000", "notes": "Menus, selects, popovers" },
+          { "role": "z-index-modal", "value": "1050", "notes": "Modals, drawers, sheets; toast sits above" }
+        ],
+        "composition": [
+          "Elevation composes with dark-mode tokens: dark themes re-map every shadow to stronger variants and add border aliases - the altitude meaning stays constant.",
+          "Component tokens consume radius/elevation (component-modal-radius = radius-lg), keeping per-component values derived instead of forked.",
+          "Radius tokens pair with spacing: inner padding should relate to outer radius (radius-md surfaces use space-3/space-4 padding) so corners never look cramped."
+        ],
+        "patterns": [
+          "Altitude contract: document the meaning of each elevation level once; components request altitude, not raw shadows.",
+          "Hover = altitude delta: interactive surfaces move up one elevation level on hover (elevation-1 to elevation-2), paired with the motion system's duration tokens."
+        ],
+        "useCases": [
+          "Design systems defining a depth language for cards, overlays, and floating UI.",
+          "Dark theme rollout: re-mapping the shadow ramp for dark physics.",
+          "Taming z-index chaos: replacing 9999-style stacking with a closed layer enum."
+        ],
+        "combinations": { "good": ["color-tokens", "spacing-sizing", "semantic-alias-naming", "dark-mode", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": ["typography-tokens", "multi-brand-theming", "contrast-validation", "platform-mapping"], "avoid": [] },
+        "styleAffinity": { "good": ["claymorphism", "neumorphism", "glassmorphism"], "caution": ["brutalism-ui", "flat-design"], "avoid": [] },
+        "motionAffinity": { "good": ["feedback-confirmation", "micro-interactions"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Shadow soup: a unique box-shadow per component instead of four altitude levels",
+          "z-index lottery: 99, 999, 9999 competing across codebases until one more zero 'wins'",
+          "Mixed radii at one altitude: 6px and 12px corners on the same level read as two different systems",
+          "Shadow-as-contrast: using elevation to separate text from background instead of meeting WCAG 1.4.3"
+        ],
+        "accessibility": { "required": true, "notes": "Depth must never carry meaning alone: an element indicated only by shadow is lost to users with shadows disabled or in flat/high-contrast modes - pair elevation with a border or background change (WCAG 1.4.11 non-text contrast for visible boundaries).", "fallback": "In forced-colors or high-contrast modes, map each elevation level to an explicit border; never rely on box-shadow alone to delineate interactive surfaces." }
+      }
+    },
+    {
+      "id": "semantic-alias-naming",
+      "name": "Semantic & Alias Naming",
+      "summary": "The three-tier naming architecture - primitive, semantic alias, component - that lets themes swap values without code ever changing.",
+      "sections": {
+        "definition": "Alias naming is the architecture that makes tokens themeable: primitives (blue-500) are referenced by semantic aliases (color-action-primary), which are referenced by component tokens (component-button-bg). Product code consumes only the top tiers, so switching light/dark, brand A to brand B, or default to high-contrast is a re-pointing of aliases - not a code change. Naming is therefore the highest-leverage decision in the system: it is the API every other token skill programs against.",
+        "principles": [
+          "Three tiers, strict direction: primitive -> semantic alias -> component; nothing references downward or sideways.",
+          "Name aliases by role and intent: color-text-primary, color-bg-surface, color-action-primary - never by value or appearance.",
+          "One alias vocabulary across the product: if a modal and a card both need a surface, they both use color-bg-surface; no modal-bg vs card-bg fork at the semantic tier.",
+          "Aliases encode state axes explicitly: -hover, -pressed, -disabled are distinct tokens, not CSS-derived ad-hoc colors.",
+          "Feedback axes are closed: success/warning/danger/info, each with bg/border/text roles - new meanings require a new axis decision, not a new one-off.",
+          "Rename with deprecation, never in place: aliases are an API; governance-migration owns renames.",
+          "An alias that maps to nothing (no primitive) or a primitive consumed directly by code are both contract violations."
+        ],
+        "tokens": [
+          { "role": "color-bg-default", "value": "var(--dt-color-neutral-0)", "notes": "Page background" },
+          { "role": "color-bg-subtle", "value": "var(--dt-color-neutral-100)", "notes": "Wells, table stripes, code blocks" },
+          { "role": "color-bg-inverse", "value": "var(--dt-color-neutral-900)", "notes": "Tooltips, dark surfaces on light theme" },
+          { "role": "color-text-primary", "value": "var(--dt-color-neutral-900)", "notes": "Body and heading text" },
+          { "role": "color-text-secondary", "value": "var(--dt-color-neutral-700)", "notes": "Meta, captions, inactive labels" },
+          { "role": "color-text-on-action", "value": "var(--dt-color-neutral-0)", "notes": "Text/icons on filled actions" },
+          { "role": "color-border-default", "value": "var(--dt-color-neutral-300)", "notes": "Inputs, card outlines, dividers" },
+          { "role": "color-action-primary", "value": "var(--dt-color-brand-500)", "notes": "Primary buttons, links, active nav" },
+          { "role": "color-action-primary-hover", "value": "var(--dt-color-brand-600)", "notes": "Hover state axis; pressed maps to -600/700" },
+          { "role": "color-feedback-danger-text", "value": "var(--dt-color-danger-600)", "notes": "Error text; passes 4.5:1 where the raw 500 does not" },
+          { "role": "color-feedback-success-bg", "value": "var(--dt-color-success-100)", "notes": "Success banner background tint" }
+        ],
+        "composition": [
+          "Alias tier is where cross-domain composition happens: dark-mode re-points aliases, multi-brand-theming overrides brand aliases, component-tokens consume aliases - each theme change is one tier deep.",
+          "State axes (-hover, -pressed, -disabled) compose with the motion system: state changes animate with motion tokens, colors come from state aliases.",
+          "The alias vocabulary is the lint target for governance: component code referencing primitives (var(--dt-color-neutral-900)) is a build failure, not a style nit."
+        ],
+        "patterns": [
+          "Role-matrix review: for each semantic role, write down bg/border/text/hover/pressed/disabled once; missing cells become tickets, not improvisations.",
+          "Alias-first design review: designs expressed in primitives ('use blue-700 here') are rejected; they must state intent ('action-primary on inverse surface')."
+        ],
+        "useCases": [
+          "Any product preparing for theming: dark mode, brands, or density - aliases are the prerequisite.",
+          "Component libraries: components consume alias/component tiers only so they render correctly in every theme.",
+          "Cleaning up a legacy palette: introducing the alias tier above existing primitives without breaking current code."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "spacing-sizing", "radius-elevation", "dark-mode", "multi-brand-theming", "contrast-validation", "platform-mapping", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "maximalism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Two-tier collapse: components consuming primitives directly, which makes theming a code-wide find-and-replace",
+          "Appearance-named aliases: color-light-blue-button encodes value and usage and dies at the first rebrand",
+          "Alias explosion: modal-bg, dialog-bg, sheet-bg as separate aliases instead of one shared surface role",
+          "Hidden state math: deriving hover colors in CSS (filter: brightness) instead of declaring -hover aliases"
+        ],
+        "accessibility": { "required": true, "notes": "The alias tier is where contrast is guaranteed: state aliases (-disabled, -on-action) must declare their ratio pairing (e.g. color-text-on-action on color-action-primary passes 4.5:1) so valid combinations are the only combinations.", "fallback": "If an alias pairing fails contrast, fix the alias mapping (choose different primitive steps) - never override the alias value in component code." }
+      }
+    },
+    {
+      "id": "dark-mode",
+      "name": "Dark Mode Theming",
+      "summary": "Re-pointing semantic aliases into a dark theme: surface inversion, elevation physics, saturation control, and contrast that survives inversion.",
+      "sections": {
+        "definition": "Dark mode is a theme expressed as a second alias mapping: the same semantic vocabulary (color-bg-surface, color-text-primary) points at different primitive values. Done well, it is not 'invert the colors' - dark themes need desaturated brand steps, elevated surfaces that get lighter as they rise, shadows replaced by borders, and every alias pairing re-validated for contrast. The token architecture decides whether dark mode is a one-sprint job or a code-wide rewrite.",
+        "principles": [
+          "Never invert, re-map: rebuild alias values against dark-surface physics; inverting #111 text gives #EEE text but breaks every feedback hue in between.",
+          "Elevated surfaces get lighter, not shadowed: dark cards rise from #1C1C1E toward #2C2C2E; lightness carries altitude where shadows cannot.",
+          "Desaturate by altitude: brand-500's dark-theme sibling is lighter and less saturated (e.g. #60A5FA) so it does not vibrate on dark surfaces.",
+          "Shadows become borders: pair every elevation level with a subtle border alias; pure shadows disappear on dark backgrounds.",
+          "Avoid pure white text on pure black: #FAFAFA on #0A0A0A reduces halation and glare while still passing AAA.",
+          "Dark mode is a user setting, not a schedule: respect prefers-color-scheme as default, expose an explicit toggle, and persist the choice.",
+          "Every state axis re-validates: hover/pressed/disabled pairings pass contrast in BOTH themes - a 3:1 hover delta in light may vanish in dark."
+        ],
+        "tokens": [
+          { "role": "color-scheme", "value": "light dark", "notes": "Declares both schemes; enables native form/scrollbar adaptation" },
+          { "role": "color-bg-default-dark", "value": "#0A0A0A", "notes": "Page background; never pure #000 for long sessions" },
+          { "role": "color-bg-surface-dark", "value": "#1C1C1E", "notes": "Cards, sheets at elevation-1" },
+          { "role": "color-bg-elevated-dark", "value": "#2C2C2E", "notes": "Dropdowns/modals; lightness carries altitude" },
+          { "role": "color-text-primary-dark", "value": "#FAFAFA", "notes": "Body text; 17.9:1 on bg-default-dark, no halation" },
+          { "role": "color-text-secondary-dark", "value": "#A3A3A3", "notes": "Meta text; 7.1:1 on bg-default-dark" },
+          { "role": "color-border-dark", "value": "#2E2E30", "notes": "Replaces shadows as the depth cue at every elevation" },
+          { "role": "color-action-primary-dark", "value": "#60A5FA", "notes": "Desaturated brand step; #0A0A0A text on it passes 8.9:1" },
+          { "role": "color-overlay-scrim", "value": "rgba(0, 0, 0, 0.60)", "notes": "Modal scrim; lighten to 0.40 in dark to avoid pitch-black" },
+          { "role": "elevation-2-dark", "value": "0 0 0 1px #2E2E30, 0 4px 12px rgba(0,0,0,0.50)", "notes": "Border-led shadow variant for dark elevation-2" }
+        ],
+        "composition": [
+          "Dark mode composes with alias naming: it re-points the semantic tier and adds -dark elevation/border aliases; primitives and component tokens stay untouched.",
+          "It composes with contrast-validation: every alias pairing ships with both light and dark ratios; a pairing without a dark ratio is not done.",
+          "It composes with component-tokens: components consume semantic aliases so they inherit the theme with zero component changes - any component requiring dark overrides is a bug."
+        ],
+        "patterns": [
+          "data-theme attribute + CSS custom properties: [data-theme='dark'] { --dt-color-bg-default: ... } - one block re-points all aliases; OS sync via prefers-color-scheme default.",
+          "color-scheme per theme: set color-scheme: dark on the dark root so scrollbars, form controls, and rendering adapt natively."
+        ],
+        "useCases": [
+          "Adding dark mode to an existing product built on semantic aliases.",
+          "Developer tools, media apps, and dashboards where long sessions demand dark ergonomics.",
+          "Audit: verifying every semantic pairing's contrast in both themes, not just light."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "radius-elevation", "semantic-alias-naming", "contrast-validation", "platform-mapping", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": ["spacing-sizing", "multi-brand-theming"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "aurora-ui", "glassmorphism"], "caution": ["skeuomorphism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": ["illustration-lottie"], "avoid": [] },
+        "antiPatterns": [
+          "Filter inversion: hue-rotate/invert hacks that turn brand colors neon and photos eerie",
+          "Pure black + pure white: #000/#FFF maximizes halation and eye strain in long sessions",
+          "Light-theme shadows on dark surfaces: invisible depth; dark elevation needs lightness + borders",
+          "Dark mode as afterthought: bolted-on dark colors with unvalidated pairings, broken state axes, and unreadable feedback hues"
+        ],
+        "accessibility": { "required": true, "notes": "Dark mode is an accessibility feature and an accessibility risk at once: it serves photosensitive and low-vision users, but every alias pairing must re-pass WCAG 1.4.3/1.4.11 in the dark theme, and state axes (hover/focus) must keep a visible delta.", "fallback": "If a component's dark pairing fails contrast, ship the component in light-forced mode behind an explicit ticket rather than shipping a failing dark pairing." }
+      }
+    },
+    {
+      "id": "multi-brand-theming",
+      "name": "Multi-Brand Theming",
+      "summary": "White-label theming at the alias tier: per-brand primitive overrides, locked shared vocabulary, and a brand matrix that does not explode.",
+      "sections": {
+        "definition": "Multi-brand theming extends the dark-mode mechanism horizontally: N brands, each re-pointing the same semantic aliases to its own primitives. The discipline is in what brands may NOT change - the shared component vocabulary, spacing, and interaction patterns stay fixed while color, radius, typography families, and illustration voice vary. The failure mode is the matrix explosion: brands x themes x densities x components, each demanding its own overrides.",
+        "principles": [
+          "Brands override the alias tier only: they may re-point color-action-primary, never restructure the vocabulary.",
+          "Component tier is brand-neutral: if two brands need different button anatomy, that is two components - not one component with brand forks.",
+          "Per-brand primitives get full scales, not single hexes: a brand anchor plus its contrast-safe siblings, validated like any ramp.",
+          "Typography varies by family, not by scale: brands may swap the font family but inherit the same size/line-height steps (license and loading permitting).",
+          "The brand matrix is explicit: brands x themes documented in one table; a cell that has not been contrast-validated does not ship.",
+          "Brand switching is runtime-safe: swapping a data-brand attribute re-points aliases without reload - proof the tier separation is real.",
+          "Shared components are the contract: a brand override that breaks a component in another brand fails CI (governance), not just the brand's eyes."
+        ],
+        "tokens": [
+          { "role": "brand-a-primary", "value": "#2563EB", "notes": "Brand A anchor; full sibling ramp validated around it" },
+          { "role": "brand-a-on-primary", "value": "#FFFFFF", "notes": "Text on A-primary: 4.6:1" },
+          { "role": "brand-b-primary", "value": "#16A34A", "notes": "Brand B anchor; white text fails 3.0:1 - use neutral-900" },
+          { "role": "brand-b-on-primary", "value": "#052E16", "notes": "Dark text on B-primary: 10.9:1 - proves on-primary must be per-brand" },
+          { "role": "brand-c-primary", "value": "#9333EA", "notes": "Brand C anchor; white on it passes 4.9:1" },
+          { "role": "brand-radius-override", "value": "12px", "notes": "Optional per-brand radius personality at alias tier" },
+          { "role": "brand-font-override", "value": "'Brand Sans', Inter, sans-serif", "notes": "Family swap only; size scale inherited" },
+          { "role": "theming-strategy", "value": "alias-tier-override", "notes": "The documented mechanism; component forks are forbidden" },
+          { "role": "brand-logo-max-width", "value": "160px", "notes": "Layout slot contract so brand marks cannot break headers" }
+        ],
+        "composition": [
+          "Brand theming stacks with dark mode: the matrix is brands x themes, so each brand's primitives need both light and dark validated pairings - budget for it.",
+          "It composes with component-tokens: component tokens reference semantic aliases, so a brand switch flows through automatically; per-brand component token forks are the avoid-level anti-pattern.",
+          "It composes with governance: brand overrides ship through the same review and validation pipeline as core tokens - a brand is a theme, not a fork."
+        ],
+        "patterns": [
+          "data-brand + data-theme composition: [data-brand='b'][data-theme='dark'] - CSS custom properties compose naturally; each axis owns its tier.",
+          "Brand starter kit: each brand onboards with a template (anchor hex + font family + logo slot), and the pipeline generates its validated ramps and pairings."
+        ],
+        "useCases": [
+          "White-label SaaS where customer logos and colors overlay one product.",
+          "Multi-brand portfolios sharing one component library across consumer brands.",
+          "Agency/client handoff: the design system ships, the client brand themes it safely."
+        ],
+        "combinations": { "good": ["color-tokens", "semantic-alias-naming", "contrast-validation", "token-pipeline-figma", "governance-migration"], "caution": ["typography-tokens", "spacing-sizing", "radius-elevation", "dark-mode", "platform-mapping"], "avoid": ["component-tokens"] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["retro", "skeuomorphism"], "avoid": [] },
+        "motionAffinity": { "good": [], "caution": ["illustration-lottie"], "avoid": [] },
+        "antiPatterns": [
+          "Brand component forks: button-brand-a vs button-brand-b instead of one button consuming brand aliases",
+          "Single-hex brands: a brand with only a primary hex cannot fill hover, disabled, and on-primary roles accessibly",
+          "Unvalidated matrix cells: shipping brand x theme combinations no one ever contrast-checked",
+          "Brand-specific vocabulary: brand-a-card-bg aliases that fragment the semantic tier per brand"
+        ],
+        "accessibility": { "required": true, "notes": "Brand identity never lowers the bar: each brand's on-primary, link, and feedback pairings pass WCAG 1.4.3 in every theme cell; on-primary text color is per-brand precisely because a shared white fails on some anchors.", "fallback": "If a brand's anchor cannot reach 4.5:1 with any text, the anchor changes or its text role darkens - brand preference loses to contrast." }
+      }
+    },
+    {
+      "id": "contrast-validation",
+      "name": "Contrast Validation",
+      "summary": "WCAG contrast as a token property: annotated scales, validated alias pairings, and automated checks that fail the build on regressions.",
+      "sections": {
+        "definition": "Contrast validation turns accessibility from a QA afterthought into a token property. Every primitive step carries a computed ratio on white/black; every alias pairing (text-on-bg, icon-on-surface, border-on-surface) is recorded and checked; CI fails when a change drops any pairing below its threshold. Because the alias tier is the only place product code consumes color, validating there means validating everything - once.",
+        "principles": [
+          "Know the thresholds: 4.5:1 body text, 3:1 large text (18.66px bold / 24px regular), 3:1 UI components and graphical objects (WCAG 1.4.3/1.4.11).",
+          "Validate pairings, not colors: a color has no ratio - only text-on-background does; the alias tier is where pairings live.",
+          "Annotate the scale once: generated ratio tables on white and black make primitive steps self-documenting.",
+          "Pair-check every state axis: hover, pressed, disabled, and focus each declare a pairing; a state that fails silently is a bug in the contract.",
+          "Focus indicators count: the focus ring must hit 3:1 against adjacent colors (WCAG 2.4.13 in 2.2) - give it a dedicated alias.",
+          "Automate at three gates: token pipeline (pairing lint), CI (regression diff), and component tests (rendered contrast) - manual spot checks are the exception.",
+          "Disabled does not mean unmeasured: even exempt disabled states get documented ratios so no one 'fixes' them blindly later."
+        ],
+        "tokens": [
+          { "role": "contrast-body-min", "value": "4.5:1", "notes": "WCAG 1.4.3 AA for body text" },
+          { "role": "contrast-large-text-min", "value": "3:1", "notes": "24px regular / 18.66px bold text" },
+          { "role": "contrast-ui-component-min", "value": "3:1", "notes": "WCAG 1.4.11: input borders, icons, control boundaries" },
+          { "role": "contrast-body-aaa", "value": "7:1", "notes": "AAA target for long-form reading surfaces" },
+          { "role": "contrast-focus-ring-min", "value": "3:1", "notes": "WCAG 2.4.13 focus appearance; ring vs both sides of the boundary" },
+          { "role": "contrast-focus-ring-color", "value": "#1D4ED8", "notes": "6.3:1 on white, 4.6:1 on neutral-100 - safe nearly everywhere" },
+          { "role": "contrast-state-delta-min", "value": "1.5:1", "notes": "Hover/pressed color shift users can actually perceive" },
+          { "role": "contrast-disabled-note", "value": "exempt-documented", "notes": "WCAG exempts disabled controls; record ratios anyway" }
+        ],
+        "composition": [
+          "Contrast composes with alias naming: pairings are declared as alias relationships, so one validation covers every consumer of the alias.",
+          "It composes with dark mode and multi-brand: each theme cell re-validates the same pairing table; automation makes N x M cheap.",
+          "It composes with component-tokens: component pairings (button-bg on button-text) inherit validation from their alias sources."
+        ],
+        "patterns": [
+          "Pairing manifest: a data file listing every semantic pairing with both themes' computed ratios; CI diffs it and fails on any regression.",
+          "Contrast-first palette build: choose alias pairs before styling - the palette is whatever values satisfy the manifest, not the reverse."
+        ],
+        "useCases": [
+          "Design systems shipping WCAG AA (or AAA) as a build-time guarantee.",
+          "Dark mode and multi-brand rollouts: validating the full pairing matrix automatically.",
+          "A11y remediation: converting audit findings into token-level fixes that propagate everywhere."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "spacing-sizing", "semantic-alias-naming", "dark-mode", "multi-brand-theming", "platform-mapping", "token-pipeline-figma", "component-tokens", "governance-migration"], "caution": ["radius-elevation"], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": ["brutalism-ui", "collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["reduced-motion"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Spot-check QA: contrast verified by screenshot eyeballing after build instead of computed in the pipeline",
+          "Color-only contrast: darkening text past the brand to pass 4.5:1 when the background alias should change",
+          "Validating light only: dark theme pairings assumed 'probably fine' and never computed",
+          "Exempt everything: labeling failing text 'large' or 'decorative' to skip thresholds without measuring"
+        ],
+        "accessibility": { "required": true, "notes": "This skill IS the accessibility layer of the token system: WCAG 1.4.3 (text), 1.4.11 (non-text), 2.4.13 (focus) enforced as data. Ratios are computed with the WCAG relative-luminance formula against sRGB values.", "fallback": "A failing pairing has three legal fixes in order: change the paired background alias, change the text alias to a darker/lighter sibling step, or (last) add a validated primitive step via governance - never ship below threshold." }
+      }
+    },
+    {
+      "id": "platform-mapping",
+      "name": "Cross-Platform Mapping",
+      "summary": "One token source translated to CSS custom properties, iOS, Android, and utility frameworks - with values that survive unit and paradigm differences.",
+      "sections": {
+        "definition": "Platform mapping is the translation layer between the platform-neutral token source and its consumers: CSS custom properties, Swift/iOS asset catalogs and UIFont metrics, Android Compose themes and dimens, plus utility frameworks like Tailwind. Good mapping preserves meaning (one spacing scale, one type ramp) while respecting each platform's units (px/rem/dp/pt), paradigms (font scaling on mobile), and idioms (Material elevation vs CSS shadows).",
+        "principles": [
+          "One source of truth, many renderers: tokens are authored once (W3C DTCG format) and codegen'd per platform - hand-synced platform files rot.",
+          "Unit mapping is explicit: CSS rem (root 16), iOS pt, Android dp; 1rem = 16 = 16pt = 16dp, and the mapping table is versioned with the tokens.",
+          "Respect platform font scaling: iOS Dynamic Type and Android fontScale must multiply type tokens - fixed-pixel type on mobile is an accessibility bug.",
+          "Map paradigms, not just values: elevation becomes Material elevation levels on Android and CALayer shadows on iOS; the altitude meaning survives.",
+          "CSS custom properties are the web renderer: prefixed (--dt-), themeable via data-attributes, and the reference output other renderers are diffed against.",
+          "Utility frameworks map to tokens, never bypass them: Tailwind config extends from the same source so text-lg IS font-size-lg.",
+          "Behavior parity is validated: dark mode, brand switching, and density modes must work identically on every mapped platform."
+        ],
+        "tokens": [
+          { "role": "map-css-prefix", "value": "--dt-", "notes": "Web custom-property prefix; collision-safe" },
+          { "role": "map-ios-prefix", "value": "DT", "notes": "Swift enum/asset prefix (DTColor.actionPrimary)" },
+          { "role": "map-android-prefix", "value": "dt_", "notes": "Resource prefix: dt_action_primary" },
+          { "role": "map-base-unit-css", "value": "1rem = 16px", "notes": "Root-relative; multiplies with user font-size preference" },
+          { "role": "map-base-unit-native", "value": "1dp = 1pt = 1px@1x", "notes": "Density-independent baseline across mobile platforms" },
+          { "role": "map-font-scaling", "value": "dynamic-type-on", "notes": "iOS Dynamic Type / Android fontScale multiply type tokens" },
+          { "role": "breakpoint-sm", "value": "640px", "notes": "Phone landscape / small tablet" },
+          { "role": "breakpoint-md", "value": "768px", "notes": "Tablet portrait" },
+          { "role": "breakpoint-lg", "value": "1024px", "notes": "Tablet landscape / small laptop" },
+          { "role": "breakpoint-xl", "value": "1280px", "notes": "Desktop; content max-widths derive from here" }
+        ],
+        "composition": [
+          "Mapping composes with the pipeline: token-pipeline-figma emits per-platform renderers; this skill defines their contracts (prefixes, units, scaling).",
+          "It composes with dark mode and brands: data-theme/data-brand on web, trait collections on iOS, configuration qualifiers on Compose - same alias semantics per platform.",
+          "It composes with typography: the type ramp maps with font scaling rules so rem/pt/dp agree at every Dynamic Type size."
+        ],
+        "patterns": [
+          "Codegen with golden tests: each platform output is generated and diffed in CI; a hand-edit to generated files fails the build.",
+          "Parity matrix: rows are features (dark mode, brand, density, font scaling), columns are platforms; a feature ships when all columns pass."
+        ],
+        "useCases": [
+          "Design systems spanning web, iOS, and Android from one token source.",
+          "Tailwind/utility adoption: generating the config from tokens so utilities cannot drift.",
+          "Audit: finding hand-synced platform files that have already diverged from the source."
+        ],
+        "combinations": { "good": ["spacing-sizing", "semantic-alias-naming", "dark-mode", "contrast-validation", "token-pipeline-figma", "governance-migration"], "caution": ["color-tokens", "typography-tokens", "radius-elevation", "multi-brand-theming", "component-tokens"], "avoid": [] },
+        "styleAffinity": { "good": ["flat-design", "minimalism"], "caution": ["skeuomorphism", "neumorphism"], "avoid": [] },
+        "motionAffinity": { "good": ["page-transitions", "gesture-drag"], "caution": ["illustration-lottie"], "avoid": [] },
+        "antiPatterns": [
+          "Hand-synced platforms: three teams maintaining three token files until they quietly disagree",
+          "Fixed type on mobile: px-locked font sizes ignoring Dynamic Type and fontScale",
+          "Value-only mapping: copying hexes but losing the semantic layer, so dark mode must be rebuilt per platform",
+          "Utility bypass: Tailwind arbitrary values (text-[17px]) as a side door around the mapped scale"
+        ],
+        "accessibility": { "required": true, "notes": "Platform mapping owns WCAG 1.4.4 resize on the web (rem-based tokens honoring user font size) and its native equivalents (Dynamic Type, fontScale): a token set that renders at fixed px on mobile fails accessibility regardless of contrast.", "fallback": "If a platform renderer cannot support font scaling, that platform's type tokens ship with a documented fixed-size exception and a tracking ticket - never silently." }
+      }
+    },
+    {
+      "id": "token-pipeline-figma",
+      "name": "Token Pipeline & Figma Sync",
+      "summary": "Design-tool-to-code automation: Figma variables as the source, W3C DTCG as the interchange format, CI as the referee.",
+      "sections": {
+        "definition": "The token pipeline is the automated path from design tools (Figma variables/modes) to code (CSS, iOS, Android): design exports in W3C DTCG JSON, a transform step validates and renders platform outputs, and CI gates every change. The pipeline's real product is trust - designers and engineers edit the same source of truth, and any drift between Figma and code is caught at PR time, not in production screenshots.",
+        "principles": [
+          "One source of truth, declared: Figma variables (design-edited) or the JSON repo (code-edited) - pick one, document it, forbid the other from drifting.",
+          "W3C DTCG as the interchange format: $value/$type JSON is the neutral ground both Figma (via Tokens Studio) and codegen understand.",
+          "Naming survives the round trip: Figma variable names (color/action/primary) map mechanically to token ids (color-action-primary) - no manual translation step.",
+          "Modes map to themes: Figma modes (Light/Dark, per-brand collections) are the design-side twin of data-theme/data-brand.",
+          "Validation lives in the pipeline: naming conventions, contrast pairings, and symmetry checks run before codegen, not after.",
+          "Sync is PR-gated: changes land as reviewable diffs with semantic version bumps - never as silent midnight syncs.",
+          "Generated files are never hand-edited: a header comment and a CI diff make hand-edits fail loudly."
+        ],
+        "tokens": [
+          { "role": "pipeline-source-of-truth", "value": "figma-variables", "notes": "Declared owner; the JSON repo is the mirrored build artifact" },
+          { "role": "pipeline-format", "value": "w3c-dtcg", "notes": "$value/$type interchange; readable by Style Dictionary and Tokens Studio" },
+          { "role": "pipeline-naming-pattern", "value": "{category}.{group}.{role}", "notes": "color.action.primary -> --dt-color-action-primary" },
+          { "role": "pipeline-modes", "value": "light,dark,brand-a,brand-b", "notes": "Figma modes = theme axes; 1:1 with data-theme/data-brand" },
+          { "role": "pipeline-export-targets", "value": "css,ios,android,docs", "notes": "Renderers; css is the reference output" },
+          { "role": "pipeline-sync-trigger", "value": "pull-request", "notes": "Human-reviewed diffs; no auto-commit to main" },
+          { "role": "pipeline-validation-gate", "value": "pre-codegen", "notes": "Naming + contrast + symmetry checks before render" },
+          { "role": "pipeline-versioning", "value": "semver", "notes": "Token releases tagged; consumers pin and migrate (governance)" }
+        ],
+        "composition": [
+          "The pipeline composes with platform-mapping: this skill moves the data; mapping defines each renderer's contract (prefixes, units, scaling).",
+          "It composes with contrast-validation: pairing manifests are generated and diffed as part of the same PR - design and code change a11y posture together.",
+          "It composes with governance-migration: deprecations, renames, and version bumps are pipeline events with changelog entries, not chat messages."
+        ],
+        "patterns": [
+          "Figma variables + Tokens Studio export: designers manage collections/modes; a PR bot turns the DTCG export into validated platform outputs.",
+          "Bidirectional diff report: every sync emits 'what changed in design' vs 'what changed in code' so reviewers see theme-affecting changes at a glance."
+        ],
+        "useCases": [
+          "Design systems with a dedicated design team maintaining Figma variables.",
+          "Multi-brand products: per-brand Figma collections flowing through one pipeline.",
+          "Audit: locating the manual copy-paste steps where design and code drift today."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "spacing-sizing", "radius-elevation", "semantic-alias-naming", "dark-mode", "multi-brand-theming", "contrast-validation", "platform-mapping", "component-tokens", "governance-migration"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["collage-art", "skeuomorphism"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Screenshot-driven sync: designers re-creating tokens in code from pictures of Figma",
+          "Two sources of truth: Figma and code both edited, reconciled by whoever notices first",
+          "Silent sync bots: auto-commits to main that bypass review and semver",
+          "Format drift: bespoke JSON shapes per tool version that break codegen on upgrade"
+        ],
+        "accessibility": { "required": true, "notes": "The pipeline makes accessibility continuous: contrast pairings validated pre-codegen mean a designer's new mode cannot merge with failing ratios - the gate is the contract, not the code review.", "fallback": "If the design tool cannot express a validation (e.g. state deltas), the pipeline computes it from exported values and blocks the PR with the failing pairing listed." }
+      }
+    },
+    {
+      "id": "component-tokens",
+      "name": "Component Tokens",
+      "summary": "Per-component token slots (component-button-bg, component-input-border) derived from aliases - the layer that gives components flexibility without forking the system.",
+      "sections": {
+        "definition": "Component tokens are the top tier: named slots owned by a specific component (component-button-radius, component-input-border-focus) whose defaults derive from semantic aliases. They give components an extension surface - products and brands can restyle a button via tokens without touching component code - while keeping every default traceable to the system. The art is restraint: component tokens are an API, and every slot is a promise to support forever.",
+        "principles": [
+          "Derive defaults, never fork: component-button-bg: var(--dt-color-action-primary) - a component token that hardcodes a hex has bypassed the system.",
+          "Slots, not knobs: expose the handful of decisions consumers actually make (bg, radius, height, border) - not every internal CSS property.",
+          "Component tokens are the ONLY tier components may consume from other tiers transitively: code reads component-* or alias-*, primitives are invisible.",
+          "State slots are explicit: -hover, -focus, -disabled variants exist for every colored slot; no runtime color math inside components.",
+          "Size variants are token families: component-button-height-sm/md/lg as a set - variants agree on which steps they use.",
+          "Naming is namespaced: component-{component}-{property} prevents collisions and makes ownership grep-able.",
+          "Adding a slot is an API review: every new component token is documented, versioned, and deprecation-managed like any public interface."
+        ],
+        "tokens": [
+          { "role": "component-button-height", "value": "40px", "notes": "Default control height; sm=32px, lg=48px siblings" },
+          { "role": "component-button-radius", "value": "var(--dt-radius-md)", "notes": "Derived from system radius, overridable per product" },
+          { "role": "component-button-bg", "value": "var(--dt-color-action-primary)", "notes": "Default primary action surface" },
+          { "role": "component-button-text", "value": "var(--dt-color-text-on-action)", "notes": "Paired label color; contrast-validated with -bg" },
+          { "role": "component-input-height", "value": "44px", "notes": "Meets the 44px touch target floor" },
+          { "role": "component-input-border-focus", "value": "var(--dt-contrast-focus-ring-color)", "notes": "Focus ring slot; 3:1-validated" },
+          { "role": "component-card-padding", "value": "var(--dt-space-4)", "notes": "Density modes re-map space tokens, cards follow" },
+          { "role": "component-modal-max-width", "value": "640px", "notes": "Reading-width contract for dialogs" },
+          { "role": "component-table-row-height", "value": "48px", "notes": "Compact mode derives 40px from the same slot system" },
+          { "role": "component-toast-width", "value": "360px", "notes": "Toast footprint; stacking logic depends on it" }
+        ],
+        "composition": [
+          "Component tokens consume semantic aliases, which consume primitives - so dark mode, brands, and density flow through automatically; a component needing its own dark override signals a missing alias, not a missing override.",
+          "They compose with the motion system: interactive component slots (hover elevation, focus ring) animate using motion tokens from skill-animation.",
+          "They compose with governance: the slot list is an API surface with semver; removing or renaming a slot is a deprecation cycle."
+        ],
+        "patterns": [
+          "Slot contract per component: every component documents its tokens (name, default, pairing notes) in one table - the component's styling API.",
+          "Product theming via slots: a product overrides component-button-radius without forking the component; the override is reviewed like any API usage."
+        ],
+        "useCases": [
+          "Component libraries balancing consistency with product-level flexibility.",
+          "White-label deployments restyling controls per brand without code forks.",
+          "Audit: finding components with hardcoded values that should be slots, or slot overload that needs pruning."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "spacing-sizing", "radius-elevation", "semantic-alias-naming", "dark-mode", "contrast-validation", "token-pipeline-figma", "governance-migration"], "caution": ["platform-mapping"], "avoid": ["multi-brand-theming"] },
+        "styleAffinity": { "good": ["minimalism", "flat-design", "glassmorphism"], "caution": ["collage-art", "brutalism-ui"], "avoid": [] },
+        "motionAffinity": { "good": ["micro-interactions", "loading-states", "feedback-confirmation"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Hardcoded defaults: component-button-bg: #2563EB silently exempting the button from themes",
+          "Knob explosion: 40 slots per component - every property exposed is a promise to maintain",
+          "Hidden color math: brightness(0.9) inside components instead of declared -hover slots",
+          "Unnamespaced slots: --bg or --radius colliding across components"
+        ],
+        "accessibility": { "required": true, "notes": "Slot pairings inherit the contrast contract: component-button-text on component-button-bg must pass its threshold in every theme/brand cell, validated through the alias layer it derives from - a slot override that breaks the pairing fails CI.", "fallback": "If a product override creates a failing pairing, the override is rejected in review; the product chooses a different validated slot value instead." }
+      }
+    },
+    {
+      "id": "governance-migration",
+      "name": "Governance & Migration",
+      "summary": "The process layer: contribution rules, semantic versioning, deprecation windows, linting, and adoption tracking that keep the token system alive.",
+      "sections": {
+        "definition": "Governance is how a token system survives contact with hundreds of contributors: who may add tokens, how changes are reviewed and versioned, how renames migrate without breakage, and how adoption is measured. It is the skill that keeps the other eleven honest - lint rules that reject primitives in component code, deprecation cycles that retire old aliases, and dashboards that show real adoption instead of aspirations.",
+        "principles": [
+          "Tokens are an API: every addition, rename, or removal goes through review, semver, and a changelog - no exceptions for 'small' changes.",
+          "Contribution is centralized but open: anyone proposes; token stewards approve; proposals ship as PRs with evidence (use cases, contrast data).",
+          "Deprecation is a window, not a deletion: deprecated tokens warn (lint + runtime dev-mode), get migrated, and are removed only after a published window (e.g. 2 releases).",
+          "Lint at the code boundary: component code consuming primitives or raw hexes fails stylelint/eslint - the alias rule is enforced, not suggested.",
+          "Measure adoption, not intent: a dashboard of primitive-vs-alias usage per codebase tells you the real migration state.",
+          "Semantic versioning communicates impact: new token = minor; rename/removal with deprecation = major; value-only fixes = patch.",
+          "One migration at a time: overlapping deprecation windows collapse into review fatigue; sequence them through the same queue."
+        ],
+        "tokens": [
+          { "role": "governance-versioning", "value": "semver", "notes": "MAJOR.MINOR.PATCH per token release; consumers pin ranges" },
+          { "role": "governance-deprecation-window", "value": "2-releases", "notes": "Warn then remove; window published in changelog" },
+          { "role": "governance-coverage-target", "value": "90%", "notes": "Share of color/space/type usage flowing through alias+ tiers" },
+          { "role": "governance-lint-css", "value": "stylelint-declaration-strict-value", "notes": "Rejects raw hex/px where tokens are required" },
+          { "role": "governance-review-sla", "value": "5-days", "notes": "Token proposal review turnaround; keeps contributions flowing" },
+          { "role": "governance-changelog", "value": "keep-a-changelog", "notes": "Every token change is a changelog entry with migration notes" },
+          { "role": "governance-owners", "value": "design-dsg", "notes": "Named steward group in CODEOWNERS for token paths" },
+          { "role": "migration-stride", "value": "one-tier-per-release", "notes": "Big migrations sliced by tier; each release ships a working state" }
+        ],
+        "composition": [
+          "Governance sits above every other skill: naming conventions, contrast gates, and pipeline rules are all enforced through the same review + lint machinery.",
+          "It composes with the pipeline: deprecation warnings and semver bumps are pipeline events; the changelog is generated from token diffs.",
+          "It composes with component-tokens: the slot list is versioned here - adding a slot without review is the canonical governance violation."
+        ],
+        "patterns": [
+          "Deprecation machine: deprecate (lint warn + docs strikethrough) -> migrate (codemod + tracking) -> remove (lint error, next major).",
+          "Adoption dashboard: CI counts token-tier usage per repo and publishes the trend; migration work targets the lowest-adoption surfaces first."
+        ],
+        "useCases": [
+          "Design systems past the first 20 components, where informal governance stops scaling.",
+          "Renaming a token vocabulary without breaking consuming products.",
+          "Proving system health: adoption metrics for stakeholder buy-in and roadmap decisions."
+        ],
+        "combinations": { "good": ["color-tokens", "typography-tokens", "spacing-sizing", "radius-elevation", "semantic-alias-naming", "dark-mode", "multi-brand-theming", "contrast-validation", "platform-mapping", "token-pipeline-figma", "component-tokens"], "caution": [], "avoid": [] },
+        "styleAffinity": { "good": ["minimalism", "flat-design"], "caution": ["maximalism", "collage-art"], "avoid": [] },
+        "motionAffinity": { "good": ["easing-timing", "reduced-motion"], "caution": [], "avoid": [] },
+        "antiPatterns": [
+          "Cowboy tokens: additions dropped into a shared file with no review until the vocabulary is unrecognizable",
+          "Hard deletion: removing a token in a patch release and letting consumer builds break as the notification system",
+          "Lint-less governance: written conventions nobody enforces, honored only by the conscientious",
+          "Vanity adoption metrics: counting installed packages instead of actual token-tier usage"
+        ],
+        "accessibility": { "required": true, "notes": "Governance enforces the accessibility contract at scale: contrast pairing manifests, reduced-motion fallback presence, and a11y lint rules are CI gates - a token change that degrades accessibility cannot merge, regardless of who proposes it.", "fallback": "When an emergency fix must bypass the normal window (security, legal), it ships as a patch with a retroactive review within 5 days - governance bends the process, never the thresholds." }
+      }
+    }
+  ]
+}

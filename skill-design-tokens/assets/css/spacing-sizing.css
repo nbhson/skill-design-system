@@ -1,0 +1,28 @@
+/* ============================================================
+ * Spacing & Sizing Tokens - starter design tokens (CSS custom properties)
+ * Skill id: spacing-sizing (#03 of 12)
+ *
+ * A 4px-base spacing scale, icon sizing, and touch-target minimums that give every layout decision a legal value.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --dt-space-1: 4px; /* Icon-to-label gap, chip inner padding */
+  --dt-space-2: 8px; /* Related-element gap, list item inner padding */
+  --dt-space-3: 12px; /* Form field spacing, dense card padding */
+  --dt-space-4: 16px; /* Default component padding, grid gutter */
+  --dt-space-6: 24px; /* Card padding, section inner spacing */
+  --dt-space-8: 32px; /* Between content groups */
+  --dt-space-12: 48px; /* Between sections */
+  --dt-space-16: 64px; /* Page-level section separation */
+  --dt-size-icon-sm: 16px; /* Inline icons beside 14px text */
+  --dt-size-icon-md: 24px; /* Standalone icon buttons, nav icons */
+  --dt-size-touch-target: 44px; /* WCAG 2.5.8 minimum interactive target; pad small visuals to this */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The scale owns WCAG 2.5.8 target size: any interactive element smaller than 44px must be padded to the floor with size-touch-target. Spacing must also preserve WCAG 1.4.12 text spacing tolerance - layouts may not break when users override spacing. */
+/* Fallback: If a dense layout cannot afford 44px targets, redesign the layout; target size is never traded away for density. */

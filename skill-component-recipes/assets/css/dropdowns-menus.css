@@ -1,0 +1,27 @@
+/* ============================================================
+ * Dropdowns & Menus - starter design tokens (CSS custom properties)
+ * Skill id: dropdowns-menus (#09 of 12)
+ *
+ * Selects, menus, popovers, and tooltips: the value-vs-action distinction, keyboard contracts, and positioning that stays in viewport.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-value-vs-action: select-vs-menu; /* The first decision; drives everything */
+  --comp-select-default: native-select; /* Custom only with justification */
+  --comp-menu-role-set: menu/menuitem; /* APG structure */
+  --comp-menu-keymap: arrows+escape+enter; /* APG menu contract */
+  --comp-combobox-structure: input+listbox+activedescendant; /* APG combobox contract */
+  --comp-combobox-announce: result-count-polite; /* Filtered results narrated */
+  --comp-popover-positioning: floating-ui-flip-shift; /* Never clipped by ancestors */
+  --comp-tooltip-contract: dismissible-hoverable-persistent; /* WCAG 1.4.13 */
+  --comp-menu-focus-return: trigger-on-close; /* Escape returns focus */
+  --comp-menu-nesting-cap: 1-submenu; /* Deeper IA becomes page/dialog */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This recipe implements the APG menu/combobox/listbox patterns plus WCAG 1.4.13 (tooltip contract): keymaps, focus return, announced results, and dismissible tooltips - dropdown family is where invented keymaps do the most damage. */
+/* Fallback: When a custom picker cannot complete its APG contract, ship the native select - a plain-looking select that works beats a beautiful one that narrates nothing. */

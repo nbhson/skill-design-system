@@ -1,0 +1,27 @@
+/* ============================================================
+ * Testing & Audit Framework - starter design tokens (CSS custom properties)
+ * Skill id: testing-audit (#12 of 12)
+ *
+ * The three-layer a11y test strategy: automated CI, manual keyboard/zoom passes, and screen reader listening scripts - plus the audit report format.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-ci-tool: axe-core; /* Component + page scans on every PR */
+  --a11y-ci-policy: critical-blocks-merge; /* Zero new critical violations per PR */
+  --a11y-lighthouse-threshold: a11y-score-95+; /* Release gate; trend-tracked */
+  --a11y-manual-pass-keyboard: per-release; /* Mouse-unplugged core flows, recorded */
+  --a11y-manual-pass-zoom: per-release; /* 200% text / 400% reflow walkthroughs */
+  --a11y-listening-scripts: core-flows; /* NVDA/VoiceOver scripts per critical journey */
+  --a11y-severity-scale: blocker-critical-major-minor; /* Blockers gate release */
+  --a11y-audit-report-format: criterion-evidence-fix; /* Every finding cites WCAG + evidence + suggested fix */
+  --a11y-regression-watch: fixed-stays-fixed; /* Fixed violations become automated tests */
+  --a11y-user-testing-cadence: quarterly; /* Sessions with disabled users; findings feed roadmap */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The meta-skill of verification: without a testing framework, every other guide's contract is aspirational - this is how conformance is proven, maintained, and improved. */
+/* Fallback: When full coverage is impossible, test in this order: blockers on core flows first, then automation on everything, then listening scripts on the highest-traffic journeys. */

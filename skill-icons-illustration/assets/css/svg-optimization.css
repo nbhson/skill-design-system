@@ -1,0 +1,27 @@
+/* ============================================================
+ * SVG Optimization - starter design tokens (CSS custom properties)
+ * Skill id: svg-optimization (#09 of 12)
+ *
+ * Lean vectors: SVGO discipline, viewBox hygiene, currentColor theming, sprite strategies, and what never to hand-edit.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --icon-optimizer: svgo-reviewed-config; /* ARIA/title preserved */
+  --icon-viewbox-hygiene: tight+low-precision; /* No editor metadata in prod */
+  --icon-mono-fill: currentColor; /* Theming free for single-color icons */
+  --icon-multicolor-fill: css-variables; /* Theme-capable illustrations */
+  --icon-delivery-strategy: inline|sprite|file-by-use; /* Deliberate per slot */
+  --icon-no-hand-edit: masters-to-pipeline; /* Dist edits die at next build */
+  --icon-fragile-features: gradients+clip-paths-tested; /* Config exceptions documented */
+  --icon-icon-budget: <50kb-per-page; /* Tracked in CI */
+  --icon-sprite-strategy: symbol+use-for-repeat; /* Repeated mono icons */
+  --icon-compression-check: gzip-in-budget; /* Budgets measured gzipped */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Optimization must preserve the a11y nodes: the SVGO config keeps title/aria attributes (accessible-icons guide), and contrast survives fill changes - performance work must never delete the aria contract. */
+/* Fallback: If the config review is pending, disable removeTitle/removeARIA transforms immediately - those two settings cause the most a11y damage. */

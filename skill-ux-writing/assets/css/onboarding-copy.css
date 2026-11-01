@@ -1,0 +1,27 @@
+/* ============================================================
+ * Onboarding & First-Run Copy - starter design tokens (CSS custom properties)
+ * Skill id: onboarding-copy (#06 of 12)
+ *
+ * First-run guidance that respects intelligence: progressive disclosure, show-don't-tour, and copy that gets users to value fast.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-onboarding-metric: time-to-value; /* The only success measure */
+  --uxw-onboarding-mode: empty-state-first; /* Well-written empties over tours */
+  --uxw-onboarding-disclosure: at-moment-of-need; /* Contextual over upfront */
+  --uxw-onboarding-concept-load: 1-per-screen; /* Firehose is failure */
+  --uxw-onboarding-skip: persistent-dismiss; /* Never re-show skipped tours */
+  --uxw-onboarding-checklist: visible-progress; /* Externalized completion state */
+  --uxw-onboarding-first-cta: one-thing; /* Single first action, not a list */
+  --uxw-onboarding-sample-data: demo+replace-path; /* Example over explanation */
+  --uxw-onboarding-hint-timing: after-first-idle; /* Hints appear on dwell, not on load */
+  --uxw-onboarding-copy-length: headline+1-line; /* Overlays stay tiny */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Onboarding must not trap or rush: tours are keyboard-operable, dismissible, and pause under reduced-motion (a11y repo cognitive-content) - hint timing must respect screen reader pacing, and overlays announce politely. */
+/* Fallback: If interactive tours cannot be made a11y-clean, replace them with written setup checklists (plain HTML) - a checklist is inherently accessible and respects the skip. */

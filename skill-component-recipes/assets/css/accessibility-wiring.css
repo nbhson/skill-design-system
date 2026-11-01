@@ -1,0 +1,27 @@
+/* ============================================================
+ * Component A11y Wiring - starter design tokens (CSS custom properties)
+ * Skill id: accessibility-wiring (#12 of 12)
+ *
+ * The cross-cutting a11y layer every recipe shares: focus contracts, announcements, target sizes, and reduced-motion - checked per component.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --comp-wiring-keymap: declared-per-component; /* The keymap IS the spec */
+  --comp-wiring-focus-contract: open/expand/close-returns; /* Per surface, tested per state */
+  --comp-wiring-announce: designed-per-state-change; /* Live region or focus move, deliberate */
+  --comp-wiring-target-min: 44px; /* WCAG 2.5.8 effective floor */
+  --comp-wiring-contrast-source: validated-aliases-only; /* No unvalidated colors in components */
+  --comp-wiring-reduced-motion: collapse-with-fallback; /* prefers-reduced-motion per component */
+  --comp-wiring-visible-focus: 3:1-ring; /* Focus ring contract (a11y 2.4.13) */
+  --comp-wiring-name-required: all-interactive-named; /* Accessible names mandatory */
+  --comp-wiring-checklist-gate: per-component-per-PR; /* Review gate; merge requires green */
+  --comp-wiring-test-tier: keyboard-then-sr; /* Keyboard pass first, then screen reader */
+}
+
+/* Accessibility contract (required) */
+/* Notes: This guide exists to make component-level accessibility systematic: the per-component checklist operationalizes WCAG 2.1.1, 2.4.7, 2.4.13, 2.5.8, 4.1.3, and 1.4.3 across every recipe - the checklist is the deliverable. */
+/* Fallback: When a component cannot pass the full checklist, it does not ship as a shared primitive - it ships as an app-local component with documented gaps, keeping the system clean. */

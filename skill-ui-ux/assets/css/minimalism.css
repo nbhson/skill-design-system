@@ -1,0 +1,27 @@
+/* ============================================================
+ * Minimalism — starter design tokens (CSS custom properties)
+ * Style id: minimalism
+ *
+ * A 'less is more' philosophy where only essential elements remain and white space is an active design component.
+ *
+ * Sinh tự động từ skills/data.json (nguồn truth đã được
+ * scripts/validate_skills.py kiểm chứng). KHÔNG sửa tay hex values —
+ * sửa data.json rồi chạy lại script sinh token.
+ * ============================================================ */
+
+:root {
+  --color-primary-background: #ffffff; /* Pure white, clean feel */
+  --color-secondary-background: #f7f7f7; /* Very light gray for alternating sections */
+  --color-primary-text: #111111; /* Near-absolute black, high contrast */
+  --color-secondary-text: #6b7280; /* Medium gray for meta and captions */
+  --color-single-accent: #2563eb; /* Blue 600 - used for CTA, links, active states */
+  --color-dark-variant-background: #0a0a0a; /* Dark mode background */
+  --color-dark-variant-text: #fafafa; /* Dark mode text */
+  --color-dark-variant-accent: #3b82f6; /* Dark mode accent */
+  --font-heading: "Inter", sans-serif; /* Inter (or Helvetica Now) */
+  --font-body: "Inter", sans-serif; /* Inter (or SF Pro Text) */
+}
+
+/* Contrast (WCAG relative luminance, AA body-text threshold = 4.5:1) */
+/* body text on primary background: #111111 on #FFFFFF = 18.88:1 — PASS */
+/* muted/secondary text on primary background: #6B7280 on #FFFFFF = 4.83:1 — PASS */

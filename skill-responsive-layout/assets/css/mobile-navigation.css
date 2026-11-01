@@ -1,0 +1,27 @@
+/* ============================================================
+ * Mobile Navigation - starter design tokens (CSS custom properties)
+ * Skill id: mobile-navigation (#08 of 12)
+ *
+ * Bottom bars, drawers, and the thumb zone: navigation patterns that work at 360px with one thumb - and when to collapse what.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-mobnav-bottom-bar-items: 3-5; /* Thumb-zone primary destinations */
+  --layout-mobnav-bar-height: 56px; /* Top bar ceiling on mobile */
+  --layout-mobnav-target-size: 44px; /* WCAG 2.5.8 floor for nav items */
+  --layout-mobnav-drawer-width: min(84vw, 360px); /* Slide-in drawer width cap */
+  --layout-mobnav-drawer-motion: 240ms ease-standard; /* Motion tokens from skill-animation */
+  --layout-mobnav-current-mark: aria-current+visual; /* Current page: semantic + visual (double signal) */
+  --layout-mobnav-icon-plus-label: always; /* Bottom bar icons carry labels (recognition over recall) */
+  --layout-mobnav-scrim: rgba(0,0,0,0.60); /* Drawer scrim; dismiss on tap */
+  --layout-mobnav-collapse-rank: by-usage-data; /* Cut line from analytics, not alphabet */
+  --layout-mobnav-safe-area: env(safe-area-inset-*); /* Notched-device bottom padding */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Mobile nav is an a11y hotspot: bottom-bar items need aria-current + labels, drawers need the full dialog contract (trap, Escape, return), and 44px targets (2.5.8) are the floor - see a11y repo guides 03/04/06. */
+/* Fallback: If drawer focus management cannot be built in time, use a full-page menu (normal document flow, no trap) - simpler and accessible by default. */

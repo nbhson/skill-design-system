@@ -1,0 +1,27 @@
+/* ============================================================
+ * Breakpoints Strategy - starter design tokens (CSS custom properties)
+ * Skill id: breakpoints-strategy (#02 of 12)
+ *
+ * Content-driven breakpoints (not device names): a small tier set, mobile-first queries, and when container queries replace them.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --layout-bp-strategy: mobile-first-min-width; /* Base = mobile; queries add complexity upward */
+  --layout-bp-sm: 640px; /* Large phones / small tablets */
+  --layout-bp-md: 768px; /* Tablet portrait; nav may collapse */
+  --layout-bp-lg: 1024px; /* Tablet landscape / laptop; sidebar reveals */
+  --layout-bp-xl: 1280px; /* Desktop; 3-col layouts unlock */
+  --layout-bp-2xl: 1536px; /* Wide desktop; content max-width governs beyond */
+  --layout-bp-naming: by-what-changes; /* sm/md/lg aliases documented per product */
+  --layout-component-bp-unit: em; /* Container queries size in em (user-font aware) */
+  --layout-test-widths: 320,640,768,1024,1280,1536; /* Screenshot matrix per release */
+  --layout-container-query-first: prefer; /* Components adapt via container queries; page tiers only for shell */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Breakpoints must preserve WCAG 1.4.4/1.4.10: zoom to 400% reflows to the single-column tier - test at zoom widths, not just device widths; em-based component queries respect user font size. */
+/* Fallback: If a tier cannot be tested in time, degrade to the nearest tested tier and ship the gap as a documented known issue - never an untested silent tier. */

@@ -1,0 +1,27 @@
+/* ============================================================
+ * Empty State Copy - starter design tokens (CSS custom properties)
+ * Skill id: empty-states (#05 of 12)
+ *
+ * First-use, no-results, and cleared states as teaching moments: explain the value, then hand over the next action.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-empty-taxonomy: first-use,no-results,cleared; /* Three states, three copy formulas */
+  --uxw-empty-cta-required: every-state-has-action; /* No dead-end blanks */
+  --uxw-empty-first-use: value-teaching; /* Why the feature matters, briefly */
+  --uxw-empty-no-results: explain+relax-suggestion; /* Query echo + relaxation tip */
+  --uxw-empty-cleared: acknowledge+restore; /* Undo path for cleared content */
+  --uxw-empty-length: 1-2-lines; /* Panel copy budget */
+  --uxw-empty-illustration-role: mood-only; /* Text carries the instruction */
+  --uxw-empty-tone: personality-allowed; /* The voice-tone safe zone */
+  --uxw-empty-announce: labelled-region; /* State change narrated */
+  --uxw-empty-coverage: every-collection-surface; /* Lists/tables/dashboards ship empties */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Empty states are state-change announcements (WCAG 4.1.3): labelled regions, keyboard-reachable CTAs, and text that does not depend on the illustration for meaning (1.1.1) - the copy must fully stand alone. */
+/* Fallback: If labelled-region wiring is unavailable, move focus to the empty-state heading on state change - focus movement is the narration fallback. */

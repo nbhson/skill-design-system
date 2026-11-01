@@ -1,0 +1,31 @@
+/* ============================================================
+ * Illustration & Lottie — starter motion tokens (CSS custom properties)
+ * Skill id: illustration-lottie (#11 of 12)
+ *
+ * Baked motion: character animation, mascots, empty states, and celebration via Lottie/Rive - designer-authored motion embedded as data.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values —
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --motion-icon-budget: 30KB; /* Max Lottie size for icon-scale animation */
+  --motion-loader-budget: 80KB; /* Max size for loading/processing animation */
+  --motion-hero-budget: 300KB; /* Max size for hero/onboarding animation */
+  --motion-playback-speed: 1.0; /* Default rate; celebrations accept 0.8-1.2 */
+  --motion-celebration-duration: 2000ms; /* Confetti/success moments; cut after completion */
+}
+
+/* Reduced motion (prefers-reduced-motion: reduce) */
+/* Replace narrative/celebration animation with its static final frame; loaders swap to a simple opacity pulse. */
+/* Fallback: Show a static exported frame (SVG/PNG) of the illustration; no playback. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

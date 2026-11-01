@@ -1,0 +1,27 @@
+/* ============================================================
+ * Copy Audit & Governance - starter design tokens (CSS custom properties)
+ * Skill id: copy-audit (#12 of 12)
+ *
+ * Keeping copy consistent at scale: the glossary, string inventory, linting, and the per-surface audit pass.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --uxw-glossary: term+banned+example; /* One concept, one term, anti-terms listed */
+  --uxw-glossary-owner: named-owner; /* Unowned standards decay */
+  --uxw-string-inventory: component+locale-mapped; /* Orphans pruned on schedule */
+  --uxw-lint-rules: case+!+click-here+caps; /* Mechanical rules automated */
+  --uxw-lint-enforcement: PR-blocking; /* Mechanical rules block, humans judge */
+  --uxw-review-dimensions: tone+clarity+completeness; /* The human review trio */
+  --uxw-audit-scope: per-surface-scorecard; /* Walked against guides 01-11 */
+  --uxw-audit-frequency: per-release+quarterly; /* Release gates + trend reviews */
+  --uxw-findings-to-tickets: tracked-over-time; /* Copy debt made visible */
+  --uxw-locale-audit: per-active-locale; /* Missing keys + clipping per locale */
+}
+
+/* Accessibility contract (required) */
+/* Notes: The audit scorecard includes the accessibility dimensions (alt text, link text, reading order, plain language) as first-class rows - copy governance is where accessible-writing compliance is actually enforced per release. */
+/* Fallback: If a full governance program cannot start, begin with two artifacts - the glossary and the lint rules - and add the audit scorecard when the surface area grows. */

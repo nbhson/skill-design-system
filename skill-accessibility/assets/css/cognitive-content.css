@@ -1,0 +1,27 @@
+/* ============================================================
+ * Cognitive & Content Accessibility - starter design tokens (CSS custom properties)
+ * Skill id: cognitive-content (#10 of 12)
+ *
+ * Plain language, predictable behavior, helpful errors, and memory-friendly flows - WCAG 3.x for users with cognitive and learning disabilities.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --a11y-plain-language-target: grade-8; /* Lower-secondary reading level for task content */
+  --a11y-sentence-length-guide: under-25-words; /* One idea per sentence; paragraphs 2-4 sentences */
+  --a11y-consistency-policy: same-place-same-action; /* WCAG 3.2.3 consistent navigation/help placement */
+  --a11y-focus-change-policy: no-navigation; /* WCAG 3.2.1: focus never triggers context change */
+  --a11y-input-change-policy: confirm-or-undo; /* WCAG 3.2.2: no auto-submit surprises */
+  --a11y-timeout-policy: warn-and-extend; /* WCAG 2.2.1: 20s+ warning, extension, no data loss */
+  --a11y-undo-policy: irreversible-only; /* Destructive actions get undo or explicit confirm */
+  --a11y-error-recovery: suggest-fix; /* 3.3.3-3.3.6: suggestions, review-before-submit, no re-entry */
+  --a11y-chunking-pattern: steps-with-progress; /* Multi-step flows show position + completion */
+  --a11y-help-availability: persistent-location; /* WCAG 3.2.6 (2.2): help entry point in a consistent place */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Cognitive accessibility is the largest underserved group and the hardest to automate: every criterion here needs human review, which is why it lives in the design-review checklists of sibling repos. */
+/* Fallback: When formal criteria conflict with content constraints, ship the plain-language summary alongside - layered content serves both audiences. */

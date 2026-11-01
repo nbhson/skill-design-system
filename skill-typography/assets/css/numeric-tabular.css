@@ -1,0 +1,27 @@
+/* ============================================================
+ * Numeric & Tabular Figures - starter design tokens (CSS custom properties)
+ * Skill id: numeric-tabular (#10 of 12)
+ *
+ * Proportional vs tabular figures, OpenType features, and data-typography: numbers that align in tables and count in dashboards.
+ *
+ * Sinh tu dong tu skills/data.json (nguon truth da duoc
+ * scripts/validate_skills.py kiem chung). KHONG sua tay token values -
+ * sua data.json roi chay lai script sinh token.
+ * ============================================================ */
+
+:root {
+  --type-figures-table: tabular-nums; /* All data tables, dashboards, timelines */
+  --type-figures-prose: proportional-nums; /* Default for running text */
+  --type-figures-lining: lining-nums; /* Data and finance contexts */
+  --type-figures-oldstyle: oldstyle-nums; /* Editorial long-form only */
+  --type-figures-zero: slashed-zero; /* Identifiers, codes, config values */
+  --type-numeric-mono: font-family-mono; /* IDs, hashes, tokens, API keys */
+  --type-kpi-display: tnum + semibold; /* Dashboard KPIs: tabular + weight for stability */
+  --type-countup-alignment: tabular-required; /* Animated numbers jitter without tnum */
+  --type-fraction-policy: diagonal-fractions; /* frac feature for recipes/measures */
+  --type-unit-typography: text-face-units; /* Units/currency in text face, digits tabular */
+}
+
+/* Accessibility contract (required) */
+/* Notes: Aligned numeric columns are a comprehension aid for dyslexic and low-vision users; slashed-zero removes transcription errors - data typography is cognitive accessibility in disguise. */
+/* Fallback: If the face lacks OpenType numeric features, switch data surfaces to the mono face - mono digits are tabular by construction. */

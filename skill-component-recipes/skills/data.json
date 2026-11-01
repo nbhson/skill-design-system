@@ -1,0 +1,1584 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "en",
+    "totalSkills": 12,
+    "companionRepos": [
+      "skill-ui-ux",
+      "skill-animation",
+      "skill-design-tokens"
+    ]
+  },
+  "skills": [
+    {
+      "id": "buttons-badges",
+      "name": "Buttons & Badges",
+      "summary": "The action vocabulary: button variants and sizes, loading/disabled contracts, icon buttons with names, and badge/status chips.",
+      "sections": {
+        "definition": "Buttons and badges are the action vocabulary of an interface: buttons commit actions (primary, secondary, tertiary, destructive), badges label state (status chips, counts, categories). The craft is a closed variant system - every button variant has a documented hierarchy role, size ramp, and state set (hover/active/focus/disabled/loading) - so products compose actions instead of redesigning them.",
+        "principles": [
+          "One primary per view: the primary variant marks the single most-likely action; competing primaries dissolve hierarchy.",
+          "Variants are hierarchy, not decoration: primary (filled), secondary (outline), tertiary (ghost), destructive (danger-filled) - each has a documented use contract.",
+          "Sizes come from the ramp: sm 32px, md 40px, lg 48px heights; touch surfaces meet 44px minimum (a11y 2.5.8).",
+          "Loading replaces label with spinner + 'Processing': the button stays sized (no reflow), disabled, and announces via aria-live.",
+          "Disabled is styled AND explained: tooltip or helper text says why - a bare disabled button is a dead end.",
+          "Icon-only buttons have accessible names: aria-label minimum; visible tooltip recommended - icon alone is never the name.",
+          "Badges carry status triples: color + icon + text (a11y 1.4.1); count badges cap at 99+; dot badges pair with screen reader text.",
+          "Destructive actions confirm or undo: destructive buttons either open a confirmation or ship an undo path - never a single-click delete."
+        ],
+        "tokens": [
+          {
+            "role": "btn-variants",
+            "value": "primary,secondary,tertiary,destructive",
+            "notes": "Closed variant set; no ad-hoc buttons"
+          },
+          {
+            "role": "btn-height-sm",
+            "value": "32px",
+            "notes": "Compact tier (dense tables, toolbars)"
+          },
+          {
+            "role": "btn-height-md",
+            "value": "40px",
+            "notes": "Default tier"
+          },
+          {
+            "role": "btn-height-lg",
+            "value": "48px",
+            "notes": "Emphasis tier (heroes, forms)"
+          },
+          {
+            "role": "btn-touch-min",
+            "value": "44px",
+            "notes": "WCAG 2.5.8 effective touch target"
+          },
+          {
+            "role": "btn-focus-ring",
+            "value": "2px + offset 2px",
+            "notes": "Focus treatment (a11y repo contracts)"
+          },
+          {
+            "role": "btn-loading-policy",
+            "value": "spinner+disabled+announce",
+            "notes": "No size change; aria-live busy"
+          },
+          {
+            "role": "btn-disabled-policy",
+            "value": "styled+explained",
+            "notes": "Reason visible in tooltip/helper"
+          },
+          {
+            "role": "badge-signal-triple",
+            "value": "color+icon+text",
+            "notes": "Never color alone (a11y 1.4.1)"
+          },
+          {
+            "role": "badge-count-cap",
+            "value": "99+",
+            "notes": "Count badges cap; overflow reads as 99+"
+          }
+        ],
+        "composition": [
+          "Composes with skill-design-tokens: button colors, radii, and spacing consume semantic/alias tokens - buttons never hardcode values.",
+          "Composes with semantic-color-system (skill-color-theory guide 06): destructive and status badges consume status ramps.",
+          "Composes with forms-inputs (guide 02): submit buttons and input heights share the size ramp."
+        ],
+        "patterns": [
+          "Button component contract: one component exposing variants x sizes x states, with the loading/disabled/announcement behavior implemented once.",
+          "Badge role matrix: badges map to status/label/count categories, each with its signal triple and overflow behavior documented."
+        ],
+        "useCases": [
+          "Any product UI: forms, toolbars, cards, dialogs all consume the button system.",
+          "Design systems: buttons are usually the first component built - the contract sets the pattern for the rest.",
+          "Audit: competing primaries, icon buttons without names, unexplained disabled states."
+        ],
+        "combinations": {
+          "good": [
+            "forms-inputs",
+            "tables-data-grid",
+            "modals-dialogs",
+            "toasts-notifications",
+            "navigation-patterns",
+            "cards-lists",
+            "tabs-accordions",
+            "dropdowns-menus",
+            "command-palette",
+            "empty-loading-error",
+            "accessibility-wiring"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "neumorphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "micro-interactions",
+            "feedback-confirmation"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Two primaries: filled CTA next to filled CTA - the eye picks neither",
+          "Icon-only mystery buttons: unlabeled glyph buttons screen readers read as 'button'",
+          "Reflow loading: button shrinking to a spinner and shifting the layout",
+          "Dead-end disabled: greyed actions with no explanation of what unlocks them"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Buttons are WCAG 2.1.1/2.4.7/2.5.8 territory: real <button> elements, visible focus, 44px touch floors, and loading announced via aria-live - icon-only controls carry accessible names (a11y repo guides 03/05).",
+          "fallback": "If a custom button variant cannot meet the state contract (loading/announce), ship the native button with the closest variant - native semantics beat custom styling without states."
+        }
+      }
+    },
+    {
+      "id": "forms-inputs",
+      "name": "Forms & Input Recipes",
+      "summary": "Text fields, selects, checkboxes, and validation layouts: the label-hint-error wiring recipe and forgiving-validation timing.",
+      "sections": {
+        "definition": "Form inputs are the highest-traffic, highest-stakes components: text fields, selects, checkboxes, radios, switches, and their validation choreography. The recipe is structural, not cosmetic: visible labels wired programmatically, hints via aria-describedby, errors flagged with aria-invalid, and validation timing that forgives mid-typing - the same wiring the a11y repo mandates, expressed as a component recipe.",
+        "principles": [
+          "Visible labels always: placeholder-only inputs are banned - labels persist above or beside the field (WCAG 3.3.2).",
+          "The wiring recipe: label-for + hint-describedby + error-describedby + aria-invalid - implemented once in the field component, consumed everywhere.",
+          "Input heights match the button ramp: 40px default, 48px on mobile forms - a form is one rhythm.",
+          "Validation timing: validate on blur or submit; inline errors clear on fix; never per-keystroke scolding.",
+          "Errors state cause + fix: 'Enter a valid email like name@domain.com' - the message content is part of the recipe (ux-writing guide 08).",
+          "Choice controls are honest: checkbox = independent toggles, radio = exclusive pick, switch = instant-effect setting - semantics match behavior.",
+          "Disabled vs readonly are distinct: disabled removes from tab order (and needs explanation); readonly stays focusable and copyable.",
+          "Autocomplete attributes ship: name/email/tel autofill (WCAG 1.3.5) is part of the recipe, not a nice-to-have."
+        ],
+        "tokens": [
+          {
+            "role": "input-height-md",
+            "value": "40px",
+            "notes": "Matches btn-height-md; one rhythm"
+          },
+          {
+            "role": "input-height-lg",
+            "value": "48px",
+            "notes": "Mobile/primary forms"
+          },
+          {
+            "role": "input-label-policy",
+            "value": "visible-always",
+            "notes": "Placeholder-only banned (3.3.2)"
+          },
+          {
+            "role": "input-wiring",
+            "value": "label+hint+error-wired",
+            "notes": "The field component implements once"
+          },
+          {
+            "role": "input-error-flag",
+            "value": "aria-invalid+describedby",
+            "notes": "Programmatic error association"
+          },
+          {
+            "role": "input-validation-timing",
+            "value": "blur-or-submit",
+            "notes": "No per-keystroke validation"
+          },
+          {
+            "role": "input-error-style",
+            "value": "cause-plus-fix",
+            "notes": "Message format shared with ux-writing"
+          },
+          {
+            "role": "input-choice-semantics",
+            "value": "checkbox-radio-switch-distinct",
+            "notes": "Control semantics match behavior"
+          },
+          {
+            "role": "input-readonly-vs-disabled",
+            "value": "readonly-focusable",
+            "notes": "Readonly keeps focus/copy"
+          },
+          {
+            "role": "input-autocomplete",
+            "value": "standard-attrs",
+            "notes": "WCAG 1.3.5 autofill support"
+          }
+        ],
+        "composition": [
+          "Composes with buttons-badges: submit/primary actions share the size ramp and loading contract.",
+          "Composes with forms-errors (skill-accessibility guide 07): that guide owns the WCAG criteria; this recipe implements the component.",
+          "Composes with ux-writing (skill-ux-writing): label and error phrasing follow the voice & tone and error message guides."
+        ],
+        "patterns": [
+          "Field component with slots: one Field wrapper owns label/hint/error/error-flag wiring; inputs plug in - wiring drift becomes impossible.",
+          "Error summary on submit: failed submits focus a linked error list at top + per-field inline messages (a11y repo pattern)."
+        ],
+        "useCases": [
+          "Any form: signup, checkout, settings, search.",
+          "Design systems: the field component is the second component built (after button).",
+          "Audit: placeholder-labels, unwired errors, per-keystroke validation noise."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "tables-data-grid",
+            "modals-dialogs",
+            "toasts-notifications",
+            "dropdowns-menus",
+            "empty-loading-error",
+            "accessibility-wiring",
+            "command-palette",
+            "tabs-accordions",
+            "cards-lists",
+            "navigation-patterns"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "feedback-confirmation",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Placeholder-as-label: hints vanishing on first keystroke",
+          "Unwired errors: red borders with no aria-invalid or text association",
+          "Keystroke scolding: 'invalid' firing mid-typing before the user finishes",
+          "Mixed control semantics: switches that submit forms, checkboxes that act instantly"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "The recipe implements WCAG 3.3.1-3.3.5, 1.3.5, and 4.1.2 at the component level: programmatic labels, described-by wiring, forgiving timing, and autofill - a11y repo guide 07 owns the criteria, this recipe ships the mechanics.",
+          "fallback": "If the field wrapper cannot be adopted repo-wide, ship the wiring checklist per form (label-for, describedby, invalid, summary) - the wiring is the deliverable, the wrapper is the convenience."
+        }
+      }
+    },
+    {
+      "id": "tables-data-grid",
+      "name": "Tables & Data Grids",
+      "summary": "Sortable, filterable, paginated tables: column semantics, sticky headers, selection models, and the grid-vs-table decision.",
+      "sections": {
+        "definition": "Data tables are where information density and interaction meet: sorting, filtering, pagination, row selection, and inline editing. The recipe distinguishes a table (read data; native <table> semantics) from a grid (interactive cells; ARIA grid pattern) - and covers column types (numeric right-aligned tabular, actions as menus), sticky headers, and empty/loading states as first-class table states.",
+        "principles": [
+          "Table vs grid is a semantics decision: read-only data stays a native <table>; per-cell interactive editing becomes an ARIA grid - never a div-soup of either.",
+          "Real <table> semantics: th scope, caption, thead/tbody - screen reader navigation (a11y repo aria-fundamentals) depends on it.",
+          "Column types have contracts: numeric right-aligned + tabular figures (typography guide 10), text left-aligned, actions as kebab menus, timestamps relative-with-absolute-title.",
+          "Sorting announces: aria-sort on column headers; sort buttons meet the 44px target floor.",
+          "Selection models are explicit: none, single, multi - with select-all that respects filter scope and announces selection count.",
+          "Sticky headers for long tables: position-sticky th persists context on scroll (responsive-layout guide 09 owns mobile adaptation).",
+          "Empty and loading are table states: zero-results with a recovery suggestion; skeleton rows that preserve column alignment.",
+          "Pagination is honest: counts ('1-25 of 1,204'), page size controls, and URL-persisted state - fake-infinite tables lose users' place."
+        ],
+        "tokens": [
+          {
+            "role": "table-semantics",
+            "value": "native-table-or-aria-grid",
+            "notes": "The documented decision rule"
+          },
+          {
+            "role": "table-row-height",
+            "value": "48px",
+            "notes": "Default; 40px compact tier"
+          },
+          {
+            "role": "table-header-sticky",
+            "value": "position-sticky",
+            "notes": "Column headers persist on vertical scroll"
+          },
+          {
+            "role": "table-numeric-align",
+            "value": "right+tabular-nums",
+            "notes": "Numeric columns contract"
+          },
+          {
+            "role": "table-actions",
+            "value": "kebab-menu-44px",
+            "notes": "Row actions; touch floor met"
+          },
+          {
+            "role": "table-sort-announce",
+            "value": "aria-sort-on-headers",
+            "notes": "Sorting narrated"
+          },
+          {
+            "role": "table-selection-model",
+            "value": "none|single|multi",
+            "notes": "Explicit per table; count announced"
+          },
+          {
+            "role": "table-empty-state",
+            "value": "message+suggestion",
+            "notes": "Zero-results is designed, not blank"
+          },
+          {
+            "role": "table-loading-state",
+            "value": "skeleton-rows",
+            "notes": "Column-aligned skeletons"
+          },
+          {
+            "role": "table-pagination",
+            "value": "counts+url-state",
+            "notes": "1-25 of N; state in URL"
+          }
+        ],
+        "composition": [
+          "Composes with responsive-layout guide 09: that guide owns narrow-screen adaptation; this recipe owns features and semantics.",
+          "Composes with data-viz-palettes (skill-color-theory guide 08): status coloring inside tables follows the CVD-safe viz rules.",
+          "Composes with numeric-tabular (skill-typography guide 10): tabular figures + alignment are shared contracts."
+        ],
+        "patterns": [
+          "Table kit: one Table component family (Table, Column, RowActions, Pagination) with the semantic/sticky/sort contracts implemented once.",
+          "Column contract declarations: columns declare type (numeric/text/action/date) and the kit applies alignment, figures, and menu treatment automatically."
+        ],
+        "useCases": [
+          "Admin and enterprise surfaces where tables are the primary object.",
+          "Finance/analytics products with comparison-critical data.",
+          "Audit: div-tables, hover-only actions, fake pagination, unwired sorting."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "forms-inputs",
+            "modals-dialogs",
+            "dropdowns-menus",
+            "toasts-notifications",
+            "empty-loading-error",
+            "accessibility-wiring",
+            "tabs-accordions",
+            "cards-lists",
+            "command-palette",
+            "navigation-patterns"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art",
+            "maximalism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "easing-timing"
+          ],
+          "caution": [
+            "data-animation"
+          ],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Div-table soup: CSS-grid divs where screen readers need th/td semantics",
+          "Hover-only actions: row toolbars invisible to touch and keyboard",
+          "Sort-by-invisibility: sorted columns with no aria-sort or visual direction cue",
+          "Pagination theater: 'infinite' tables that reset scroll and lose user place"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Tables implement WCAG 1.3.1 (structure), 2.1.1 (keyboard-sort/actions), and the ARIA grid pattern when interactive: scope/caption semantics, aria-sort, and keyboard-reachable row actions are the recipe's non-negotiables.",
+          "fallback": "If the full grid pattern is too heavy for a surface, ship the native table with keyboard-reachable actions (menus open via keyboard) - a semantic table with menus beats a partial grid."
+        }
+      }
+    },
+    {
+      "id": "modals-dialogs",
+      "name": "Modals & Dialogs",
+      "summary": "The dialog contract done once: role/label, focus trap-and-return, Escape, scrim, and the when-NOT-to-modal decision table.",
+      "sections": {
+        "definition": "Modal dialogs interrupt flow for a focused task: confirmations, short forms, critical notices. The recipe is the full dialog contract - role=dialog, accessible name, focus trap-and-return, Escape/scrim close, scroll lock, and stacked-dialog handling - implemented once in a Dialog primitive. Equally important is the decision table of when NOT to modal: most confirmations belong inline or as toasts; modality is for tasks that must complete before proceeding.",
+        "principles": [
+          "Modal earns its interruption: use for confirmation of destructive/irreversible actions, focused subtasks, and blocking notices - everything else is inline or a toast.",
+          "The contract is uniform: role=dialog + aria-modal + labelled-by title, focus enters on open, traps inside, returns to trigger on close (a11y repo guide 04).",
+          "Escape and scrim both close (except blocking): destructive-task dialogs keep Escape dismissible with confirmation - blocking alerts document the exception.",
+          "Scroll lock without layout shift: body scroll locks with scrollbar-width compensation - the page must not jump when the dialog opens.",
+          "Dialogs are short: one task, one primary action, one escape hatch - multi-step flows are routes or wizards, not nested modals.",
+          "Stacking is capped and ordered: dialog-on-dialog is capped at 2 with managed focus order; 3+ signals the flow needs redesign.",
+          "Size variants by task: sm (confirmations), md (short forms), lg (content-heavy) - with mobile behavior declared (full-screen sheet under 640px).",
+          "Native <dialog> where possible: the platform element carries focus management and :modal styling - the primitive builds on it."
+        ],
+        "tokens": [
+          {
+            "role": "dialog-role",
+            "value": "dialog+aria-modal+labelledby",
+            "notes": "The AT contract triple"
+          },
+          {
+            "role": "dialog-focus-policy",
+            "value": "trap-and-return",
+            "notes": "Enter on open, return to trigger"
+          },
+          {
+            "role": "dialog-escape",
+            "value": "escape+scrim-close",
+            "notes": "Blocking dialogs document exceptions"
+          },
+          {
+            "role": "dialog-scrim",
+            "value": "rgba(0,0,0,0.60)",
+            "notes": "Consistent scrim across surfaces"
+          },
+          {
+            "role": "dialog-scroll-lock",
+            "value": "locked+compensated",
+            "notes": "No layout shift on open"
+          },
+          {
+            "role": "dialog-size-sm",
+            "value": "400px",
+            "notes": "Confirmations"
+          },
+          {
+            "role": "dialog-size-md",
+            "value": "560px",
+            "notes": "Short forms"
+          },
+          {
+            "role": "dialog-size-lg",
+            "value": "800px",
+            "notes": "Content-heavy tasks"
+          },
+          {
+            "role": "dialog-mobile",
+            "value": "full-sheet-under-640px",
+            "notes": "Declared mobile behavior"
+          },
+          {
+            "role": "dialog-stack-cap",
+            "value": "2",
+            "notes": "Max nested dialogs; 3+ = redesign"
+          }
+        ],
+        "composition": [
+          "Composes with forms-inputs: dialog forms use the field recipe; dialog buttons use the button contract.",
+          "Composes with focus-management (skill-accessibility guide 04): that guide owns the focus criteria; this recipe implements the dialog around them.",
+          "Composes with toasts-notifications: post-dialog feedback lands as a toast - dialogs close, confirmation narrates politely."
+        ],
+        "patterns": [
+          "Dialog primitive: one component (native <dialog>-based) exposing size variants, the focus contract, and scrim/escape handling - every modal composes it.",
+          "When-to-modal decision table: confirmation/subtask/blocking vs inline/toast/route - reviewed at design time, not built time."
+        ],
+        "useCases": [
+          "Destructive confirmations (delete, revoke, transfer).",
+          "Focused subtasks (invite member, edit record) that must finish or abort.",
+          "Audit: modal fatigue, trap-less dialogs, scroll-jump on open, 3-deep stacking."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "forms-inputs",
+            "toasts-notifications",
+            "tables-data-grid",
+            "dropdowns-menus",
+            "tabs-accordions",
+            "empty-loading-error",
+            "accessibility-wiring",
+            "cards-lists",
+            "command-palette",
+            "navigation-patterns"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Modal fatigue: everything in a modal until users reflex-click through the one that mattered",
+          "Trap-less dialogs: focus escapes to the dead page behind the scrim",
+          "Focus-to-nowhere: dialogs that close and drop focus to body",
+          "Scroll-jump opens: scrollbar loss shifting the whole page sideways"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Dialogs implement the WAI-ARIA dialog pattern: role/name/trap/escape/return are the five non-negotiables (a11y repo guides 03/04) - a dialog missing any one is a build failure in review.",
+          "fallback": "If the trap implementation cannot be completed, use the native <dialog> element with showModal() - it carries the focus contract natively."
+        }
+      }
+    },
+    {
+      "id": "toasts-notifications",
+      "name": "Toasts & Notifications",
+      "summary": "Transient feedback done politely: aria-live narration, timing that respects reading speed, stacking, and the undo pattern.",
+      "sections": {
+        "definition": "Toasts deliver post-action feedback without stealing focus: 'Saved', 'Invitation sent', 'Item archived - Undo'. The recipe covers the politeness contract (aria-live=polite, focus never stolen), timing (4-8s scaled by content length, dismissible, paused on hover), stacking limits, and the undo pattern that replaces confirm dialogs for reversible actions. Bad toasts are noise; good toasts are the feedback layer.",
+        "principles": [
+          "Toasts never steal focus: they narrate via aria-live=polite - focus stays where the user is (a11y 4.1.3).",
+          "Timing scales with content: 4s minimum, +1s per extra line, 8s cap; errors persist until dismissed - users read at their own pace.",
+          "Dismissible + hover-pause: every toast has a close control and pauses its timer on hover/focus - auto-dismissal never outruns a screen reader.",
+          "The undo pattern beats confirmation: 'Archived - Undo' replaces confirm dialogs for reversible actions (a11y cognitive-content contract).",
+          "Max 3 stacked: older toasts collapse into a digest or a notification center - a toast column is not a feed.",
+          "Placement is consistent and non-blocking: bottom-right (desktop) / top (mobile) over content, never covering the action just performed.",
+          "Success is quiet, error is loud: success toasts are subtle; error toasts persist, pair with an icon, and link to the fix.",
+          "Notifications have a home: high-volume products route history to a notification center/drawer - toasts are the ephemeral layer only."
+        ],
+        "tokens": [
+          {
+            "role": "toast-announcing",
+            "value": "aria-live-polite",
+            "notes": "Never assertive for success; focus never stolen"
+          },
+          {
+            "role": "toast-duration-min",
+            "value": "4s",
+            "notes": "Minimum read time"
+          },
+          {
+            "role": "toast-duration-cap",
+            "value": "8s",
+            "notes": "Long toasts cap; errors persist"
+          },
+          {
+            "role": "toast-dismissibility",
+            "value": "close+hover-pause",
+            "notes": "Timer pauses on hover/focus"
+          },
+          {
+            "role": "toast-stack-max",
+            "value": "3",
+            "notes": "Overflow → digest/notification center"
+          },
+          {
+            "role": "toast-placement",
+            "value": "bottom-right-desktop-top-mobile",
+            "notes": "Consistent; non-blocking"
+          },
+          {
+            "role": "toast-undo-window",
+            "value": "5-8s",
+            "notes": "Undo action window for reversible actions"
+          },
+          {
+            "role": "toast-error-persist",
+            "value": "until-dismissed",
+            "notes": "Errors never auto-dismiss"
+          },
+          {
+            "role": "toast-success-quiet",
+            "value": "subtle-single-line",
+            "notes": "Success stays understated"
+          },
+          {
+            "role": "toast-center-overflow",
+            "value": "notification-center",
+            "notes": "History lives in a dedicated surface"
+          }
+        ],
+        "composition": [
+          "Composes with buttons-badges: undo/close actions inside toasts use the button contract.",
+          "Composes with modals-dialogs: the when-to-modal table routes reversible actions to toasts-with-undo instead of confirm dialogs.",
+          "Composes with feedback-confirmation (skill-animation): toast entrance/exit uses motion tokens; reduced-motion collapses it (a11y)."
+        ],
+        "patterns": [
+          "Toast service: one app-level toast manager owning queue, stack cap, placement, and the polite live region - components call toast(), never build their own.",
+          "Undo-first flow: reversible actions skip confirmation entirely and announce 'done - Undo' - the confirmation budget is reserved for the irreversible."
+        ],
+        "useCases": [
+          "Post-save/post-send feedback in any app.",
+          "Destructive-but-reversible actions (archive, remove from list).",
+          "Audit: toast floods, unreadable auto-dismiss, toasts covering the button just clicked."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "modals-dialogs",
+            "forms-inputs",
+            "tables-data-grid",
+            "empty-loading-error",
+            "accessibility-wiring",
+            "dropdowns-menus",
+            "cards-lists",
+            "navigation-patterns",
+            "tabs-accordions",
+            "command-palette"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "feedback-confirmation",
+            "entrance-exit"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Toast flood: every action toasting until the stack is a feed nobody reads",
+          "Speed-read dismissal: 2s toasts vanishing before the text registers",
+          "Assertive success: aria-live=assertive interrupting the user for 'Saved'",
+          "Blocking placement: toasts covering the button the user just clicked"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Toasts implement WCAG 4.1.3 (status messages): polite narration without focus theft, durations a screen reader user can meet (hover-pause), and dismissal controls - the toast service is a11y infrastructure, not decoration.",
+          "fallback": "If a toast cannot be announced (legacy stack), pair critical feedback with an inline status region on the page - narration must exist somewhere, even if not transient."
+        }
+      }
+    },
+    {
+      "id": "navigation-patterns",
+      "name": "Navigation Patterns",
+      "summary": "Top bars, sidebars, breadcrumbs, and pagination: the wayfinding components, current-page semantics, and responsive collapse contracts.",
+      "sections": {
+        "definition": "Navigation components are the wayfinding layer: top bars (identity + global actions), sidebars (section nav with collapsible groups), breadcrumbs (hierarchy location), tabs-as-nav, and pagination. The recipe covers each pattern's structure, the current-page contract (aria-current + visual marker), keyboard behavior, and responsive collapse (sidebar → drawer per responsive-layout guide 08).",
+        "principles": [
+          "Nav landmarks structure the page: header/nav/main/footer landmarks with one main - the page skeleton ships as a template (a11y repo aria-fundamentals).",
+          "Current page is semantic + visual: aria-current=page plus a visual marker - both, always (a11y 1.4.1).",
+          "Sidebars declare depth and grouping: collapsible sections with aria-expanded; depth capped at 3 - deeper IA is restructured, not nested.",
+          "Breadcrumbs for hierarchy, back for flow: breadcrumbs show where you are in a hierarchy; back buttons/links handle task flow - never confuse them.",
+          "Skip links are part of nav: the nav block ships with the skip-to-content link as one template.",
+          "Keyboard paths are nav contracts: menu triggers, drawer toggles, and breadcrumb links are all keyboard-operable with visible focus.",
+          "Pagination for archives, load-more for feeds: pagination preserves place (URL state); infinite feeds need a 'jump to top' escape.",
+          "Responsive collapse is declared: sidebar → drawer, top bar → bottom bar - the collapse contract is written with the component (responsive-layout guide 08)."
+        ],
+        "tokens": [
+          {
+            "role": "nav-landmark-set",
+            "value": "header-nav-main-footer",
+            "notes": "Page skeleton; one main"
+          },
+          {
+            "role": "nav-current-mark",
+            "value": "aria-current+visual",
+            "notes": "Double signal for current location"
+          },
+          {
+            "role": "sidebar-width",
+            "value": "minmax(240px, 280px)",
+            "notes": "Sidebar width contract"
+          },
+          {
+            "role": "sidebar-depth-cap",
+            "value": "3",
+            "notes": "Deeper IA is restructured"
+          },
+          {
+            "role": "sidebar-group-toggle",
+            "value": "aria-expanded",
+            "notes": "Collapsible groups narrated"
+          },
+          {
+            "role": "breadcrumb-separator",
+            "value": "/-aria-hidden",
+            "notes": "Separators decorative; nav is the list"
+          },
+          {
+            "role": "skip-link-required",
+            "value": "template-bundled",
+            "notes": "Skip link ships with nav template"
+          },
+          {
+            "role": "nav-target-size",
+            "value": "44px",
+            "notes": "Touch floor for nav items"
+          },
+          {
+            "role": "pagination-policy",
+            "value": "archives-only+url-state",
+            "notes": "Feeds use load-more"
+          },
+          {
+            "role": "nav-collapse-contract",
+            "value": "declared-per-breakpoint",
+            "notes": "Collapse behavior is written, not discovered"
+          }
+        ],
+        "composition": [
+          "Composes with responsive-layout guides 01/08: the shell grid and mobile collapse contracts are shared documents.",
+          "Composes with keyboard-navigation (skill-accessibility guide 03): skip links, landmarks, and keyboard paths are the a11y layer of this recipe.",
+          "Composes with dropdowns-menus (guide 09): nav overflow items collapse into the menu pattern."
+        ],
+        "patterns": [
+          "Nav template kit: header + sidebar + breadcrumbs + skip link as one composable template - pages assemble wayfinding, never rebuild it.",
+          "Current-page contract: one helper resolves aria-current + visual marker across top bar, sidebar, and breadcrumbs from the same route state."
+        ],
+        "useCases": [
+          "App shells for dashboards and admin tools.",
+          "Documentation/marketing sites with hierarchical nav.",
+          "Audit: no aria-current, breadcrumbs-as-back-buttons, sidebar depth spirals."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "dropdowns-menus",
+            "tabs-accordions",
+            "tables-data-grid",
+            "forms-inputs",
+            "command-palette",
+            "accessibility-wiring",
+            "cards-lists",
+            "toasts-notifications",
+            "modals-dialogs",
+            "empty-loading-error"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "collage-art"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "page-transitions",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Current-page guesswork: users lost because active nav state is a subtle tint",
+          "Breadcrumb-as-back: hierarchical crumbs used for task flow back-navigation",
+          "Depth spiral: 5-level sidebar nesting nobody can hold in memory",
+          "Nav rebuild per page: every page hand-rolling its header instead of consuming the template"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Navigation implements WCAG 1.3.1/2.4.1/2.4.5-2.4.8: landmarks, skip links, current-location semantics, and consistent placement - the nav template is the accessibility skeleton of the product.",
+          "fallback": "If a full sidebar cannot be keyboard-perfect in time, ship the flat top-nav variant - a simple, complete keyboard path beats a rich, broken one."
+        }
+      }
+    },
+    {
+      "id": "cards-lists",
+      "name": "Cards & Lists",
+      "summary": "Content containers: card anatomy, list-item patterns, media-object rows, and the whole-card-clickable done accessibly.",
+      "sections": {
+        "definition": "Cards and list items are the content containers of every feed, dashboard, and catalog: a card bundles media, title, meta, and actions into one composable unit; a list row does the same in compact form. The recipe covers card anatomy (header/body/media/footer slots), the media-object row pattern, hover/elevation contracts, and the whole-card-clickable pattern done accessibly (one link, stretched, with named actions preserved).",
+        "principles": [
+          "Card anatomy is slotted: media, title, meta, body, actions - the card component owns slots, content decides what fills them.",
+          "One action per card, visually primary: a card may hold multiple actions, but exactly one is the primary link - the card's identity action.",
+          "Whole-card-clickable without nested links: the primary link stretches over the card (pseudo-element), while other buttons sit above it (z-index) - no link-in-link markup.",
+          "Media-object rows for repeating content: avatar/icon + text + trailing action as one shared pattern (responsive-layout guide 04).",
+          "Elevation is a state language: resting cards sit flat (border), hoverable cards lift - elevation changes mean interactivity, nothing else.",
+          "List rows keep rhythm: 48-72px row heights, dividers or spacing (never both), and consistent trailing-action alignment.",
+          "Card grids inherit the layout system: cards are content; the grid (responsive-layout guides 01/05) decides their geometry.",
+          "Titles are the semantic anchors: card titles are headings in context (h2/h3 level in the page outline) - not styled divs."
+        ],
+        "tokens": [
+          {
+            "role": "card-slots",
+            "value": "media,title,meta,body,actions",
+            "notes": "Anatomy slot set"
+          },
+          {
+            "role": "card-radius",
+            "value": "12px",
+            "notes": "From the radius scale (design-tokens guide 04)"
+          },
+          {
+            "role": "card-border-resting",
+            "value": "1px solid border-alias",
+            "notes": "Resting state: border, no shadow"
+          },
+          {
+            "role": "card-hover-elevation",
+            "value": "shadow-2 + translateY(-1px)",
+            "notes": "Hover lift; motion tokens"
+          },
+          {
+            "role": "card-primary-link",
+            "value": "stretched-pseudo-element",
+            "notes": "Whole-card clickable, no nested links"
+          },
+          {
+            "role": "card-actions-above",
+            "value": "z-above-stretched",
+            "notes": "Secondary actions stay clickable"
+          },
+          {
+            "role": "list-row-height",
+            "value": "48-72px",
+            "notes": "Row rhythm by density tier"
+          },
+          {
+            "role": "list-divider-policy",
+            "value": "divider-or-spacing",
+            "notes": "Never both"
+          },
+          {
+            "role": "card-title-semantic",
+            "value": "heading-in-outline",
+            "notes": "Titles are real headings in context"
+          },
+          {
+            "role": "card-grid-owner",
+            "value": "layout-system",
+            "notes": "Geometry from responsive-layout, not card CSS"
+          }
+        ],
+        "composition": [
+          "Composes with responsive-layout guides 04/05: media-object and grid geometry are shared contracts.",
+          "Composes with buttons-badges: card actions consume the button/badge contract.",
+          "Composes with skill-ui-ux styles: card styling (radius, elevation, borders) is where design styles surface most - styleAffinity records the lean."
+        ],
+        "patterns": [
+          "Card component with anatomy slots: one card primitive; products compose media/title/actions into catalog, dashboard, and feed variants.",
+          "Stretched-link recipe: primary link with ::after covering the card; interactive children raise above it - accessible whole-card clicking without nested links."
+        ],
+        "useCases": [
+          "Feeds, catalogs, and dashboards (every product has a card somewhere).",
+          "Notification lists, search results, and settings groups as list rows.",
+          "Audit: nested interactive markup, hover-only affordances, styled-div titles."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "toasts-notifications",
+            "navigation-patterns",
+            "tabs-accordions",
+            "empty-loading-error",
+            "accessibility-wiring",
+            "forms-inputs",
+            "tables-data-grid",
+            "dropdowns-menus",
+            "modals-dialogs",
+            "command-palette"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism",
+            "neumorphism"
+          ],
+          "caution": [
+            "brutalism-ui"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Link-in-link markup: a whole clickable card containing buttons - invalid HTML, broken AT",
+          "Everything-lifts: elevation on static cards until lift means nothing",
+          "Divider-and-spacing: double separation reading as heavy-handed noise",
+          "Styled-div titles: card titles outside the page heading outline"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Cards are a hot spot for 1.3.1/2.4.4/4.1.2: single-link semantics (stretched pattern), real headings, and named actions - the stretched-link recipe exists specifically to make whole-card clicking compatible with AT.",
+          "fallback": "If the stretched pattern is unavailable, make only the title a link with a clearly-sized hit area - a smaller clickable is better than invalid nesting."
+        }
+      }
+    },
+    {
+      "id": "tabs-accordions",
+      "name": "Tabs & Accordions",
+      "summary": "Disclosure widgets per APG: tabs for peer views, accordions for progressive detail - roles, keyboard maps, and the choice rule.",
+      "sections": {
+        "definition": "Tabs and accordions are disclosure widgets: they swap or reveal content while keeping page structure. Tabs present peer views of one object (manual selection per APG); accordions progressively reveal detail within a page (details/summary or button+region). The recipe covers the APG contracts - roles, roving tabindex, aria-expanded/selected - and the decision rule: tabs switch peers, accordions condense, and navigation-style tabs are links instead.",
+        "principles": [
+          "Tabs for peers, accordions for detail: tabs switch between peer views of one object; accordions reveal optional depth - misusing tabs as content condensing buries content.",
+          "APG tabs contract: role=tablist/tab/tabpanel, roving tabindex with arrow keys, Home/End, aria-selected - the keymap is the standard (a11y repo guide 06).",
+          "Accordion = button + expanded region: native details/summary when styling allows; otherwise button with aria-expanded + region - the trigger is always a real button.",
+          "Panels are labelled: tabpanel labelled by its tab; accordion regions labelled by their trigger - AT users hear where they landed.",
+          "One open accordion is the default: multiple-open needs a reason (comparison tasks) - single-open keeps scroll position stable.",
+          "URL state for tab views: peer views that bookmark/refresh (tab=usage in URL) - state users can link to.",
+          "No lazy surprises: tab panel content mounts on demand but announces loading; content must not shift the page when revealed.",
+          "Never tabs inside tabs inside accordions: nesting disclosure widgets beyond one level is a content-architecture failure."
+        ],
+        "tokens": [
+          {
+            "role": "tabs-role-set",
+            "value": "tablist/tab/tabpanel",
+            "notes": "APG structure"
+          },
+          {
+            "role": "tabs-keymap",
+            "value": "arrows+home+end",
+            "notes": "Roving tabindex per APG"
+          },
+          {
+            "role": "tabs-selection",
+            "value": "manual-activation",
+            "notes": "Space/Enter activates; arrows move"
+          },
+          {
+            "role": "tabs-url-state",
+            "value": "tab-param",
+            "notes": "Bookmarkable peer views"
+          },
+          {
+            "role": "accordion-trigger",
+            "value": "button+aria-expanded",
+            "notes": "Native details preferred when styleable"
+          },
+          {
+            "role": "accordion-region-label",
+            "value": "trigger-labelled",
+            "notes": "Region named by its trigger"
+          },
+          {
+            "role": "accordion-open-policy",
+            "value": "single-open-default",
+            "notes": "Multi-open documented per use"
+          },
+          {
+            "role": "tabs-panel-label",
+            "value": "labelledby-tab",
+            "notes": "Panel narrates its tab"
+          },
+          {
+            "role": "disclosure-nesting-cap",
+            "value": "1-level",
+            "notes": "No tabs-in-tabs-in-accordions"
+          },
+          {
+            "role": "tabs-vs-links",
+            "value": "peers-vs-navigation",
+            "notes": "Site navigation is links, not tabs"
+          }
+        ],
+        "composition": [
+          "Composes with accessibility-wiring (guide 11) and a11y repo guide 06: the APG keymaps are shared contracts this recipe implements.",
+          "Composes with tables-data-grid and forms-inputs: tab panels host full recipes; disclosure widgets are containers, not content.",
+          "Composes with skill-animation entrance-exit: panel transitions use motion tokens; reduced-motion collapses them instantly."
+        ],
+        "patterns": [
+          "Disclosure kit: Tabs and Accordion components implementing the APG contracts once - products compose panels, never re-implement keymaps.",
+          "Peer-content review: content designed for tabs passes the 'would a user expect this as a peer view?' test at design time - buried-content checks before build."
+        ],
+        "useCases": [
+          "Product detail views (overview/specs/reviews), settings groups, and docs.",
+          "FAQs, release notes, and help panels as accordions.",
+          "Audit: div-tabs, auto-activating arrows, accordion content invisible to find-in-page."
+        ],
+        "combinations": {
+          "good": [
+            "navigation-patterns",
+            "forms-inputs",
+            "tables-data-grid",
+            "cards-lists",
+            "accessibility-wiring",
+            "buttons-badges",
+            "modals-dialogs",
+            "dropdowns-menus",
+            "empty-loading-error",
+            "toasts-notifications",
+            "command-palette"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "class-morphism"
+          ],
+          "caution": [
+            "neumorphism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Div-tabs: clickable divs with no roles or keymaps",
+          "Auto-activation chaos: panels swapping on every arrow pass - disorienting and slow",
+          "Buried content: primary content stuffed in tab 3 where find-in-page and print cannot see it",
+          "Accordion-everything: whole pages as accordions - scroll lost, content hidden"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "Disclosure widgets are APG territory (a11y repo guide 06): roles, roving tabindex, expanded/selected states, and labelled panels - a tab widget that narrates nothing is decoration, not a widget.",
+          "fallback": "Where the full tab contract cannot ship, use native radio-style selection or plain sections with anchor links - semantic structure beats partial widgets."
+        }
+      }
+    },
+    {
+      "id": "dropdowns-menus",
+      "name": "Dropdowns & Menus",
+      "summary": "Selects, menus, popovers, and tooltips: the value-vs-action distinction, keyboard contracts, and positioning that stays in viewport.",
+      "sections": {
+        "definition": "Dropdown-family components divide into value pickers (select, combobox - choose a value) and action menus (dropdown menu, context menu - trigger a command), plus the popover/tooltip satellites. Confusing them is the classic bug: a menu-as-select breaks form narration and mobile behavior. The recipe covers each pattern's contract, keyboard map, positioning (floating-ui, viewport-aware flip/shift), and the native-select default.",
+        "principles": [
+          "Value vs action is the first decision: choosing a value = select/combobox; triggering a command = menu - the distinction drives semantics and keymaps.",
+          "Native select is the default: unless styling demands more, <select> carries mobile pickers, autofill, and AT support for free.",
+          "Menus are APG-exact: role=menu/menuitem, arrows navigate, Escape closes, focus returns to trigger - invented keymaps break muscle memory (a11y repo guide 06).",
+          "Combobox = input + listbox: aria-expanded, aria-activedescendant or focus-managed options, typeahead, and announced result counts.",
+          "Positioning never clips: floating positioning with flip/shift keeps popovers in viewport - overflow: hidden ancestors are tested, not assumed.",
+          "Tooltips are hover supplements, never the only label: dismissible, hoverable, persistent (WCAG 1.4.13) - and the control carries its own accessible name.",
+          "Popovers escape their DOM box: position: fixed/absolute rendering (top layer) so parent overflow/stacking contexts cannot clip them.",
+          "Nested menus are capped: one submenu level; deeper IA becomes a dialog or page - depth 3 menus are unusable on touch."
+        ],
+        "tokens": [
+          {
+            "role": "value-vs-action",
+            "value": "select-vs-menu",
+            "notes": "The first decision; drives everything"
+          },
+          {
+            "role": "select-default",
+            "value": "native-select",
+            "notes": "Custom only with justification"
+          },
+          {
+            "role": "menu-role-set",
+            "value": "menu/menuitem",
+            "notes": "APG structure"
+          },
+          {
+            "role": "menu-keymap",
+            "value": "arrows+escape+enter",
+            "notes": "APG menu contract"
+          },
+          {
+            "role": "combobox-structure",
+            "value": "input+listbox+activedescendant",
+            "notes": "APG combobox contract"
+          },
+          {
+            "role": "combobox-announce",
+            "value": "result-count-polite",
+            "notes": "Filtered results narrated"
+          },
+          {
+            "role": "popover-positioning",
+            "value": "floating-ui-flip-shift",
+            "notes": "Never clipped by ancestors"
+          },
+          {
+            "role": "tooltip-contract",
+            "value": "dismissible-hoverable-persistent",
+            "notes": "WCAG 1.4.13"
+          },
+          {
+            "role": "menu-focus-return",
+            "value": "trigger-on-close",
+            "notes": "Escape returns focus"
+          },
+          {
+            "role": "menu-nesting-cap",
+            "value": "1-submenu",
+            "notes": "Deeper IA becomes page/dialog"
+          }
+        ],
+        "composition": [
+          "Composes with forms-inputs: combobox/select are form fields - the field wiring recipe wraps them.",
+          "Composes with accessibility-wiring and a11y repo guide 06: APG menu/combobox contracts are the AT layer of this recipe.",
+          "Composes with navigation-patterns: nav overflow collapses into menus; the menu contract is shared."
+        ],
+        "patterns": [
+          "Popover primitive: one positioning wrapper (floating-ui) powering menus, tooltips, and popovers - flip/shift/escape logic implemented once.",
+          "Native-first audit: every custom dropdown in the codebase justifies itself against <select>/<details> - custom pickers need custom features to exist."
+        ],
+        "useCases": [
+          "Toolbars and row actions (kebab menus).",
+          "Filtered pickers (country, user, tag comboboxes).",
+          "Audit: menu-as-select, clipped popovers, tooltip-only labels."
+        ],
+        "combinations": {
+          "good": [
+            "tables-data-grid",
+            "navigation-patterns",
+            "forms-inputs",
+            "buttons-badges",
+            "command-palette",
+            "accessibility-wiring",
+            "tabs-accordions",
+            "modals-dialogs",
+            "toasts-notifications",
+            "cards-lists",
+            "empty-loading-error"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "glassmorphism"
+          ],
+          "caution": [
+            "skeuomorphism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Menu-as-select: role=menu picking form values - narration and mobile pickers break",
+          "Clipped popovers: menus amputated by overflow: hidden ancestors",
+          "Tooltip-only labels: icon buttons whose name lives only in hover",
+          "Submenu spirals: three-deep cascades unusable by keyboard and touch alike"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "This recipe implements the APG menu/combobox/listbox patterns plus WCAG 1.4.13 (tooltip contract): keymaps, focus return, announced results, and dismissible tooltips - dropdown family is where invented keymaps do the most damage.",
+          "fallback": "When a custom picker cannot complete its APG contract, ship the native select - a plain-looking select that works beats a beautiful one that narrates nothing."
+        }
+      }
+    },
+    {
+      "id": "command-palette",
+      "name": "Command Palette & Search",
+      "summary": "Cmd-K overlays: fuzzy search over actions and objects, keyboard-first UX, recent/frecency ranking, and the analytics loop.",
+      "sections": {
+        "definition": "The command palette (Cmd-K) is the power-user surface: one overlay searching across actions ('Create project'), navigation ('Go to settings'), and objects ('Open ACME deal'). The recipe covers the overlay contract (modal focus, trap-and-return), the search index (actions + objects + navigation), fuzzy matching, frecency ranking, and the analytics loop that records which commands run - palettes are data products as much as UI.",
+        "principles": [
+          "One palette, three item types: actions, navigation, objects - the index is typed and each type renders a distinct group with a distinct verb.",
+          "Keyboard-first contract: Cmd-K/Ctrl-K opens, arrows navigate, Enter runs, Escape closes - mouse is the fallback, not the target.",
+          "Fuzzy matching with typeahead: matching tolerates typos and abbreviations ('usr set' finds User Settings) - strict prefix matching starves palettes.",
+          "Frecency + recency ranking: recently/frequently used items surface first - the palette learns the user.",
+          "Empty state teaches: a first-run palette shows examples ('Try: create, invite, export') - the blank palette is a dead end.",
+          "Dialog contract underneath: the palette is a dialog - focus trap, return, Escape, scroll lock (guide 04 recipe) all apply.",
+          "Results are announced: result counts narrate politely as the user types (combobox contract).",
+          "Analytics close the loop: query logs with no-result tracking feed the index - 'nothing found' entries are roadmap data."
+        ],
+        "tokens": [
+          {
+            "role": "palette-hotkey",
+            "value": "cmd-k/ctrl-k",
+            "notes": "Global open; documented app-wide"
+          },
+          {
+            "role": "palette-item-types",
+            "value": "action,nav,object",
+            "notes": "Typed index; grouped rendering"
+          },
+          {
+            "role": "palette-keymap",
+            "value": "arrows+enter+escape",
+            "notes": "Keyboard-first contract"
+          },
+          {
+            "role": "palette-matching",
+            "value": "fuzzy+typeahead",
+            "notes": "Tolerant matching; no strict-prefix"
+          },
+          {
+            "role": "palette-ranking",
+            "value": "frecency+recency",
+            "notes": "Learns per user"
+          },
+          {
+            "role": "palette-dialog-contract",
+            "value": "trap-and-return",
+            "notes": "Dialog recipe underneath"
+          },
+          {
+            "role": "palette-empty-state",
+            "value": "teaching-examples",
+            "notes": "First-run shows try-queries"
+          },
+          {
+            "role": "palette-announce",
+            "value": "result-count-polite",
+            "notes": "Combobox narration"
+          },
+          {
+            "role": "palette-analytics",
+            "value": "query+selection-logged",
+            "notes": "No-result tracking feeds roadmap"
+          },
+          {
+            "role": "palette-highlight",
+            "value": "match-substring-marked",
+            "notes": "Matches visually marked"
+          }
+        ],
+        "composition": [
+          "Composes with modals-dialogs: the overlay contract (trap/return/Escape/scrim) is the dialog recipe.",
+          "Composes with navigation-patterns: 'Go to...' items make the palette a navigation accelerant on top of the nav system.",
+          "Composes with dropdowns-menus: the result list follows the combobox contract (announced counts, activedescendant)."
+        ],
+        "patterns": [
+          "Typed command registry: features register actions into the palette index with (type, verb, keywords, handler) - palette coverage grows with features automatically.",
+          "No-result analytics: weekly review of zero-result queries; missing commands become tickets - the palette's index is maintained like a search engine's."
+        ],
+        "useCases": [
+          "Power-user products: IDEs, CRMs, project tools, admin consoles.",
+          "Deep-IA products: palettes flatten navigation for large apps.",
+          "Audit: palettes missing actions, strict matching, no analytics."
+        ],
+        "combinations": {
+          "good": [
+            "navigation-patterns",
+            "modals-dialogs",
+            "dropdowns-menus",
+            "tables-data-grid",
+            "accessibility-wiring",
+            "buttons-badges",
+            "toasts-notifications",
+            "forms-inputs",
+            "tabs-accordions",
+            "cards-lists",
+            "empty-loading-error"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "glassmorphism",
+            "class-morphism"
+          ],
+          "caution": [
+            "skeuomorphism"
+          ],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "entrance-exit",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Silent palettes: overlays that grab focus and narrate nothing",
+          "Strict matching: 'proj cr' finding nothing while the user stares",
+          "Static ranking: every query returning the same order - the palette never learns",
+          "Actionless palettes: navigation-only palettes where users expected verbs"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "The palette is the keyboard-accessibility showcase: it IS a keyboard-only interface, so the dialog + combobox contracts must be airtight - focus management, narration, and Escape behavior are its core features, not polish.",
+          "fallback": "If analytics/fuzzy search cannot ship in v1, launch with a static typed list + arrow/enter keyboard contract - a simple, narrated palette beats a broken search."
+        }
+      }
+    },
+    {
+      "id": "empty-loading-error",
+      "name": "Empty, Loading & Error States",
+      "summary": "The states most components forget: skeletons that match layout, empty states that teach, error states that recover.",
+      "sections": {
+        "definition": "Every component has more states than its happy path: loading (first load, refetch, inline), empty (first-use, no-results, cleared), and error (network, permission, not-found). Products fail here most visibly - a blank box communicates nothing while a designed empty state onboards. The recipe covers skeleton discipline, empty-state taxonomy with next actions, and error-state recovery paths.",
+        "principles": [
+          "Skeletons match the final layout: the skeleton is the component's own geometry - a generic spinner-less gray blob that swaps into a different shape causes a jarring shift.",
+          "Never skeleton past 3 seconds: long loads switch to progress indication (bar, percentage) - skeletons are for sub-3s waits.",
+          "Empty states are taxonomy-driven: first-use (teach + CTA), no-results (relax the query suggestion), cleared (restore action) - each has its own copy and action.",
+          "Empty states carry the next action: 'Create your first project' with the button - an empty state without an action is a dead end.",
+          "Errors are specific and recoverable: what failed, why (in user terms), and the recovery action (retry, contact, alternative path).",
+          "Offline is a designed state: detect and message degraded connectivity with the retry contract - not a browser error.",
+          "Permission errors explain the unlock: 'Ask your admin for access' with the request action - not a bare 403.",
+          "All states are announced: loading/empty/error narrate via live regions or focus moves (a11y repo guide 04) - state changes AT users can hear."
+        ],
+        "tokens": [
+          {
+            "role": "skeleton-policy",
+            "value": "matches-final-layout",
+            "notes": "Component-own geometry; no generic blobs"
+          },
+          {
+            "role": "skeleton-duration-cap",
+            "value": "3s",
+            "notes": "Longer waits switch to progress"
+          },
+          {
+            "role": "empty-taxonomy",
+            "value": "first-use,no-results,cleared",
+            "notes": "Each with own copy + action"
+          },
+          {
+            "role": "empty-cta",
+            "value": "required",
+            "notes": "Empty states carry the next action"
+          },
+          {
+            "role": "error-format",
+            "value": "what+why+recovery",
+            "notes": "The three-part error message"
+          },
+          {
+            "role": "error-recovery-action",
+            "value": "retry-or-alternative",
+            "notes": "Every error has a path forward"
+          },
+          {
+            "role": "offline-state",
+            "value": "designed+retry",
+            "notes": "Connectivity degradation handled"
+          },
+          {
+            "role": "permission-error",
+            "value": "explain-unlock",
+            "notes": "403s request access, not just refuse"
+          },
+          {
+            "role": "state-announce",
+            "value": "live-region-or-focus",
+            "notes": "State changes narrated"
+          },
+          {
+            "role": "state-coverage",
+            "value": "component-spec-includes-states",
+            "notes": "Recipes ship with all states designed"
+          }
+        ],
+        "composition": [
+          "Composes with every recipe in this repo: each component's spec includes its loading/empty/error states - states are part of the recipe.",
+          "Composes with toasts-notifications: async failures land as persistent toasts with retry; inline errors stay in-component.",
+          "Composes with ux-writing (skill-ux-writing): empty/error copy follows the voice/tone and error-message guides."
+        ],
+        "patterns": [
+          "State triad per component: every recipe ships (loading, empty, error) alongside default - a component without its triad is an incomplete spec.",
+          "Error taxonomy: network/permission/not-found/validation each get their approved copy pattern - engineers pick from the taxonomy, not from scratch."
+        ],
+        "useCases": [
+          "First-run experiences: empty states are the onboarding surface.",
+          "Async-heavy dashboards: loading and error choreography.",
+          "Audit: blank boxes, skeleton-to-content layout jumps, bare 403s."
+        ],
+        "combinations": {
+          "good": [
+            "toasts-notifications",
+            "tables-data-grid",
+            "cards-lists",
+            "forms-inputs",
+            "buttons-badges",
+            "command-palette",
+            "tabs-accordions",
+            "modals-dialogs",
+            "navigation-patterns",
+            "accessibility-wiring",
+            "dropdowns-menus"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design",
+            "collage-art"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "loading-states",
+            "easing-timing"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "Blank-box states: unstyled empty/loading/error surfaces shipping to production",
+          "Skeleton-forever: spinners-as-skeletons hanging past 3s with no progress",
+          "Dead-end errors: 'Something went wrong' with no cause and no path",
+          "Layout-jump loads: skeleton geometry that doesn't match the content it becomes"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "State changes are WCAG 4.1.3 surface: loading/empty/error transitions announce politely, error focus moves to summaries (forms contract), and empty-state CTAs are keyboard-reachable - states designed without AT are half-designed.",
+          "fallback": "If a live-region announcement cannot be wired for a state, move focus to the state's heading instead - focus movement is the fallback narration channel."
+        }
+      }
+    },
+    {
+      "id": "accessibility-wiring",
+      "name": "Component A11y Wiring",
+      "summary": "The cross-cutting a11y layer every recipe shares: focus contracts, announcements, target sizes, and reduced-motion - checked per component.",
+      "sections": {
+        "definition": "Every recipe in this repo shares one wiring layer: keyboard operability, focus contracts, live announcements, target sizes, contrast through tokens, and reduced-motion behavior. Rather than repeating it twelve times, this guide is the component-level a11y checklist: the per-component pass that verifies the recipe's accessibility wiring before it ships - the bridge between the a11y repo's criteria and this repo's components.",
+        "principles": [
+          "Every recipe ships its a11y wiring: the component spec includes keyboard map, focus behavior, announcements, and target size - not an appendix.",
+          "Keyboard map before styling: each component declares its keymap (per APG where applicable) before pixels - the map is the spec.",
+          "Focus contracts per surface: what receives focus on open/expand/select, what returns on close/collapse - per component, tested per state.",
+          "Announcements are designed: state changes users must hear (loading done, error, selection) wire to live regions or focus moves deliberately.",
+          "44px touch targets are the floor: all interactive surfaces meet the effective-target minimum (2.5.8) - dense variants use spacing, not smaller targets.",
+          "Contrast comes from tokens: component colors consume validated alias pairs (design-tokens/skill-color-theory) - components never introduce unvalidated colors.",
+          "Reduced-motion is wired per component: entrance/exit/loading motion collapses under prefers-reduced-motion (skill-animation guide 12) - the component owns its fallback.",
+          "The checklist runs per component, per PR: the wiring pass is a review gate - components merge only with the checklist green."
+        ],
+        "tokens": [
+          {
+            "role": "wiring-keymap",
+            "value": "declared-per-component",
+            "notes": "The keymap IS the spec"
+          },
+          {
+            "role": "wiring-focus-contract",
+            "value": "open/expand/close-returns",
+            "notes": "Per surface, tested per state"
+          },
+          {
+            "role": "wiring-announce",
+            "value": "designed-per-state-change",
+            "notes": "Live region or focus move, deliberate"
+          },
+          {
+            "role": "wiring-target-min",
+            "value": "44px",
+            "notes": "WCAG 2.5.8 effective floor"
+          },
+          {
+            "role": "wiring-contrast-source",
+            "value": "validated-aliases-only",
+            "notes": "No unvalidated colors in components"
+          },
+          {
+            "role": "wiring-reduced-motion",
+            "value": "collapse-with-fallback",
+            "notes": "prefers-reduced-motion per component"
+          },
+          {
+            "role": "wiring-visible-focus",
+            "value": "3:1-ring",
+            "notes": "Focus ring contract (a11y 2.4.13)"
+          },
+          {
+            "role": "wiring-name-required",
+            "value": "all-interactive-named",
+            "notes": "Accessible names mandatory"
+          },
+          {
+            "role": "wiring-checklist-gate",
+            "value": "per-component-per-PR",
+            "notes": "Review gate; merge requires green"
+          },
+          {
+            "role": "wiring-test-tier",
+            "value": "keyboard-then-sr",
+            "notes": "Keyboard pass first, then screen reader"
+          }
+        ],
+        "composition": [
+          "Composes with every recipe here: this guide is the shared checklist they all reference.",
+          "Composes with skill-accessibility guides 03/04/05/06: the criteria layer this wiring implements at component level.",
+          "Composes with skill-design-review: the design-side review consumes this checklist as its component section."
+        ],
+        "patterns": [
+          "The wiring checklist block: a standardized checklist (keymap, focus, announce, target, contrast, motion) pasted into every component's spec and PR template.",
+          "Wiring-first reviews: PRs touching components route to reviewers who run the checklist - a11y review is scheduled, not aspirational."
+        ],
+        "useCases": [
+          "Design systems: the gate every new component passes before publishing.",
+          "Component audits: scoring existing components against the wiring checklist.",
+          "Onboarding engineers: the single page that teaches component-level a11y."
+        ],
+        "combinations": {
+          "good": [
+            "buttons-badges",
+            "forms-inputs",
+            "tables-data-grid",
+            "modals-dialogs",
+            "toasts-notifications",
+            "navigation-patterns",
+            "cards-lists",
+            "tabs-accordions",
+            "dropdowns-menus",
+            "command-palette",
+            "empty-loading-error"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "styleAffinity": {
+          "good": [
+            "minimalism",
+            "flat-design"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "motionAffinity": {
+          "good": [
+            "reduced-motion",
+            "micro-interactions"
+          ],
+          "caution": [],
+          "avoid": []
+        },
+        "antiPatterns": [
+          "A11y-as-appendix: wiring considered after styling, patched in at review",
+          "Checklist theater: boxes ticked without running the keyboard pass",
+          "Style-first specs: component specs with no keymap or focus section",
+          "Unvalidated colors: one-off hex values inside components escaping the token system"
+        ],
+        "accessibility": {
+          "required": true,
+          "notes": "This guide exists to make component-level accessibility systematic: the per-component checklist operationalizes WCAG 2.1.1, 2.4.7, 2.4.13, 2.5.8, 4.1.3, and 1.4.3 across every recipe - the checklist is the deliverable.",
+          "fallback": "When a component cannot pass the full checklist, it does not ship as a shared primitive - it ships as an app-local component with documented gaps, keeping the system clean."
+        }
+      }
+    }
+  ]
+}
